@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alışveriş Sepeti | Kıbrıs Bazar</title>
+    <title id="pageTitle">Ürün Detayı | Kıbrıs Bazar</title>
     
     <link rel="icon" href="/favicon.png" type="image/png">
     <meta name="theme-color" content="#f97316">
@@ -22,11 +22,17 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
 
+    <!-- Yükleniyor Göstergesi -->
+    <div id="loadingIndicator" class="fixed inset-0 z-[999] bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-300">
+        <i data-lucide="loader-2" class="w-10 h-10 text-orange-500 animate-spin mb-4"></i>
+        <p class="text-slate-500 font-bold">Ürün Bilgileri Yükleniyor...</p>
+    </div>
+
     <!-- Üst Sabit Navigasyon -->
     <div class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shadow-sm">
         <div class="w-1/3 flex justify-start">
             <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> <span class="hidden sm:inline">Alışverişe Devam Et</span>
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> <span class="hidden sm:inline">Vitrine Dön</span>
             </a>
         </div>
         
@@ -37,74 +43,84 @@
         </div>
         
         <div class="w-1/3 flex justify-end">
-            <span class="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">Güvenli Sepet</span>
+            <a href="sepet.html" class="flex items-center justify-center p-2 text-slate-600 hover:text-orange-500 transition-colors relative bg-white border border-slate-200 hover:border-orange-200 rounded-lg">
+                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-sm hidden">0</span>
+            </a>
         </div>
     </div>
 
-    <!-- Ana İçerik -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mb-8 flex items-center gap-3">
-            <i data-lucide="shopping-cart" class="w-8 h-8 text-orange-500"></i> Alışveriş Sepetim
-        </h1>
+    <!-- Ana Ürün Detay Alanı -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 w-full">
+        
+        <!-- Breadcrumb / Yol Göstergesi -->
+        <nav class="flex items-center gap-2 text-xs font-bold text-slate-400 mb-6 overflow-x-auto whitespace-nowrap no-scrollbar">
+            <a href="index.html" class="hover:text-orange-500 transition">Anasayfa</a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span id="breadcrumbCategory" class="text-slate-600">Kategori</span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span id="breadcrumbStore" class="text-slate-600">Mağaza</span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span id="breadcrumbTitle" class="text-orange-600 font-black truncate max-w-[200px]">Ürün Adı</span>
+        </nav>
 
-        <div id="cartContentWrapper" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             
-            <!-- Sol: Ürün Listesi -->
-            <div class="lg:col-span-2 space-y-4" id="cartItemsContainer">
-                <!-- JS ile Doldurulacak -->
+            <!-- Sol: Ürün Görsel Galerisi -->
+            <div class="space-y-4">
+                <div class="w-full aspect-square rounded-2xl bg-slate-100 overflow-hidden border border-slate-200 relative shadow-inner">
+                    <img id="mainProductImage" src="" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x600/cbd5e1/475569?text=Gorsel';">
+                    <div id="productBadgesContainer" class="absolute top-4 left-4 flex flex-col gap-2 items-start z-10"></div>
+                </div>
+                <!-- Küçük Resim Önizlemeleri -->
+                <div id="thumbnailContainer" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar"></div>
             </div>
 
-            <!-- Sağ: Sipariş Özeti ve Müşteri Bilgileri -->
-            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm sticky top-24 space-y-6">
-                <h3 class="text-lg font-black text-slate-800 border-b border-slate-100 pb-4 flex items-center gap-2">
-                    <i data-lucide="receipt" class="w-5 h-5 text-orange-500"></i> Sipariş Özeti
-                </h3>
-
-                <div class="space-y-3 text-sm font-medium text-slate-600">
-                    <div class="flex justify-between">
-                        <span>Ara Toplam</span>
-                        <span id="summarySubtotal" class="font-bold text-slate-800">0.00 TL</span>
+            <!-- Sağ: Ürün Bilgileri ve Seçenekler -->
+            <div class="space-y-6">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <a id="storeProfileLink" href="#" class="text-xs font-black text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1.5 border border-orange-200">
+                            <i data-lucide="store" class="w-3.5 h-3.5"></i> <span id="storeNameBadge">Mağaza Adı</span>
+                        </a>
+                        <span id="categoryBadge" class="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg">Kategori</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span>Kargo / Teslimat</span>
-                        <span class="text-emerald-600 font-bold">Satıcı ile Görüşülür</span>
-                    </div>
-                    <div class="pt-3 border-t border-slate-100 flex justify-between text-base">
-                        <span class="font-black text-slate-800">Toplam Tutar</span>
-                        <span id="summaryTotal" class="font-black text-orange-600 text-xl">0.00 TL</span>
-                    </div>
+                    <h1 id="productTitle" class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">Yükleniyor...</h1>
                 </div>
 
-                <hr class="border-slate-100">
-
-                <!-- Müşteri Bilgileri Formu -->
-                <form id="checkoutForm" onsubmit="window.completeOrder(event)" class="space-y-4">
-                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Teslimat & İletişim Bilgileri</h4>
+                <!-- Fiyat Alanı -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex items-center justify-between">
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Adınız Soyadınız</label>
-                        <input type="text" id="buyerName" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Örn: Ahmet Yılmaz">
+                        <span class="text-xs font-bold text-slate-400 block mb-1">Satış Fiyatı</span>
+                        <div class="flex items-baseline gap-3">
+                            <span id="productPrice" class="text-3xl font-black text-orange-600">0.00 TL</span>
+                            <span id="productOriginalPrice" class="text-sm font-bold text-slate-400 line-through hidden">0.00 TL</span>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Telefon Numaranız</label>
-                        <input type="tel" id="buyerPhone" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="0533 123 45 67">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Teslimat Adresi / Bölge</label>
-                        <textarea id="buyerAddress" rows="3" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Mahalle, Sokak, No veya Bölge (Örn: Girne Merkez)..."></textarea>
-                    </div>
+                    <div id="discountRibbon" class="hidden bg-rose-500 text-white text-xs font-black px-3 py-1.5 rounded-xl shadow-md">-%0 İndirim</div>
+                </div>
 
-                    <!-- Yasal Sorumluluk Reddi (Disclaimer) Metni -->
-                    <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-2xl text-[11px] text-amber-800 leading-relaxed font-medium flex gap-2.5">
-                        <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
-                        <p>Kıbrıs Bazar yalnızca bir ilan ve iletişim platformudur. Satıcı ile alıcı arasındaki ödeme, teslimat veya olası anlaşmazlıklardan platformumuz hiçbir şekilde sorumlu değildir.</p>
-                    </div>
+                <!-- Varyant Seçenekleri (Eğer varsa) -->
+                <div id="variantsSection" class="hidden space-y-3 pt-2">
+                    <label class="block text-xs font-bold text-slate-700" id="variantGroupName">Seçenekler:</label>
+                    <div id="variantOptionsContainer" class="flex flex-wrap gap-2"></div>
+                </div>
 
-                    <div class="pt-2">
-                        <button type="submit" id="btnCheckout" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-4 rounded-2xl transition shadow-xl shadow-green-500/20 flex items-center justify-center gap-2 text-base">
-                            <i data-lucide="message-circle" class="w-6 h-6"></i> WhatsApp ile Siparişi Tamamla
-                        </button>
-                    </div>
-                </form>
+                <!-- Açıklama -->
+                <div class="pt-4 border-t border-slate-100">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Ürün Açıklaması</h3>
+                    <p id="productDescription" class="text-sm text-slate-600 leading-relaxed whitespace-pre-line">Yükleniyor...</p>
+                </div>
+
+                <!-- Sepete Ekle Butonu -->
+                <div class="pt-4 border-t border-slate-100 space-y-3">
+                    <button onclick="window.addToCart()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-2xl transition shadow-xl shadow-orange-500/20 flex items-center justify-center gap-2 text-base">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i> Sepete Ekle
+                    </button>
+                    <a id="whatsappOrderBtn" href="#" target="_blank" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-3.5 rounded-2xl transition flex items-center justify-center gap-2 text-sm shadow-md">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp ile Hemen Sipariş Ver
+                    </a>
+                </div>
             </div>
         </div>
     </main>
@@ -119,187 +135,216 @@
         </div>
     </footer>
 
-    <!-- Firebase ve Sepet Mantığı -->
+    <!-- Firebase ve Detay Mantığı -->
     <script type="module">
         import { db } from "./js/firebase-config.js";
-        import { doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const APP_ID = 'kibris-pazar';
+        let currentProduct = null;
+        let selectedVariant = null;
+        let currentActivePrice = 0;
+        let currentActiveImage = '';
+        
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
 
-        window.renderCart = () => {
-            const container = document.getElementById('cartItemsContainer');
-            const wrapper = document.getElementById('cartContentWrapper');
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
 
-            if (cart.length === 0) {
-                wrapper.innerHTML = `
-                    <div class="col-span-full py-20 text-center bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-                        <div class="w-20 h-20 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="shopping-cart" class="w-10 h-10"></i>
-                        </div>
-                        <h2 class="text-xl font-black text-slate-800 mb-2">Sepetiniz Henüz Boş</h2>
-                        <p class="text-sm text-slate-500 mb-6">Pazaryerindeki yüzlerce eşsiz ürünü keşfetmeye hemen başlayın.</p>
-                        <a href="index.html" class="inline-block bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-8 rounded-xl transition shadow-lg">Alışverişe Başla</a>
-                    </div>
-                `;
+        function updateCartBadge() {
+            let totalQty = 0;
+            cart.forEach(item => totalQty += item.quantity);
+            const badge = document.getElementById('cartCountBadge');
+            if(badge) {
+                badge.innerText = totalQty;
+                if(totalQty > 0) badge.classList.remove('hidden');
+                else badge.classList.add('hidden');
+            }
+        }
+
+        async function initProductPage() {
+            updateCartBadge();
+            const productId = getProductIdFromUrl();
+
+            if (!productId) {
+                document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Ürün ID bulunamadı.</p>';
+                return;
+            }
+
+            try {
+                const docRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', productId);
+                const docSnap = await getDoc(docRef);
+
+                if (!docSnap.exists()) {
+                    document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Ürün bulunamadı veya yayından kaldırılmış.</p>';
+                    return;
+                }
+
+                currentProduct = { id: docSnap.id, ...docSnap.data() };
+                currentActivePrice = currentProduct.price;
+                currentActiveImage = (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : '';
+
+                // DİNAMİK BAŞLIK (SEO & Sekme İsmi)
+                document.title = `${currentProduct.title} | ${currentProduct.storeName || 'Kıbrıs Bazar'}`;
+                document.getElementById('pageTitle').innerText = `${currentProduct.title} | Kıbrıs Bazar`;
+
+                // Breadcrumb
+                document.getElementById('breadcrumbCategory').innerText = currentProduct.category || 'Genel';
+                document.getElementById('breadcrumbStore').innerText = currentProduct.storeName || 'Mağaza';
+                document.getElementById('breadcrumbTitle').innerText = currentProduct.title;
+
+                // İçerik Doldurma
+                document.getElementById('productTitle').innerText = currentProduct.title;
+                document.getElementById('productDescription').innerText = currentProduct.description || 'Açıklama belirtilmemiş.';
+                document.getElementById('categoryBadge').innerText = currentProduct.category || 'Genel';
+                
+                document.getElementById('storeNameBadge').innerText = currentProduct.storeName || 'Mağaza';
+                document.getElementById('storeProfileLink').href = `magaza.html?id=${currentProduct.storeId}`;
+
+                // Fiyat
+                document.getElementById('productPrice').innerText = currentProduct.price.toLocaleString('tr-TR') + " TL";
+                if (currentProduct.originalPrice && currentProduct.originalPrice > currentProduct.price) {
+                    const origEl = document.getElementById('productOriginalPrice');
+                    origEl.innerText = currentProduct.originalPrice.toLocaleString('tr-TR') + " TL";
+                    origEl.classList.remove('hidden');
+                    
+                    const disc = Math.round(((currentProduct.originalPrice - currentProduct.price) / currentProduct.originalPrice) * 100);
+                    const rib = document.getElementById('discountRibbon');
+                    rib.innerText = `-%${disc} İndirim`;
+                    rib.classList.remove('hidden');
+                }
+
+                // Etiketler (Kargo vb.)
+                let badgesHtml = '';
+                if (currentProduct.freeDelivery) badgesHtml += `<div class="bg-[#0ea5e9] text-white text-[10px] font-black px-3 py-1 rounded-xl shadow-md uppercase tracking-wider">Ücretsiz Teslimat</div>`;
+                if (currentProduct.cashOnDelivery) badgesHtml += `<div class="bg-emerald-500 text-white text-[10px] font-black px-3 py-1 rounded-xl shadow-md uppercase tracking-wider">Kapıda Ödeme</div>`;
+                document.getElementById('productBadgesContainer').innerHTML = badgesHtml;
+
+                // Görseller
+                renderImages();
+
+                // Varyantlar
+                if (currentProduct.variants && currentProduct.variants.length > 0) {
+                    renderVariants();
+                }
+
+                // WhatsApp Sipariş Linki
+                setupWhatsAppButton();
+
+                // Yükleyiciyi Kaldır
+                document.getElementById('loadingIndicator').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('loadingIndicator').classList.add('hidden'), 300);
                 lucide.createIcons();
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Veriler yüklenirken hata oluştu.</p>';
+            }
+        }
+
+        function renderImages() {
+            const mainImg = document.getElementById('mainProductImage');
+            mainImg.src = currentActiveImage;
+
+            const thumbContainer = document.getElementById('thumbnailContainer');
+            if (!currentProduct.images || currentProduct.images.length <= 1) {
+                thumbContainer.classList.add('hidden');
                 return;
             }
 
             let html = '';
-            let subtotal = 0;
-
-            cart.forEach((item, index) => {
-                const p = item.product;
-                const price = item.dynamicPrice || p.price;
-                const itemTotal = price * item.quantity;
-                subtotal += itemTotal;
-                const img = item.dynamicImage || (p.images && p.images.length > 0 ? p.images[0] : 'https://placehold.co/200x200');
-
+            currentProduct.images.forEach((imgUrl, idx) => {
+                const isActive = imgUrl === currentActiveImage;
                 html += `
-                    <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center gap-5">
-                        <div class="w-24 h-24 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
-                            <img src="${img}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200';">
-                        </div>
-                        <div class="flex-1 text-center sm:text-left">
-                            <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-md inline-block mb-1">${p.storeName || 'Mağaza'}</span>
-                            <h3 class="text-base font-bold text-slate-800 line-clamp-1 mb-1">${p.title}</h3>
-                            ${item.variant ? `<div class="text-xs text-purple-600 font-bold mb-2">Seçenek: ${item.variant}</div>` : ''}
-                            <div class="text-lg font-black text-slate-900">${price.toLocaleString('tr-TR')} TL</div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
-                                <button onclick="window.updateQty(${index}, -1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">-</button>
-                                <span class="px-4 py-2 font-black text-sm text-slate-800">${item.quantity}</span>
-                                <button onclick="window.updateQty(${index}, 1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">+</button>
-                            </div>
-                            <button onclick="window.removeItem(${index})" class="text-slate-400 hover:text-rose-600 p-2.5 rounded-xl bg-slate-50 hover:bg-rose-50 border border-slate-200 transition" title="Ürünü Sil">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <button onclick="window.changeMainImage('${imgUrl}')" class="w-20 h-20 rounded-xl overflow-hidden border-2 ${isActive ? 'border-orange-500 shadow-md' : 'border-slate-200 opacity-70 hover:opacity-100'} transition shrink-0 bg-slate-100">
+                        <img src="${imgUrl}" class="w-full h-full object-cover">
+                    </button>
                 `;
             });
+            thumbContainer.innerHTML = html;
+        }
 
-            container.innerHTML = html;
-            document.getElementById('summarySubtotal').innerText = subtotal.toLocaleString('tr-TR') + " TL";
-            document.getElementById('summaryTotal').innerText = subtotal.toLocaleString('tr-TR') + " TL";
-            lucide.createIcons();
+        window.changeMainImage = (url) => {
+            currentActiveImage = url;
+            renderImages();
         };
 
-        window.updateQty = (index, delta) => {
-            cart[index].quantity += delta;
-            if (cart[index].quantity <= 0) {
-                cart.splice(index, 1);
+        function renderVariants() {
+            const section = document.getElementById('variantsSection');
+            section.classList.remove('hidden');
+
+            const groupName = currentProduct.variants[0].group || 'Seçenek';
+            document.getElementById('variantGroupName').innerText = `${groupName} Seçiniz:`;
+
+            let html = '';
+            currentProduct.variants.forEach((v, idx) => {
+                const isSelected = selectedVariant === v.name;
+                html += `
+                    <button type="button" onclick="window.selectVariant('${v.name}', ${v.price}, '${v.image || ''}')" class="px-4 py-2.5 rounded-xl border-2 text-xs font-bold transition ${isSelected ? 'border-orange-500 bg-orange-50 text-orange-600 shadow-sm' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}">
+                        ${v.name} <span class="opacity-75 font-normal ml-1">(${v.price.toLocaleString('tr-TR')} TL)</span>
+                    </button>
+                `;
+            });
+            document.getElementById('variantOptionsContainer').innerHTML = html;
+        }
+
+        window.selectVariant = (name, price, imageUrl) => {
+            selectedVariant = name;
+            currentActivePrice = price;
+            if (imageUrl) currentActiveImage = imageUrl;
+
+            document.getElementById('productPrice').innerText = price.toLocaleString('tr-TR') + " TL";
+            renderImages();
+            renderVariants();
+            setupWhatsAppButton();
+        };
+
+        function setupWhatsAppButton() {
+            const waBtn = document.getElementById('whatsappOrderBtn');
+            let phone = (currentProduct.storeWhatsapp || '').replace(/\D/g,'');
+            if (phone.length === 10 && !phone.startsWith('90')) phone = '90' + phone;
+
+            const priceText = currentActivePrice.toLocaleString('tr-TR') + " TL";
+            const variantText = selectedVariant ? ` (Seçenek: ${selectedVariant})` : '';
+            
+            let message = `Merhaba *${currentProduct.storeName || 'Mağaza'}*, şu ürününüzü sipariş etmek istiyorum:\n\n`;
+            message += `📦 *Ürün:* ${currentProduct.title}${variantText}\n`;
+            message += `💰 *Fiyat:* ${priceText}\n\n`;
+            message += `Siparişimi onaylıyor musunuz?`;
+
+            waBtn.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        }
+
+        window.addToCart = () => {
+            if (currentProduct.variants && currentProduct.variants.length > 0 && !selectedVariant) {
+                alert("Lütfen bir seçenek (renk/beden vb.) seçiniz.");
+                return;
             }
-            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
-            window.renderCart();
-        };
 
-        window.removeItem = (index) => {
-            cart.splice(index, 1);
-            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
-            window.renderCart();
-        };
+            const cartItemId = currentProduct.id + (selectedVariant ? `_${selectedVariant}` : '');
+            const existing = cart.find(item => item.cartItemId === cartItemId);
 
-        window.completeOrder = async (e) => {
-            e.preventDefault();
-            if (cart.length === 0) return;
-
-            const name = document.getElementById('buyerName').value.trim();
-            const phone = document.getElementById('buyerPhone').value.trim();
-            const address = document.getElementById('buyerAddress').value.trim();
-
-            const btn = document.getElementById('btnCheckout');
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Sipariş Kaydediliyor...`;
-            btn.disabled = true;
-            lucide.createIcons();
-
-            try {
-                let storesMap = {};
-                let totalOrderAmount = 0;
-
-                cart.forEach(item => {
-                    const storeId = item.product.storeId;
-                    if(!storesMap[storeId]) {
-                        storesMap[storeId] = {
-                            storeWhatsapp: item.product.storeWhatsapp || '',
-                            storeName: item.product.storeName || 'Mağaza',
-                            items: [],
-                            amount: 0
-                        };
-                    }
-                    const itemPrice = item.dynamicPrice || item.product.price;
-                    const sub = itemPrice * item.quantity;
-                    storesMap[storeId].amount += sub;
-                    totalOrderAmount += sub;
-
-                    storesMap[storeId].items.push({
-                        productId: item.product.id,
-                        title: item.product.title,
-                        quantity: item.quantity,
-                        price: itemPrice,
-                        variant: item.variant || null
-                    });
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({
+                    cartItemId: cartItemId,
+                    product: currentProduct,
+                    variant: selectedVariant,
+                    quantity: 1,
+                    dynamicPrice: currentActivePrice,
+                    dynamicImage: currentActiveImage
                 });
-
-                let firstWhatsapp = '';
-
-                for(let storeId in storesMap) {
-                    const storeData = storesMap[storeId];
-                    
-                    const orderPayload = {
-                        storeId: storeId,
-                        customerName: name,
-                        customerPhone: phone,
-                        customerAddress: address,
-                        items: storeData.items,
-                        totalAmount: storeData.amount,
-                        status: 'pending',
-                        createdAt: Date.now()
-                    };
-
-                    await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders')), orderPayload);
-
-                    let msg = `*🛒 YENİ SİPARİŞ - KIBRIS BAZAR*\n\n`;
-                    msg += `👤 *Müşteri:* ${name}\n`;
-                    msg += `📞 *Telefon:* ${phone}\n`;
-                    msg += `📍 *Adres:* ${address}\n\n`;
-                    msg += `📦 *Sipariş Edilen Ürünler:*\n`;
-                    storeData.items.forEach(i => {
-                        msg += `- ${i.quantity}x ${i.title} ${i.variant ? `(${i.variant})` : ''} - ${(i.price * i.quantity).toLocaleString('tr-TR')} TL\n`;
-                    });
-                    msg += `\n💰 *Toplam Tutar:* ${storeData.amount.toLocaleString('tr-TR')} TL\n\n`;
-                    msg += `Siparişimi onaylıyor musunuz?`;
-
-                    let phoneClean = storeData.storeWhatsapp.replace(/\D/g,'');
-                    if(phoneClean.length === 10 && !phoneClean.startsWith('90')) phoneClean = '90' + phoneClean;
-                    
-                    if(phoneClean) {
-                        firstWhatsapp = `https://wa.me/${phoneClean}?text=${encodeURIComponent(msg)}`;
-                    }
-                }
-
-                localStorage.removeItem('cart_items_v2');
-                cart = [];
-
-                alert("Siparişiniz başarıyla oluşturuldu! Satıcıya yönlendiriliyorsunuz.");
-                if(firstWhatsapp) {
-                    window.location.href = firstWhatsapp;
-                } else {
-                    window.location.href = 'index.html';
-                }
-
-            } catch (err) {
-                console.error(err);
-                alert("Sipariş kaydedilirken bir hata oluştu.");
-                btn.innerHTML = `<i data-lucide="message-circle" class="w-6 h-6"></i> WhatsApp ile Siparişi Tamamla`;
-                btn.disabled = false;
-                lucide.createIcons();
             }
+
+            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
+            updateCartBadge();
+            alert("Ürün sepete başarıyla eklendi!");
         };
 
-        document.addEventListener('DOMContentLoaded', window.renderCart);
+        document.addEventListener('DOMContentLoaded', initProductPage);
     </script>
 </body>
 </html>
