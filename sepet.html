@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alışveriş Sepeti | Kıbrıs Bazar</title>
+    
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <meta name="theme-color" content="#f97316">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
+
+    <!-- Üst Sabit Navigasyon -->
+    <div class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shadow-sm">
+        <div class="w-1/3 flex justify-start">
+            <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> <span class="hidden sm:inline">Alışverişe Devam Et</span>
+            </a>
+        </div>
+        
+        <div class="w-1/3 flex justify-center items-center">
+            <a href="index.html" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
+                KIBRIS<span class="text-orange-500">BAZAR</span>
+            </a>
+        </div>
+        
+        <div class="w-1/3 flex justify-end">
+            <span class="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">Güvenli Sepet</span>
+        </div>
+    </div>
+
+    <!-- Ana İçerik -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mb-8 flex items-center gap-3">
+            <i data-lucide="shopping-cart" class="w-8 h-8 text-orange-500"></i> Alışveriş Sepetim
+        </h1>
+
+        <div id="cartContentWrapper" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            
+            <!-- Sol: Ürün Listesi -->
+            <div class="lg:col-span-2 space-y-4" id="cartItemsContainer">
+                <!-- JS ile Doldurulacak -->
+            </div>
+
+            <!-- Sağ: Sipariş Özeti ve Müşteri Bilgileri -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm sticky top-24 space-y-6">
+                <h3 class="text-lg font-black text-slate-800 border-b border-slate-100 pb-4 flex items-center gap-2">
+                    <i data-lucide="receipt" class="w-5 h-5 text-orange-500"></i> Sipariş Özeti
+                </h3>
+
+                <div class="space-y-3 text-sm font-medium text-slate-600">
+                    <div class="flex justify-between">
+                        <span>Ara Toplam</span>
+                        <span id="summarySubtotal" class="font-bold text-slate-800">0.00 TL</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Kargo / Teslimat</span>
+                        <span class="text-emerald-600 font-bold">Satıcı ile Görüşülür</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex justify-between text-base">
+                        <span class="font-black text-slate-800">Toplam Tutar</span>
+                        <span id="summaryTotal" class="font-black text-orange-600 text-xl">0.00 TL</span>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100">
+
+                <!-- Müşteri Bilgileri Formu -->
+                <form id="checkoutForm" onsubmit="window.completeOrder(event)" class="space-y-4">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Teslimat & İletişim Bilgileri</h4>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Adınız Soyadınız</label>
+                        <input type="text" id="buyerName" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Örn: Ahmet Yılmaz">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Telefon Numaranız</label>
+                        <input type="tel" id="buyerPhone" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="0533 123 45 67">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Teslimat Adresi / Bölge</label>
+                        <textarea id="buyerAddress" rows="3" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Mahalle, Sokak, No veya Bölge (Örn: Girne Merkez)..."></textarea>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" id="btnCheckout" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-4 rounded-2xl transition shadow-xl shadow-green-500/20 flex items-center justify-center gap-2 text-base">
+                            <i data-lucide="message-circle" class="w-6 h-6"></i> WhatsApp ile Siparişi Tamamla
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto pt-8 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
+            <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
+            <div class="flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> Güvenli Yerel Alışveriş
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase ve Sepet Mantığı -->
+    <script type="module">
+        import { db } from "./js/firebase-config.js";
+        import { doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const APP_ID = 'kibris-pazar';
+        let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
+
+        window.renderCart = () => {
+            const container = document.getElementById('cartItemsContainer');
+            const wrapper = document.getElementById('cartContentWrapper');
+
+            if (cart.length === 0) {
+                wrapper.innerHTML = `
+                    <div class="col-span-full py-20 text-center bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+                        <div class="w-20 h-20 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="shopping-cart" class="w-10 h-10"></i>
+                        </div>
+                        <h2 class="text-xl font-black text-slate-800 mb-2">Sepetiniz Henüz Boş</h2>
+                        <p class="text-sm text-slate-500 mb-6">Pazaryerindeki yüzlerce eşsiz ürünü keşfetmeye hemen başlayın.</p>
+                        <a href="index.html" class="inline-block bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-8 rounded-xl transition shadow-lg">Alışverişe Başla</a>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            let html = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const p = item.product;
+                const price = item.dynamicPrice || p.price;
+                const itemTotal = price * item.quantity;
+                subtotal += itemTotal;
+                const img = item.dynamicImage || (p.images && p.images.length > 0 ? p.images[0] : 'https://placehold.co/200x200');
+
+                html += `
+                    <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center gap-5">
+                        <div class="w-24 h-24 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
+                            <img src="${img}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200';">
+                        </div>
+                        <div class="flex-1 text-center sm:text-left">
+                            <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-md inline-block mb-1">${p.storeName || 'Mağaza'}</span>
+                            <h3 class="text-base font-bold text-slate-800 line-clamp-1 mb-1">${p.title}</h3>
+                            ${item.variant ? `<div class="text-xs text-purple-600 font-bold mb-2">Seçenek: ${item.variant}</div>` : ''}
+                            <div class="text-lg font-black text-slate-900">${price.toLocaleString('tr-TR')} TL</div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
+                                <button onclick="window.updateQty(${index}, -1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">-</button>
+                                <span class="px-4 py-2 font-black text-sm text-slate-800">${item.quantity}</span>
+                                <button onclick="window.updateQty(${index}, 1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">+</button>
+                            </div>
+                            <button onclick="window.removeItem(${index})" class="text-slate-400 hover:text-rose-600 p-2.5 rounded-xl bg-slate-50 hover:bg-rose-50 border border-slate-200 transition" title="Ürünü Sil">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('summarySubtotal').innerText = subtotal.toLocaleString('tr-TR') + " TL";
+            document.getElementById('summaryTotal').innerText = subtotal.toLocaleString('tr-TR') + " TL";
+            lucide.createIcons();
+        };
+
+        window.updateQty = (index, delta) => {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
+            window.renderCart();
+        };
+
+        window.removeItem = (index) => {
+            cart.splice(index, 1);
+            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
+            window.renderCart();
+        };
+
+        window.completeOrder = async (e) => {
+            e.preventDefault();
+            if (cart.length === 0) return;
+
+            const name = document.getElementById('buyerName').value.trim();
+            const phone = document.getElementById('buyerPhone').value.trim();
+            const address = document.getElementById('buyerAddress').value.trim();
+
+            const btn = document.getElementById('btnCheckout');
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Sipariş Kaydediliyor...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            try {
+                // Sepetteki ürünleri mağazalarına göre grupla (Çoklu satıcı desteği)
+                let storesMap = {};
+                let totalOrderAmount = 0;
+
+                cart.forEach(item => {
+                    const storeId = item.product.storeId;
+                    if(!storesMap[storeId]) {
+                        storesMap[storeId] = {
+                            storeWhatsapp: item.product.storeWhatsapp || '',
+                            storeName: item.product.storeName || 'Mağaza',
+                            items: [],
+                            amount: 0
+                        };
+                    }
+                    const itemPrice = item.dynamicPrice || item.product.price;
+                    const sub = itemPrice * item.quantity;
+                    storesMap[storeId].amount += sub;
+                    totalOrderAmount += sub;
+
+                    storesMap[storeId].items.push({
+                        productId: item.product.id,
+                        title: item.product.title,
+                        quantity: item.quantity,
+                        price: itemPrice,
+                        variant: item.variant || null
+                    });
+                });
+
+                // Her mağaza için veritabanına ayrı sipariş kaydı oluştur ve WhatsApp linki hazırla
+                let firstWhatsapp = '';
+                let lastMessage = '';
+
+                for(let storeId in storesMap) {
+                    const storeData = storesMap[storeId];
+                    
+                    const orderPayload = {
+                        storeId: storeId,
+                        customerName: name,
+                        customerPhone: phone,
+                        customerAddress: address,
+                        items: storeData.items,
+                        totalAmount: storeData.amount,
+                        status: 'pending',
+                        createdAt: Date.now()
+                    };
+
+                    await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders')), orderPayload);
+
+                    let msg = `*🛒 YENİ SİPARİŞ - KIBRIS BAZAR*\n\n`;
+                    msg += `👤 *Müşteri:* ${name}\n`;
+                    msg += `📞 *Telefon:* ${phone}\n`;
+                    msg += `📍 *Adres:* ${address}\n\n`;
+                    msg += `📦 *Sipariş Edilen Ürünler:*\n`;
+                    storeData.items.forEach(i => {
+                        msg += `- ${i.quantity}x ${i.title} ${i.variant ? `(${i.variant})` : ''} - ${(i.price * i.quantity).toLocaleString('tr-TR')} TL\n`;
+                    });
+                    msg += `\n💰 *Toplam Tutar:* ${storeData.amount.toLocaleString('tr-TR')} TL\n\n`;
+                    msg += `Siparişimi onaylıyor musunuz?`;
+
+                    let phoneClean = storeData.storeWhatsapp.replace(/\D/g,'');
+                    if(phoneClean.length === 10 && !phoneClean.startsWith('90')) phoneClean = '90' + phoneClean;
+                    
+                    if(phoneClean) {
+                        firstWhatsapp = `https://wa.me/${phoneClean}?text=${encodeURIComponent(msg)}`;
+                    }
+                }
+
+                // Sepeti temizle
+                localStorage.removeItem('cart_items_v2');
+                cart = [];
+
+                alert("Siparişiniz başarıyla oluşturuldu! Satıcıya yönlendiriliyorsunuz.");
+                if(firstWhatsapp) {
+                    window.location.href = firstWhatsapp;
+                } else {
+                    window.location.href = 'index.html';
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("Sipariş kaydedilirken bir hata oluştu.");
+                btn.innerHTML = `<i data-lucide="message-circle" class="w-6 h-6"></i> WhatsApp ile Siparişi Tamamla`;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', window.renderCart);
+    </script>
+</body>
+</html>
