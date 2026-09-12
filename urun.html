@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Ürün Detayı | Kıbrıs Bazar</title>
+    
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <meta name="theme-color" content="#f97316">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
+
+    <!-- Üst Bilgi Çubuğu -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] py-1.5 px-4 font-medium border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="flex items-center gap-1">
+                    <i data-lucide="map-pin" class="w-3 h-3 text-orange-400"></i> Tüm Kıbrıs
+                </span>
+                <span class="hidden sm:inline">| Komisyonsuz Dijital Pazar Yeri</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="satici.html" class="text-orange-400 hover:text-orange-300 font-bold transition flex items-center gap-1">
+                    <i data-lucide="store" class="w-3.5 h-3.5"></i> Satıcı Paneli
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 gap-4">
+                <a href="index.html" class="flex items-center gap-3">
+                    <span class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">KIBRIS<span class="text-orange-500">BAZAR</span></span>
+                </a>
+
+                <div class="flex-1 max-w-2xl hidden md:flex items-center mx-6">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="Aradığınız ürün, kategori veya markayı yazınız..." class="w-full pl-4 pr-10 py-2.5 bg-slate-100 border border-slate-200 rounded-full text-sm font-medium focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition-all"/>
+                        <button class="absolute right-3 top-2.5"><i data-lucide="search" class="w-5 h-5 text-slate-400"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-5 sm:gap-6">
+                    <a href="sepet.html" class="flex flex-col items-center text-slate-600 hover:text-orange-500 transition-colors relative">
+                        <div class="relative">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span id="cartCountBadge" class="absolute -top-1.5 -right-2 bg-orange-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-sm hidden">0</span>
+                        </div>
+                        <span class="text-[10px] font-bold mt-1 hidden sm:block">Sepetim</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ana Ürün Detay İçeriği -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- Yükleniyor Göstergesi -->
+        <div id="loadingIndicator" class="flex flex-col items-center justify-center py-20">
+            <i data-lucide="loader-2" class="w-10 h-10 text-orange-500 animate-spin mb-4"></i>
+            <p class="text-slate-500 font-bold">Ürün Bilgileri Getiriliyor...</p>
+        </div>
+
+        <div id="productDetailPanel" class="hidden bg-white rounded-[2rem] shadow-sm border border-slate-200 flex-col md:flex-row overflow-hidden">
+            
+            <!-- Sol Taraf: Görseller -->
+            <div class="w-full md:w-1/2 lg:w-3/5 bg-slate-50/50 border-r border-slate-100 p-4 sm:p-8 flex flex-col relative shrink-0">
+                <div class="w-full h-[300px] sm:h-[400px] md:h-[500px] bg-white rounded-3xl border border-slate-200 overflow-hidden relative flex items-center justify-center shadow-sm shrink-0">
+                    <img id="detailMainImage" src="" class="absolute w-full h-full object-contain p-4 transition-transform duration-300" alt="Ürün Görseli"/>
+                    <div id="detailRibbonContainer" class="absolute top-4 left-0 flex flex-col gap-1 items-start z-10 pointer-events-none hidden"></div>
+                </div>
+                <div id="detailThumbnails" class="flex gap-3 overflow-x-auto mt-5 pb-2 pt-1 no-scrollbar snap-x items-center shrink-0"></div>
+            </div>
+
+            <!-- Sağ Taraf: Detaylar ve Satın Alma -->
+            <div class="w-full md:w-1/2 lg:w-2/5 p-6 sm:p-8 flex flex-col bg-white relative">
+                <h1 id="detailTitle" class="text-2xl sm:text-3xl font-black text-slate-900 mb-6 leading-tight pr-8">Ürün Yükleniyor...</h1>
+                
+                <div id="detailVariantContainer" class="mb-6 hidden shrink-0"></div>
+
+                <div class="mb-6 p-5 sm:p-6 bg-orange-50/50 rounded-3xl border border-orange-100 flex items-center justify-between shadow-sm shrink-0">
+                    <div>
+                        <div id="detailOriginalPrice" class="text-sm text-slate-400 line-through font-bold mb-1 hidden"></div>
+                        <div id="detailPrice" class="text-4xl sm:text-5xl font-black text-orange-600 tracking-tight">0 TL</div>
+                    </div>
+                    <div id="detailDiscountBadge" class="hidden bg-rose-500 text-white font-black text-lg px-4 py-2 rounded-xl shadow-md"></div>
+                </div>
+
+                <div id="detailDescContainer" class="mb-6 bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden hidden shrink-0">
+                    <div class="p-4 sm:p-5 flex items-center justify-between border-b border-slate-100/50 bg-white">
+                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="align-left" class="w-4 h-4 text-orange-500"></i> Ürün Açıklaması
+                        </h4>
+                    </div>
+                    <div class="p-4 sm:p-5">
+                        <p id="detailDescription" class="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap"></p>
+                    </div>
+                </div>
+                
+                <!-- Mağaza Yönlendirmesi -->
+                <a id="detailStoreLink" href="#" class="block bg-slate-50 hover:bg-orange-50 rounded-2xl p-4 border border-slate-200 mb-6 transition-colors group shadow-sm shrink-0">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-400 shrink-0 overflow-hidden p-1">
+                                <i data-lucide="store" class="w-6 h-6" id="detailStoreLogoIcon"></i>
+                                <img id="detailStoreLogo" src="" class="w-full h-full object-contain rounded-full hidden">
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-400 uppercase group-hover:text-orange-500 transition-colors">Satıcı Profili & Tüm Ürünleri</div>
+                                <div class="font-black text-slate-800 text-lg flex items-center gap-1"><span id="detailStoreName">Mağaza</span><i id="detailStoreShield" data-lucide="shield-check" class="w-4 h-4 text-emerald-500 hidden"></i></div>
+                                <div class="text-xs font-bold text-slate-500 flex items-center gap-1 mt-0.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-orange-400"></i> <span id="detailDistrict">Kıbrıs</span></div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-orange-500 transition-colors"></i>
+                    </div>
+                </a>
+                
+                <input type="hidden" id="detailStoreIdHidden">
+                <input type="hidden" id="detailProductId">
+
+                <div class="mb-4 mt-2 shrink-0">
+                    <button id="detailAddToCartBtn" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 sm:py-5 rounded-2xl font-black text-base transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i> Sepete Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto pt-8 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
+            <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
+            <div class="flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> %100 Güvenli Alışveriş
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase Bağlantısı ve Detay Sayfası Mantığı -->
+    <script type="module">
+        import { db } from "./js/firebase-config.js";
+        import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const APP_ID = 'kibris-pazar';
+        let currentProduct = null;
+        let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
+
+        // Sepet İkonunu Güncelle
+        function updateCartBadge() {
+            let totalQty = 0;
+            cart.forEach(item => totalQty += item.quantity);
+            const badge = document.getElementById('cartCountBadge');
+            badge.innerText = totalQty;
+            if(totalQty > 0) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+        }
+
+        // URL'den ID alma fonksiyonu (MPA zekası)
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Ana Resmi Değiştir
+        window.changeDetailMedia = (url) => {
+            document.getElementById('detailMainImage').src = url; 
+        };
+
+        // Varyant Seçimi
+        window.selectVariant = (idx) => {
+            if(!currentProduct) return;
+            const variant = currentProduct.variants[idx];
+
+            // Tüm butonların rengini sıfırla
+            document.querySelectorAll('.var-btn').forEach(b => {
+                b.classList.remove('border-orange-500', 'text-orange-600', 'bg-orange-50');
+                b.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
+            });
+            
+            // Seçileni renklendir
+            const btn = document.getElementById(`varBtn-${idx}`);
+            if(btn) {
+                btn.classList.remove('border-slate-200', 'bg-white', 'text-slate-700');
+                btn.classList.add('border-orange-500', 'text-orange-600', 'bg-orange-50');
+            }
+
+            document.getElementById('selectedVariantIndex').value = idx;
+
+            // Fiyatı ve resmi güncelle
+            const varPrice = variant.price || currentProduct.price;
+            document.getElementById('detailPrice').innerText = varPrice.toLocaleString('tr-TR') + ' TL';
+            document.getElementById('detailOriginalPrice').classList.add('hidden');
+            document.getElementById('detailDiscountBadge').classList.add('hidden');
+
+            if(variant.image) {
+                document.getElementById('detailMainImage').src = variant.image;
+            }
+        };
+
+        // Sepete Ekle
+        document.getElementById('detailAddToCartBtn').onclick = () => {
+            if(!currentProduct) return;
+
+            let selectedVariantName = null;
+            let finalPrice = currentProduct.price;
+            let finalImage = (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : '';
+
+            if (currentProduct.variants && currentProduct.variants.length > 0) {
+                const vIdx = document.getElementById('selectedVariantIndex')?.value;
+                if (!vIdx) { alert("Lütfen bir seçenek (varyant) belirleyin."); return; }
+                const variantData = currentProduct.variants[parseInt(vIdx)];
+                selectedVariantName = variantData.name;
+                finalPrice = variantData.price || currentProduct.price;
+                if(variantData.image) finalImage = variantData.image;
+            }
+
+            const cartItemId = selectedVariantName ? `${currentProduct.id}-${selectedVariantName}` : currentProduct.id;
+            const exist = cart.find(i => i.cartItemId === cartItemId);
+            
+            if(exist) exist.quantity++;
+            else cart.push({ 
+                cartItemId: cartItemId, 
+                product: currentProduct, 
+                variant: selectedVariantName, 
+                quantity: 1, 
+                dynamicPrice: finalPrice, 
+                dynamicImage: finalImage 
+            });
+            
+            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
+            updateCartBadge();
+            alert("Ürün başarıyla sepete eklendi!");
+        };
+
+        async function initProductPage() {
+            lucide.createIcons();
+            updateCartBadge();
+
+            const productId = getProductIdFromUrl();
+            if (!productId) {
+                document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Ürün bulunamadı veya link hatalı.</p>';
+                return;
+            }
+
+            try {
+                // Firebase'den Ürünü Çek
+                const productSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', productId));
+                
+                if (!productSnap.exists()) {
+                    document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Bu ürün sistemden silinmiş olabilir.</p>';
+                    return;
+                }
+
+                currentProduct = { id: productSnap.id, ...productSnap.data() };
+                
+                // Mağaza bilgilerini çek (Rozet ve Logo için)
+                const storeSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'stores', currentProduct.storeId));
+                let storeObj = null;
+                if (storeSnap.exists()) storeObj = storeSnap.data();
+
+                // Görseller
+                const images = (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images : ['https://placehold.co/400x400/cbd5e1/475569?text=Gorsel+Yok'];
+                document.getElementById('detailMainImage').src = images[0];
+                
+                let thumbHtml = '';
+                images.forEach(imgUrl => { 
+                    thumbHtml += `<div onclick="window.changeDetailMedia('${imgUrl}')" class="snap-start shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden cursor-pointer border-2 border-slate-200 hover:border-orange-400 transition-colors shadow-sm bg-white"><img src="${imgUrl}" class="w-full h-full object-cover"/></div>`; 
+                });
+                document.getElementById('detailThumbnails').innerHTML = thumbHtml;
+
+                // Temel Bilgiler
+                document.getElementById('detailTitle').innerText = currentProduct.title;
+                document.title = `${currentProduct.title} | Kıbrıs Bazar`;
+
+                document.getElementById('detailPrice').innerText = currentProduct.price.toLocaleString('tr-TR') + ' TL';
+                
+                // İndirim Oranı ve Etiketler
+                const discount = currentProduct.originalPrice > currentProduct.price ? Math.round(((currentProduct.originalPrice - currentProduct.price) / currentProduct.originalPrice) * 100) : 0;
+                let ribbonHtml = '';
+                if (discount > 0) {
+                     ribbonHtml += `<div class="bg-rose-500 text-white text-[12px] font-black px-3 py-1 rounded-r shadow-md">-%${discount} İndirim</div>`;
+                     document.getElementById('detailOriginalPrice').innerText = currentProduct.originalPrice.toLocaleString('tr-TR') + ' TL';
+                     document.getElementById('detailOriginalPrice').classList.remove('hidden');
+                     document.getElementById('detailDiscountBadge').innerText = `-%${discount}`;
+                     document.getElementById('detailDiscountBadge').classList.remove('hidden');
+                }
+                if (currentProduct.freeDelivery) {
+                     ribbonHtml += `<div class="bg-[#0ea5e9] text-white text-[11px] font-black px-3 py-1 rounded-r shadow-md flex items-center gap-1 uppercase tracking-wider"><i data-lucide="truck" class="w-4 h-4 shrink-0"></i> Ücretsiz Teslimat</div>`;
+                }
+                if (currentProduct.cashOnDelivery) {
+                     ribbonHtml += `<div class="bg-emerald-500 text-white text-[11px] font-black px-3 py-1 rounded-r shadow-md flex items-center gap-1 uppercase tracking-wider"><i data-lucide="banknote" class="w-4 h-4 shrink-0"></i> Kapıda Ödeme</div>`;
+                }
+                const detailRibbonContainer = document.getElementById('detailRibbonContainer');
+                if(ribbonHtml !== '') {
+                    detailRibbonContainer.innerHTML = ribbonHtml;
+                    detailRibbonContainer.classList.remove('hidden');
+                }
+
+                // Açıklama
+                if(currentProduct.description) {
+                    document.getElementById('detailDescription').innerText = currentProduct.description;
+                    document.getElementById('detailDescContainer').classList.remove('hidden');
+                }
+
+                // Varyantlar (Seçenekler)
+                const variantContainer = document.getElementById('detailVariantContainer');
+                if (currentProduct.variants && currentProduct.variants.length > 0) {
+                    const groups = {};
+                    currentProduct.variants.forEach((v, idx) => {
+                        const rawGroup = v.group || 'Seçenek';
+                        const g = rawGroup.trim().toUpperCase(); 
+                        if(!groups[g]) groups[g] = [];
+                        groups[g].push({ ...v, originalIndex: idx });
+                    });
+
+                    let varHtml = '';
+                    for (const [groupName, vars] of Object.entries(groups)) {
+                        varHtml += `<div class="mb-5 last:mb-0">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-3 tracking-wider">${groupName}</label>
+                            <div class="flex flex-wrap gap-4">`;
+                        
+                        vars.forEach(v => {
+                            varHtml += `<button onclick="window.selectVariant(${v.originalIndex})" id="varBtn-${v.originalIndex}" class="var-btn px-4 py-2.5 rounded-xl border-2 bg-white border-slate-200 text-slate-700 hover:border-orange-500 shadow-sm text-sm font-bold transition">${v.name}</button>`;
+                        });
+                        varHtml += `</div></div>`;
+                    }
+                    varHtml += `<input type="hidden" id="selectedVariantIndex" value="">`;
+                    variantContainer.innerHTML = varHtml;
+                    variantContainer.classList.remove('hidden');
+                }
+
+                // Mağaza Bilgileri ve Linki
+                document.getElementById('detailStoreName').innerText = currentProduct.storeName;
+                document.getElementById('detailDistrict').innerText = currentProduct.district;
+                document.getElementById('detailStoreLink').href = `magaza.html?id=${currentProduct.storeId}`; // Mağaza MPA Linki
+
+                if(storeObj && (storeObj.isPremium || storeObj.packageType === 'premium')) {
+                    document.getElementById('detailStoreShield').classList.remove('hidden');
+                }
+                if(storeObj && storeObj.logoUrl) {
+                    document.getElementById('detailStoreLogo').src = storeObj.logoUrl;
+                    document.getElementById('detailStoreLogo').classList.remove('hidden');
+                    document.getElementById('detailStoreLogoIcon').classList.add('hidden');
+                }
+
+                // Yükleyiciyi gizle, içeriği göster
+                document.getElementById('loadingIndicator').classList.add('hidden');
+                document.getElementById('productDetailPanel').classList.remove('hidden');
+                document.getElementById('productDetailPanel').classList.add('flex');
+                
+            } catch (error) {
+                console.error("Ürün yüklenirken hata:", error);
+                document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Bir hata oluştu, lütfen sayfayı yenileyin.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initProductPage);
+    </script>
+</body>
+</html>
