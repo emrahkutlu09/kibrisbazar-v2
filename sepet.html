@@ -93,6 +93,12 @@
                         <textarea id="buyerAddress" rows="3" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Mahalle, Sokak, No veya Bölge (Örn: Girne Merkez)..."></textarea>
                     </div>
 
+                    <!-- Yasal Sorumluluk Reddi (Disclaimer) Metni -->
+                    <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-2xl text-[11px] text-amber-800 leading-relaxed font-medium flex gap-2.5">
+                        <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                        <p>Kıbrıs Bazar yalnızca bir ilan ve iletişim platformudur. Satıcı ile alıcı arasındaki ödeme, teslimat veya olası anlaşmazlıklardan platformumuz hiçbir şekilde sorumlu değildir.</p>
+                    </div>
+
                     <div class="pt-2">
                         <button type="submit" id="btnCheckout" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-4 rounded-2xl transition shadow-xl shadow-green-500/20 flex items-center justify-center gap-2 text-base">
                             <i data-lucide="message-circle" class="w-6 h-6"></i> WhatsApp ile Siparişi Tamamla
@@ -210,7 +216,6 @@
             lucide.createIcons();
 
             try {
-                // Sepetteki ürünleri mağazalarına göre grupla (Çoklu satıcı desteği)
                 let storesMap = {};
                 let totalOrderAmount = 0;
 
@@ -238,9 +243,7 @@
                     });
                 });
 
-                // Her mağaza için veritabanına ayrı sipariş kaydı oluştur ve WhatsApp linki hazırla
                 let firstWhatsapp = '';
-                let lastMessage = '';
 
                 for(let storeId in storesMap) {
                     const storeData = storesMap[storeId];
@@ -277,7 +280,6 @@
                     }
                 }
 
-                // Sepeti temizle
                 localStorage.removeItem('cart_items_v2');
                 cart = [];
 
