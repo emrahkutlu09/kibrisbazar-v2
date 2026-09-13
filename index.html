@@ -19,13 +19,6 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        /* Mega Menü Animasyonları */
-        .mega-menu-container { display: none; }
-        .menu-item:hover .mega-menu-container { display: flex; animation: slideIn 0.2s ease-out forwards; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        
-        /* Filtre Checkbox Stili */
         .filter-checkbox { @apply w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
     </style>
 </head>
@@ -35,17 +28,17 @@
     <header class="sticky top-0 z-[100] bg-white border-b border-slate-200 shadow-sm">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             
-            <div class="flex items-center gap-4 shrink-0">
-                <!-- Mobil Hamburger Menü -->
-                <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="lg:hidden p-1 text-slate-600 hover:text-orange-500 transition">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
+            <div class="flex items-center gap-3 sm:gap-4 shrink-0">
+                <!-- Evrensel Hamburger Menü İkonu -->
+                <button onclick="window.toggleHamburgerMenu()" class="p-1 sm:p-2 text-slate-600 hover:text-orange-500 hover:bg-orange-50 rounded-xl transition">
+                    <i data-lucide="menu" class="w-6 h-6 sm:w-7 sm:h-7"></i>
                 </button>
                 <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
                     KIBRIS<span class="text-orange-500">BAZAR</span>
                 </a>
             </div>
 
-            <!-- Arama Çubuğu -->
+            <!-- Arama Çubuğu (Masaüstü) -->
             <div class="flex-1 max-w-2xl mx-2 sm:mx-8 hidden sm:block relative">
                 <input type="text" id="searchInput" placeholder="Aradığınız ürün, kategori veya markayı yazınız..." 
                     class="w-full bg-slate-100 border border-transparent hover:border-slate-300 rounded-full pl-12 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 transition-all placeholder:text-slate-500 font-medium">
@@ -56,9 +49,6 @@
             <div class="flex items-center gap-2 sm:gap-4 shrink-0">
                 <a href="satici.html" class="hidden md:flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-xl hover:bg-orange-50">
                     <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
-                </a>
-                <a href="#" class="flex items-center justify-center p-2 text-slate-600 hover:text-rose-500 transition-colors bg-white rounded-xl group relative hidden sm:flex">
-                    <i data-lucide="heart" class="w-5 h-5 group-hover:fill-rose-500"></i>
                 </a>
                 <a href="sepet.html" class="flex items-center justify-center px-3 py-2 text-slate-700 hover:text-orange-600 transition-colors bg-orange-50 border border-orange-100 rounded-xl group relative">
                     <i data-lucide="shopping-cart" class="w-5 h-5"></i>
@@ -78,32 +68,39 @@
         </div>
     </header>
 
-    <!-- Ana İçerik Konteyneri (Sol Menü + Sağ Vitrin) -->
+    <!-- HAMBURGER MENÜ (ÇEKMECE) -->
+    <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] hidden">
+        <div id="hamburgerMenuContentArea" class="bg-white w-[85%] max-w-[320px] h-full flex flex-col shadow-2xl transform -translate-x-full transition-transform duration-300">
+            <!-- Çekmece Başlık -->
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+                <span class="font-black text-slate-800 flex items-center gap-2"><i data-lucide="list" class="w-5 h-5 text-orange-500"></i> Tüm Kategoriler</span>
+                <button onclick="window.toggleHamburgerMenu()" class="p-2 text-slate-400 hover:text-rose-500 bg-white rounded-full border border-slate-200 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            
+            <!-- Dinamik Akordeon Kategori Listesi -->
+            <div class="flex-1 overflow-y-auto no-scrollbar p-2" id="hamburgerMenuCategories">
+                <div class="py-10 text-center"><i data-lucide="loader-2" class="w-6 h-6 text-orange-500 animate-spin mx-auto"></i></div>
+            </div>
+        </div>
+        <!-- Boş alana tıklayınca kapatma -->
+        <div class="flex-1 h-full" onclick="window.toggleHamburgerMenu()"></div>
+    </div>
+
+    <!-- ANA İÇERİK KONSOLU -->
     <div class="max-w-[1400px] mx-auto w-full flex-1 flex flex-col lg:flex-row relative">
         
-        <!-- SOL SÜTUN: MEGAMENTÜ & FİLTRELER -->
-        <aside id="leftSidebar" class="hidden lg:flex flex-col w-[260px] shrink-0 border-r border-slate-200 bg-white py-4 z-40 min-h-[calc(100vh-64px)] sticky top-16">
-            
-            <!-- MEGA MENÜ ALANI -->
-            <div id="megaMenuWrapper" class="flex flex-col w-full border-b border-slate-100 pb-4 mb-4">
-                <h3 class="px-5 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Kategoriler</h3>
-                <nav id="desktopCategoryMenu" class="flex flex-col relative w-full">
-                    <!-- JS İle Dinamik Dolacak -->
-                    <div class="py-10 text-center"><i data-lucide="loader-2" class="w-5 h-5 text-orange-500 animate-spin mx-auto"></i></div>
-                </nav>
-            </div>
-
-            <!-- DİNAMİK FİLTRELER ALANI (Sadece kategori seçilince görünür) -->
-            <div id="dynamicFiltersWrapper" class="px-5 space-y-6 hidden overflow-y-auto pb-20 no-scrollbar">
+        <!-- SOL SÜTUN: SADECE FİLTRELER İÇİN (Varsayılan olarak gizli) -->
+        <aside id="leftSidebar" class="hidden lg:flex flex-col w-[260px] shrink-0 border-r border-slate-200 bg-white py-6 z-40 min-h-[calc(100vh-64px)] sticky top-16">
+            <div class="px-5 space-y-6 overflow-y-auto no-scrollbar pb-20">
                 <div class="flex items-center justify-between">
                     <h3 class="text-sm font-black text-slate-800 flex items-center gap-1.5"><i data-lucide="filter" class="w-4 h-4 text-orange-500"></i> Filtreler</h3>
                     <button onclick="window.clearAllFilters()" class="text-[10px] font-bold text-rose-500 hover:underline">Temizle</button>
                 </div>
                 
                 <!-- Seçili Kategori Etiketi -->
-                <div id="selectedCategoryBadge" class="bg-orange-50 text-orange-700 text-xs font-bold px-3 py-2 rounded-lg flex items-center justify-between border border-orange-100">
-                    <span id="activeCatNameText">Kategori</span>
-                    <button onclick="window.resetCategorySelection()" class="text-orange-400 hover:text-rose-500 transition"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                <div class="bg-orange-50 text-orange-700 text-xs font-bold px-3 py-2.5 rounded-xl flex items-center justify-between border border-orange-100 shadow-sm">
+                    <span id="activeCatNameText" class="truncate pr-2">Kategori</span>
+                    <button onclick="window.resetCategorySelection()" class="text-orange-400 hover:text-rose-500 transition shrink-0 bg-white p-1 rounded-full shadow-sm"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                 </div>
 
                 <!-- Sabit Filtreler (Fiyat, Kargo, Kapıda Ödeme) -->
@@ -147,8 +144,8 @@
                         <span class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-4 inline-block shadow-md">Sezon Fırsatı</span>
                         <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-4 tracking-tight">Kıbrıs'ın En Büyük<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-400">Pazar Yerine</span> Hoş Geldiniz!</h1>
                         <p class="text-slate-300 text-sm sm:text-base font-medium mb-8 leading-relaxed max-w-md">Yerel mağazalardan binlerce ürün, ücretsiz kargo ve kapıda ödeme seçenekleriyle kapınızda.</p>
-                        <button onclick="document.getElementById('searchInput').focus()" class="bg-white text-slate-900 hover:bg-orange-50 font-black py-3.5 px-8 rounded-full transition shadow-xl hover:scale-105 transform inline-flex items-center gap-2">
-                            Alışverişe Başla <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        <button onclick="window.toggleHamburgerMenu()" class="bg-white text-slate-900 hover:bg-orange-50 font-black py-3.5 px-8 rounded-full transition shadow-xl hover:scale-105 transform inline-flex items-center gap-2">
+                            Kategorileri Keşfet <i data-lucide="menu" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <img src="https://cdni.iconscout.com/illustration/premium/thumb/online-shopping-4560967-3786270.png" class="absolute -right-10 sm:right-10 bottom-0 w-64 sm:w-96 opacity-30 sm:opacity-100 pointer-events-none drop-shadow-2xl" alt="Shopping">
@@ -163,6 +160,11 @@
                         Tüm Ürünler <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg" id="resultsCountBadge">0 İlan</span>
                     </h2>
                     <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <!-- Mobil Filtre Açma Butonu (Sadece kategorideyken görünür) -->
+                        <button id="mobileFilterBtn" onclick="window.openMobileFilters()" class="lg:hidden hidden bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 flex items-center gap-2 shadow-sm flex-1 justify-center">
+                            <i data-lucide="filter" class="w-4 h-4"></i> Filtrele
+                        </button>
+
                         <select id="sortSelect" onchange="window.applyFilters()" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 outline-none focus:border-orange-500 cursor-pointer shadow-sm w-full sm:w-auto">
                             <option value="newest">En Yeniler</option>
                             <option value="price_asc">En Düşük Fiyat</option>
@@ -216,19 +218,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Mobil Kategori Menüsü Modal -->
-    <div id="mobileMenu" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-[200] hidden">
-        <div class="bg-white w-[85%] max-w-sm h-full flex flex-col shadow-2xl">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <span class="font-black text-slate-800">Menü & Kategoriler</span>
-                <button onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="p-2 text-slate-400 hover:text-rose-500 bg-white rounded-full border border-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4" id="mobileCategoryContainer">
-                <!-- JS İle Dolacak -->
-            </div>
-        </div>
-    </div>
 
     <!-- Firebase ve Uygulama Mantığı -->
     <script type="module">
@@ -301,6 +290,109 @@
             setTimeout(() => { toast.classList.add('translate-y-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
         };
 
+        // --- HAMBURGER MENÜ (AKORDEON) MANTIĞI ---
+        window.toggleHamburgerMenu = () => {
+            const drawer = document.getElementById('hamburgerMenuDrawer');
+            const content = document.getElementById('hamburgerMenuContentArea');
+            if(drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                drawer.classList.add('flex');
+                setTimeout(() => { content.classList.remove('-translate-x-full'); }, 10);
+            } else {
+                content.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('hidden');
+                    drawer.classList.remove('flex');
+                }, 300);
+            }
+        };
+
+        window.toggleAccordion = (id) => {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if(el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                el.classList.add('flex');
+                if(icon) icon.classList.add('rotate-180');
+            } else {
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+                if(icon) icon.classList.remove('rotate-180');
+            }
+        };
+
+        function renderHamburgerMenu() {
+            const container = document.getElementById('hamburgerMenuCategories');
+            if(!container) return;
+
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a,b) => a.name.localeCompare(b.name));
+            let html = '<div class="space-y-1">';
+
+            mainCats.forEach(main => {
+                const groups = allCategories.filter(c => c.parentId === main.id && c.isGroupTitle).sort((a,b) => a.name.localeCompare(b.name));
+                
+                html += `
+                <div class="border-b border-slate-100 last:border-0 rounded-xl overflow-hidden bg-white mb-2 shadow-sm">
+                    <button onclick="window.toggleAccordion('acc-${main.id}')" class="w-full flex items-center justify-between p-4 hover:bg-orange-50 text-slate-800 font-bold transition">
+                        <span class="flex items-center gap-3"><i data-lucide="${main.icon || 'circle'}" class="w-5 h-5 text-orange-500"></i> ${main.name}</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-300" id="icon-acc-${main.id}"></i>
+                    </button>
+                    <div id="acc-${main.id}" class="hidden flex-col bg-slate-50 px-5 py-3 space-y-5 border-t border-slate-100">
+                `;
+                
+                groups.forEach(grp => {
+                    const subs = allCategories.filter(c => c.parentId === grp.id).sort((a,b) => a.name.localeCompare(b.name));
+                    html += `<div><h4 class="text-[10px] font-black uppercase text-slate-400 mb-2 tracking-wider">${grp.name}</h4><div class="flex flex-col gap-1.5 border-l-2 border-slate-200 pl-3">`;
+                    subs.forEach(sub => {
+                        html += `<button onclick="window.selectCategory('${main.id}', '${sub.slug}', '${sub.name}')" class="text-xs text-slate-600 hover:text-orange-600 font-medium hover:font-bold text-left py-1 transition">${sub.name}</button>`;
+                    });
+                    html += `</div></div>`;
+                });
+                
+                html += `</div></div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // Kategori Seçildiğinde Çalışır
+        window.selectCategory = (mainCatId, subCatSlug, subCatName) => {
+            activeMainCategory = mainCatId;
+            activeSubCategorySlug = subCatSlug;
+            selectedFilters = {}; 
+            document.getElementById('searchInput').value = "";
+            document.getElementById('mobileSearchInput').value = "";
+            searchQuery = "";
+            
+            window.toggleHamburgerMenu(); // Menüyü kapat
+
+            // Görünüm Ayarları
+            document.getElementById('heroBannerSection').classList.add('hidden');
+            document.getElementById('leftSidebar').classList.remove('hidden');
+            document.getElementById('mobileFilterBtn').classList.remove('hidden');
+            
+            document.getElementById('activeCatNameText').innerText = subCatName;
+            
+            renderDynamicFilters(subCatSlug);
+            window.applyFilters();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // Kategoriyi Temizle ve Ana Ekrana Dön
+        window.resetCategorySelection = () => {
+            activeMainCategory = null;
+            activeSubCategorySlug = null;
+            window.clearAllFilters();
+            
+            // Görünüm Ayarları
+            document.getElementById('heroBannerSection').classList.remove('hidden');
+            document.getElementById('leftSidebar').classList.add('hidden');
+            document.getElementById('mobileFilterBtn').classList.add('hidden');
+            
+            window.applyFilters();
+        };
+
         // Yeni Nesil Ürün Kartı
         window.createProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
@@ -348,102 +440,6 @@
             `;
         };
 
-        // --- TRENDYOL TİPİ MEGAMENU OLUŞTURUCU ---
-        function renderMegaMenu() {
-            const desktopMenu = document.getElementById('desktopCategoryMenu');
-            const mobileMenu = document.getElementById('mobileCategoryContainer');
-            if(!desktopMenu || !mobileMenu) return;
-
-            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a,b) => a.name.localeCompare(b.name));
-            
-            let desktopHtml = '';
-            let mobileHtml = '<div class="space-y-2">';
-
-            mainCats.forEach(main => {
-                const groups = allCategories.filter(c => c.parentId === main.id && c.isGroupTitle).sort((a,b) => a.name.localeCompare(b.name));
-                
-                // MASAÜSTÜ MENÜ ITEM
-                let megaPanelHtml = '';
-                if(groups.length > 0) {
-                    megaPanelHtml = `<div class="mega-menu-container absolute top-0 left-full ml-1 w-[700px] min-h-full bg-white border border-slate-200 shadow-2xl rounded-2xl p-6 z-[200] grid grid-cols-3 gap-8">`;
-                    groups.forEach(grp => {
-                        const subs = allCategories.filter(c => c.parentId === grp.id).sort((a,b) => a.name.localeCompare(b.name));
-                        megaPanelHtml += `<div class="flex flex-col gap-2">
-                            <h4 class="font-black text-slate-800 text-sm mb-1 pb-1 border-b border-slate-100">${grp.name}</h4>
-                            <div class="flex flex-col gap-1.5">`;
-                        subs.forEach(sub => {
-                            megaPanelHtml += `<button onclick="window.selectCategory('${main.id}', '${sub.slug}', '${sub.name}')" class="text-xs text-slate-500 hover:text-orange-500 hover:font-bold text-left transition">${sub.name}</button>`;
-                        });
-                        megaPanelHtml += `</div></div>`;
-                    });
-                    megaPanelHtml += `</div>`;
-                }
-
-                desktopHtml += `
-                    <div class="menu-item relative group/item">
-                        <button class="w-full flex items-center justify-between px-5 py-3 hover:bg-orange-50 hover:text-orange-600 transition-colors border-l-4 border-transparent hover:border-orange-500 text-sm font-bold text-slate-700">
-                            <span class="flex items-center gap-3"><i data-lucide="${main.icon || 'circle'}" class="w-4 h-4"></i> ${main.name}</span>
-                            <i data-lucide="chevron-right" class="w-4 h-4 opacity-50"></i>
-                        </button>
-                        ${megaPanelHtml}
-                    </div>
-                `;
-
-                // MOBİL MENÜ ITEM
-                mobileHtml += `
-                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
-                        <div class="bg-slate-50 px-4 py-3 font-black text-sm text-slate-800 flex items-center gap-2"><i data-lucide="${main.icon || 'circle'}" class="w-4 h-4 text-orange-500"></i> ${main.name}</div>
-                        <div class="p-3 grid grid-cols-2 gap-x-2 gap-y-4">
-                `;
-                groups.forEach(grp => {
-                    const subs = allCategories.filter(c => c.parentId === grp.id).sort((a,b) => a.name.localeCompare(b.name));
-                    mobileHtml += `<div><h4 class="text-[10px] font-black uppercase text-slate-400 mb-1">${grp.name}</h4><div class="flex flex-col gap-1">`;
-                    subs.forEach(sub => {
-                        mobileHtml += `<button onclick="document.getElementById('mobileMenu').classList.add('hidden'); window.selectCategory('${main.id}', '${sub.slug}', '${sub.name}')" class="text-xs text-slate-600 hover:text-orange-500 text-left py-0.5">${sub.name}</button>`;
-                    });
-                    mobileHtml += `</div></div>`;
-                });
-                mobileHtml += `</div></div>`;
-            });
-            
-            mobileHtml += '</div>';
-
-            desktopMenu.innerHTML = desktopHtml;
-            mobileMenu.innerHTML = mobileHtml;
-            lucide.createIcons();
-        }
-
-        // Kategori Seçildiğinde Çalışır
-        window.selectCategory = (mainCatId, subCatSlug, subCatName) => {
-            activeMainCategory = mainCatId;
-            activeSubCategorySlug = subCatSlug;
-            selectedFilters = {}; // Filtreleri Sıfırla
-            document.getElementById('searchInput').value = "";
-            document.getElementById('mobileSearchInput').value = "";
-            searchQuery = "";
-            
-            document.getElementById('megaMenuWrapper').classList.add('hidden');
-            document.getElementById('heroBannerSection').classList.add('hidden');
-            document.getElementById('dynamicFiltersWrapper').classList.remove('hidden');
-            
-            document.getElementById('activeCatNameText').innerText = subCatName;
-            
-            renderDynamicFilters(subCatSlug);
-            window.applyFilters();
-        };
-
-        // Kategoriyi Temizle ve Ana Ekrana Dön
-        window.resetCategorySelection = () => {
-            activeMainCategory = null;
-            activeSubCategorySlug = null;
-            window.clearAllFilters();
-            
-            document.getElementById('megaMenuWrapper').classList.remove('hidden');
-            document.getElementById('heroBannerSection').classList.remove('hidden');
-            document.getElementById('dynamicFiltersWrapper').classList.add('hidden');
-            window.applyFilters();
-        };
-
         // Seçilen Kategoriye Göre Sol Filtre Sütununu Çizer
         function renderDynamicFilters(subCatSlug) {
             const container = document.getElementById('dynamicAttributesFilterContainer');
@@ -452,11 +448,8 @@
             const catData = allCategories.find(c => c.slug === subCatSlug);
             if(!catData || !catData.attributes || catData.attributes.length === 0) return;
 
-            // Satıcı formundaki mantık: Ürün tipi haricindekileri filtreye bas
-            const validAttrs = catData.attributes.filter(a => a.name !== 'Ürün Tipi');
-            
             let html = '';
-            validAttrs.forEach(attr => {
+            catData.attributes.forEach(attr => {
                 html += `<div class="filter-group">
                             <h4 class="text-xs font-bold text-slate-800 mb-2">${attr.name}</h4>
                             <div class="space-y-1.5 max-h-40 overflow-y-auto pr-1 custom-scrollbar">`;
@@ -474,6 +467,7 @@
             });
             
             container.innerHTML = html;
+            lucide.createIcons();
         }
 
         window.toggleDynamicFilter = (attrName, attrValue, isChecked) => {
@@ -489,15 +483,30 @@
 
         window.clearAllFilters = () => {
             selectedFilters = {};
-            document.getElementById('filterFreeDelivery').checked = false;
-            document.getElementById('filterCOD').checked = false;
-            document.getElementById('filterPriceMin').value = "";
-            document.getElementById('filterPriceMax').value = "";
+            const fd = document.getElementById('filterFreeDelivery'); if(fd) fd.checked = false;
+            const cod = document.getElementById('filterCOD'); if(cod) cod.checked = false;
+            const pMin = document.getElementById('filterPriceMin'); if(pMin) pMin.value = "";
+            const pMax = document.getElementById('filterPriceMax'); if(pMax) pMax.value = "";
             
             const cbs = document.querySelectorAll('.filter-checkbox');
             cbs.forEach(cb => cb.checked = false);
             
             window.applyFilters();
+        };
+
+        // Mobil cihazlarda filtreleri açmak için (Opsiyonel Modal eklenebilir)
+        window.openMobileFilters = () => {
+            // Şimdilik sadece sayfayı yukarı kaydırıp sol sütunu görünür kılabiliriz (Mobil için modal tasarımı eklenebilir)
+            const sidebar = document.getElementById('leftSidebar');
+            if(sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                sidebar.classList.remove('lg:flex');
+                sidebar.classList.add('flex', 'w-full', 'border-b', 'border-r-0');
+            } else {
+                sidebar.classList.add('hidden');
+                sidebar.classList.add('lg:flex');
+                sidebar.classList.remove('flex', 'w-full', 'border-b', 'border-r-0');
+            }
         };
 
         // FİLTRELEME MOTORU
@@ -525,7 +534,7 @@
                 );
             }
 
-            // 3. Sabit Filtreler (Kargo & Kapıda Ödeme)
+            // 3. Sabit Filtreler
             if(document.getElementById('filterFreeDelivery')?.checked) {
                 filtered = filtered.filter(p => p.freeDelivery === true);
             }
@@ -540,26 +549,18 @@
             if(maxPrice) filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
 
             // 5. DİNAMİK ATTRIBUTE (ZORUNLU FİLTRELER) EŞLEŞMESİ
-            // selectedFilters: { 'Renk': ['Mavi', 'Siyah'], 'Beden': ['M'] }
             if (Object.keys(selectedFilters).length > 0) {
                 filtered = filtered.filter(p => {
-                    // Ürünün dynamicAttributes'i yoksa ve biz filtre seçtiysek elenir.
                     if (!p.dynamicAttributes || p.dynamicAttributes.length === 0) return false;
-
-                    // Her bir filtre grubu için kontrol et
                     for (const attrName in selectedFilters) {
                         const wantedValues = selectedFilters[attrName];
-                        // Eğer bu grup için hiç seçim yapılmadıysa devam et
                         if (wantedValues.length === 0) continue;
-
-                        // Üründe bu attribute var mı bul
                         const productAttr = p.dynamicAttributes.find(a => a.group === attrName);
-                        // Yoksa veya değeri istenenlerden biri değilse ürünü ele
                         if (!productAttr || !wantedValues.includes(productAttr.name)) {
                             return false; 
                         }
                     }
-                    return true; // Tüm filtre şartlarını sağladı
+                    return true;
                 });
             }
 
@@ -574,7 +575,7 @@
             }
 
             // SONUÇLARI EKRANA BAS
-            countBadge.innerText = `${filtered.length} İlan`;
+            if (countBadge) countBadge.innerText = `${filtered.length} İlan`;
             
             if(activeSubCategorySlug && activeMainCategory) {
                 const subCat = allCategories.find(c => c.slug === activeSubCategorySlug);
@@ -606,15 +607,11 @@
             const handleSearch = (e) => {
                 searchQuery = e.target.value;
                 if(searchQuery.length > 0) {
-                    document.getElementById('megaMenuWrapper').classList.add('hidden');
                     document.getElementById('heroBannerSection').classList.add('hidden');
-                    document.getElementById('dynamicFiltersWrapper').classList.remove('hidden');
-                    // Mobil menüyü de kapat
-                    document.getElementById('mobileMenu').classList.add('hidden');
+                    document.getElementById('leftSidebar').classList.add('hidden');
                 } else if (!activeSubCategorySlug) {
-                    document.getElementById('megaMenuWrapper').classList.remove('hidden');
                     document.getElementById('heroBannerSection').classList.remove('hidden');
-                    document.getElementById('dynamicFiltersWrapper').classList.add('hidden');
+                    document.getElementById('leftSidebar').classList.add('hidden');
                 }
                 window.applyFilters();
             };
@@ -623,11 +620,11 @@
             if (mobileSearchInput) mobileSearchInput.addEventListener('input', handleSearch);
 
             try {
-                // 1. Kategorileri Çek ve MegaMenü Oluştur
+                // 1. Kategorileri Çek ve Hamburger Menü Oluştur
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
-                renderMegaMenu();
+                renderHamburgerMenu();
 
                 // 2. Aktif Ürünleri Çek
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
@@ -636,6 +633,10 @@
                 snap.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
 
                 document.getElementById('loadingIndicator').classList.add('hidden');
+                
+                // Ana sayfa açıldığında filtreleri gizle
+                document.getElementById('leftSidebar').classList.add('hidden');
+                
                 window.applyFilters();
 
             } catch (err) {
