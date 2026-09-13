@@ -137,17 +137,34 @@
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
         let currentUserUid = null;
 
+        // SEO Uyumlu Slug Üretici (Hem Mağaza hem Ürün isimleri için)
+        window.generateSlug = (text) => {
+            if (!text) return 'kibris-bazar';
+            return text.toString().toLowerCase()
+                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        };
+
+        // YENİ: Slug + ID yapısından sadece ID'yi çeken fonksiyon
         function getStoreIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            let id = urlParams.get('id');
-            if (!id) {
+            let rawPath = urlParams.get('id');
+            if (!rawPath) {
                 const pathParts = window.location.pathname.split('/');
                 const magazaIndex = pathParts.indexOf('magaza');
                 if (magazaIndex !== -1 && pathParts[magazaIndex + 1]) {
-                    id = pathParts[magazaIndex + 1];
+                    rawPath = pathParts[magazaIndex + 1];
                 }
             }
-            return id;
+            if (rawPath) {
+                const parts = rawPath.split('-');
+                return parts[parts.length - 1]; 
+            }
+            return null;
         }
 
         function updateCartBadge() {
@@ -186,10 +203,13 @@
             const isFav = favorites.includes(p.id);
             const isPremiumStore = currentStore && (currentStore.isPremium || currentStore.packageType === 'premium');
             
+            // SEO Slug ile link oluşturma
+            const productLink = `/urun/${window.generateSlug(p.title)}-${p.id}`;
+            
             return `
                 <div class="bg-white rounded-2xl p-3 hover:shadow-xl hover:border-orange-200 border border-slate-200 transition-all group flex flex-col w-full h-full relative">
                     <div class="relative w-full aspect-[4/5] mb-3 overflow-hidden rounded-xl bg-slate-100 shrink-0">
-                        <a href="/urun/${p.id}" class="block w-full h-full">
+                        <a href="${productLink}" class="block w-full h-full">
                             <img src="${img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${p.title}"/>
                         </a>
                         ${discount > 0 ? `<div class="absolute top-2 left-0 bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-r shadow-md">-%${discount}</div>` : ''}
@@ -208,7 +228,7 @@
                         </div>
                         
                         <h3 class="text-xs font-bold text-slate-800 mb-1 line-clamp-2">
-                            <a href="/urun/${p.id}" class="hover:text-orange-500 transition-colors">${p.title}</a>
+                            <a href="${productLink}" class="hover:text-orange-500 transition-colors">${p.title}</a>
                         </h3>
                         
                         <div class="pt-2 border-t border-slate-100 flex items-end justify-between mt-auto">
@@ -338,6 +358,13 @@
                 document.getElementById('spName').innerText = currentStore.name;
                 document.getElementById('spDistrict').innerText = currentStore.district;
                 document.title = `${currentStore.name} | Kıbrıs Bazar`;
+                
+                // Eğer doğrudan slug link ile gelindiyse URL'yi tarayıcıda temiz göster
+                const expectedSlug = window.generateSlug(currentStore.name) + '-' + currentStore.id;
+                const currentPath = window.location.pathname;
+                if(currentPath.includes('/magaza/') && !currentPath.endsWith(expectedSlug)) {
+                    window.history.replaceState({}, '', `/magaza/${expectedSlug}`);
+                }
 
                 if(currentStore.isPremium || currentStore.packageType === 'premium') {
                     document.getElementById('spPremium').classList.remove('hidden');
