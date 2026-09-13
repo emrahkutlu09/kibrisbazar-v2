@@ -19,11 +19,19 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .filter-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
         
         /* Çekmece Animasyonları */
         .drawer-overlay { transition: opacity 0.3s ease; }
         .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        /* Trendyol Tarzı Toggle Switch */
+        .toggle-checkbox:checked { right: 0; border-color: #f97316; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #f97316; }
+        .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
+        .toggle-label { background-color: #e2e8f0; transition: all 0.3s; }
+        
+        /* Checkbox Özel Stil */
+        .custom-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen overflow-x-hidden">
@@ -81,7 +89,6 @@
 
     <!-- VİTRİN BANNER (Sadece Ana Sayfada) -->
     <div id="heroBannerSection" class="w-full bg-slate-50">
-        <!-- Mobil Arama (Sadece ana sayfadayken Mobilde görünsün) -->
         <div class="sm:hidden p-3 bg-white border-b border-slate-200">
             <div class="relative w-full">
                 <input type="text" id="mobileSearchInput" placeholder="Marka, ürün veya kategori ara..." 
@@ -105,28 +112,23 @@
         </div>
     </div>
 
-    <!-- TREDYOL STİLİ UYGULAMA ÜST BAR (Sadece Kategori Seçilince Çıkar) -->
+    <!-- TREDYOL STİLİ UYGULAMA ÜST BAR (Kategori Seçilince Çıkar) -->
     <div id="categoryTopBar" class="hidden flex-col bg-white border-b border-slate-200 sticky top-14 sm:top-16 z-40 w-full shadow-sm">
-        
-        <!-- Breadcrumb & Başlık Alanı -->
         <div class="px-4 py-3 flex items-center justify-between relative">
             <button onclick="window.resetCategorySelection()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500 transition shrink-0">
                 <i data-lucide="chevron-left" class="w-6 h-6"></i>
             </button>
             <div class="flex-1 text-center flex flex-col items-center justify-center">
-                <!-- Ekmek Kırıntısı -->
                 <div class="text-[10px] sm:text-xs text-slate-500 flex items-center gap-1 justify-center mb-0.5">
                     <span>Kıbrıs Bazar</span> <i data-lucide="chevron-right" class="w-3 h-3 opacity-50"></i> 
                     <span id="bcMainName">Giyim</span> <i data-lucide="chevron-right" class="w-3 h-3 opacity-50"></i>
                 </div>
-                <!-- Ana Başlık -->
                 <h1 id="catTitleText" class="text-base sm:text-lg font-black text-slate-800 leading-tight">Elbise</h1>
                 <span id="catProductCount" class="text-[10px] text-slate-400 font-medium">0 Ürün</span>
             </div>
-            <div class="w-10 shrink-0"></div> <!-- Dengeleyici -->
+            <div class="w-10 shrink-0"></div> 
         </div>
 
-        <!-- Sıralama ve Filtre Butonları -->
         <div class="flex border-t border-slate-100 h-12">
             <button onclick="window.openSortModal()" class="flex-1 flex items-center justify-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-50 border-r border-slate-100 transition">
                 <i data-lucide="arrow-up-down" class="w-4 h-4 text-orange-500"></i> Sıralama
@@ -137,31 +139,26 @@
             </button>
         </div>
 
-        <!-- Hızlı Filtre (Scroll) Balonları -->
+        <!-- Hızlı Filtre Balonları -->
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-2.5 bg-slate-50 border-t border-slate-100" id="quickFilterPills">
-            <!-- JS Dolduracak (Örn: Marka V, Renk V, Beden V) -->
+            <!-- JS Dolduracak -->
         </div>
     </div>
 
     <!-- ANA İÇERİK: ÜRÜN IZGARASI -->
     <main class="w-full flex-1 max-w-[1400px] mx-auto p-3 sm:p-4 lg:p-6 bg-slate-50 min-h-[50vh]">
-        
-        <!-- Ana Sayfa Listeleme Başlığı (Kategori Seçilmediğinde) -->
         <div id="homeResultsTitle" class="mb-4 flex items-center gap-2">
             <h2 class="text-lg font-black text-slate-800">Sizin İçin Seçtiklerimiz</h2>
             <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">0 İlan</span>
         </div>
 
-        <!-- Yükleniyor -->
         <div id="loadingIndicator" class="flex flex-col items-center justify-center py-20">
             <i data-lucide="loader-2" class="w-8 h-8 text-orange-500 animate-spin mb-3"></i>
             <p class="text-xs font-bold text-slate-500">Ürünler Listeleniyor...</p>
         </div>
 
-        <!-- Ürün Izgarası (Mobilde 2, Tablette 3, Masaüstünde 4/5 kolon) -->
         <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 hidden"></div>
 
-        <!-- Sonuç Yok -->
         <div id="noResults" class="hidden text-center py-16 sm:py-24 bg-white rounded-3xl border border-slate-200 border-dashed m-2">
             <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
                 <i data-lucide="package-search" class="w-8 h-8"></i>
@@ -172,7 +169,7 @@
         </div>
     </main>
 
-    <!-- SIRALAMA MODALI (Alttan Açılan Çekmece) -->
+    <!-- SIRALAMA MODALI (Alttan Açılan) -->
     <div id="sortModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[300] hidden drawer-overlay opacity-0 flex-col justify-end">
         <div class="flex-1 w-full" onclick="window.closeSortModal()"></div>
         <div class="bg-white w-full rounded-t-3xl flex flex-col p-4 pb-8 transform translate-y-full drawer-content" id="sortModalContent">
@@ -188,50 +185,90 @@
         </div>
     </div>
 
-    <!-- FİLTRELEME MODALI (Alttan Açılan Tam Sayfa Çekmece) -->
+    <!-- FİLTRELEME MODALI (Tam Ekran İçi İçe Menü) -->
     <div id="filterModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[300] hidden drawer-overlay opacity-0 flex-col justify-end">
-        <div class="bg-white w-full h-[90vh] md:h-[80vh] md:max-w-md md:mx-auto rounded-t-3xl flex flex-col transform translate-y-full drawer-content" id="filterModalContent">
+        <div class="bg-white w-full h-[90vh] md:h-[80vh] md:max-w-md md:mx-auto rounded-t-3xl flex flex-col transform translate-y-full drawer-content relative overflow-hidden" id="filterModalContent">
             
-            <!-- Header -->
-            <div class="p-4 border-b border-slate-200 flex justify-between items-center shrink-0 bg-white rounded-t-3xl">
-                <h3 class="font-black text-lg text-slate-800 flex items-center gap-2"><i data-lucide="sliders-horizontal" class="w-5 h-5 text-orange-500"></i> Filtreler</h3>
-                <button onclick="window.closeFilterModal()" class="p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition"><i data-lucide="x" class="w-5 h-5 text-slate-600"></i></button>
+            <!-- Modal Genel Başlık (Hem Main hem Detail view'da kullanılır) -->
+            <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
+                <!-- Ana Görünüm Header -->
+                <div id="filterMainHeader" class="w-full flex justify-between items-center">
+                    <button onclick="window.closeFilterModal()" class="p-2 -ml-2 text-slate-600 hover:text-rose-500"><i data-lucide="x" class="w-6 h-6"></i></button>
+                    <h3 class="font-black text-lg text-slate-800">Filtrele</h3>
+                    <div class="w-10"></div> <!-- Denge -->
+                </div>
+                <!-- Detay Görünüm Header (Gizli) -->
+                <div id="filterDetailHeader" class="w-full flex justify-between items-center hidden">
+                    <button onclick="window.closeFilterDetail()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                    <h3 id="filterDetailTitle" class="font-black text-lg text-slate-800">Renk</h3>
+                    <div class="w-10"></div> <!-- Denge -->
+                </div>
             </div>
             
-            <!-- Body -->
-            <div class="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50" id="filterModalBody">
+            <!-- GÖRÜNÜM ALANI (View Container) -->
+            <div class="flex-1 bg-white relative overflow-hidden">
                 
-                <!-- Sabit Filtreler -->
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
-                    <label class="flex items-center justify-between cursor-pointer group">
-                        <span class="text-sm font-bold text-slate-700 flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-[#0ea5e9]"></i> Ücretsiz Kargo</span>
-                        <input type="checkbox" id="modalFilterFreeDelivery" class="filter-checkbox">
-                    </label>
-                    <div class="h-px bg-slate-100 w-full"></div>
-                    <label class="flex items-center justify-between cursor-pointer group">
-                        <span class="text-sm font-bold text-slate-700 flex items-center gap-2"><i data-lucide="banknote" class="w-4 h-4 text-emerald-500"></i> Kapıda Ödeme</span>
-                        <input type="checkbox" id="modalFilterCOD" class="filter-checkbox">
-                    </label>
+                <!-- ANA FİLTRE LİSTESİ -->
+                <div id="filterMainView" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-0">
+                    
+                    <!-- Seçilen Filtreler Kutusu (Gizli Başlar) -->
+                    <div id="selectedFiltersContainer" class="p-4 bg-white border-b border-slate-200 hidden">
+                        <h4 class="text-xs font-bold text-slate-800 mb-3">Seçilen Filtreler</h4>
+                        <div class="flex flex-wrap gap-2" id="selectedFiltersList">
+                            <!-- JS İle Balonlar Gelecek -->
+                        </div>
+                    </div>
+
+                    <!-- Sabit Filtreler (App Tipi Toggle Switch) -->
+                    <div class="bg-white border-b border-slate-200 flex flex-col">
+                        <label class="flex justify-between items-center p-4 border-b border-slate-100 cursor-pointer">
+                            <span class="text-sm font-medium text-slate-700">Kargo Bedava</span>
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" id="modalFilterFreeDelivery" onchange="window.handleFilterChange()" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                <label for="modalFilterFreeDelivery" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </label>
+                        <label class="flex justify-between items-center p-4 cursor-pointer">
+                            <span class="text-sm font-medium text-slate-700">Kapıda Ödeme</span>
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" id="modalFilterCOD" onchange="window.handleFilterChange()" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                <label for="modalFilterCOD" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Dinamik Filtre Satırları (> İşaretli) -->
+                    <div id="modalDynamicFilterRows" class="flex flex-col bg-white border-b border-slate-200 mt-2">
+                        <!-- JS Dinamik Dolduracak -->
+                    </div>
+
+                    <!-- Fiyat Aralığı -->
+                    <div class="bg-white p-4 border-b border-slate-200 mt-2">
+                        <h4 class="text-sm font-medium text-slate-700 mb-3">Fiyat</h4>
+                        <div class="flex items-center gap-3">
+                            <input type="number" id="modalFilterPriceMin" oninput="window.handleFilterChange()" placeholder="En Az" class="w-1/2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-orange-500 outline-none">
+                            <span class="text-slate-400">-</span>
+                            <input type="number" id="modalFilterPriceMax" oninput="window.handleFilterChange()" placeholder="En Çok" class="w-1/2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-orange-500 outline-none">
+                        </div>
+                    </div>
+                    
+                    <div class="h-10"></div> <!-- Scroll Boşluğu -->
                 </div>
 
-                <!-- Fiyat Aralığı -->
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
-                    <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider">Fiyat Aralığı (TL)</h4>
-                    <div class="flex items-center gap-2">
-                        <input type="number" id="modalFilterPriceMin" placeholder="En Az" class="w-1/2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-orange-500 outline-none">
-                        <span class="text-slate-400">-</span>
-                        <input type="number" id="modalFilterPriceMax" placeholder="En Çok" class="w-1/2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-orange-500 outline-none">
+                <!-- DETAY FİLTRE LİSTESİ (Örn: Renk seçenekleri) -->
+                <div id="filterDetailView" class="absolute inset-0 w-full h-full bg-white overflow-y-auto custom-scrollbar transition-transform duration-300 transform translate-x-full">
+                    <div class="flex flex-col" id="filterDetailOptions">
+                        <!-- JS İle Checkboxlar Gelecek -->
                     </div>
                 </div>
 
-                <!-- Dinamik Filtreler Buraya Gelecek -->
-                <div id="modalDynamicFilters" class="space-y-4"></div>
             </div>
 
-            <!-- Footer -->
-            <div class="p-4 border-t border-slate-200 flex gap-3 bg-white shrink-0 pb-6 sm:pb-4">
-                <button onclick="window.clearAllFilters()" class="px-6 py-3.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">Temizle</button>
-                <button onclick="window.applyAndCloseFilters()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-xl shadow-lg shadow-orange-500/30 transition text-sm">Sonuçları Göster</button>
+            <!-- Footer Uygula Butonu -->
+            <div class="p-4 border-t border-slate-200 bg-white shrink-0">
+                <button id="btnApplyFilters" onclick="window.applyAndCloseFilters()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl py-3.5 shadow-lg shadow-orange-500/30 transition text-sm">
+                    Tüm Sonuçları Listele
+                </button>
             </div>
         </div>
     </div>
@@ -246,7 +283,6 @@
         </div>
     </footer>
 
-    <!-- Firebase ve Uygulama Mantığı -->
     <script type="module">
         import { db } from "./js/firebase-config.js";
         import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -257,8 +293,11 @@
         let activeMainCategory = null; 
         let activeSubCategorySlug = null; 
         let searchQuery = '';
-        let selectedFilters = {}; // { 'Renk': ['Mavi', 'Siyah'] }
+        
+        // Yeni Filtre State'leri
+        let selectedFilters = {}; 
         let currentSort = 'newest';
+        let dynamicOptionsData = {}; // Sadece mevcut kategorinin aktif filtre verilerini tutar
 
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
@@ -306,7 +345,6 @@
             localStorage.setItem('cart_items_v2', JSON.stringify(cart));
             updateCartBadge();
             
-            // Sepete eklendi animasyonu (Hızlı Toast)
             const toast = document.createElement('div');
             toast.className = `fixed top-20 right-4 sm:top-24 sm:right-10 bg-slate-900 text-white px-5 py-3 rounded-2xl text-sm font-bold shadow-2xl z-[500] flex items-center gap-3 transition-all duration-300 transform translate-y-[-20px] opacity-0`;
             toast.innerHTML = `<div class="bg-emerald-500 rounded-full p-1"><i data-lucide="check" class="w-4 h-4 text-white"></i></div> Sepete Eklendi`;
@@ -376,7 +414,7 @@
             lucide.createIcons();
         }
 
-        // --- KATEGORİ SEÇİMİ VE GÖRÜNÜM DEĞİŞİKLİĞİ ---
+        // --- KATEGORİ SEÇİMİ VE GÖRÜNÜM ---
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             activeMainCategory = mainCatId;
             activeSubCategorySlug = subCatSlug;
@@ -388,27 +426,31 @@
             if(mobSearch) mobSearch.value = "";
             searchQuery = "";
             
-            window.toggleHamburgerMenu(); // Çekmeceyi kapat
+            window.toggleHamburgerMenu();
 
-            // Görünüm Değişiklikleri: Ana sayfa elemanlarını gizle, Kategori barını göster
             document.getElementById('heroBannerSection').classList.add('hidden');
             document.getElementById('homeResultsTitle').classList.add('hidden');
             document.getElementById('categoryTopBar').classList.remove('hidden');
             document.getElementById('categoryTopBar').classList.add('flex');
             
-            // Metinleri Güncelle
             document.getElementById('bcMainName').innerText = mainCatName;
             document.getElementById('catTitleText').innerText = subCatName;
             
-            buildFilterModal(subCatSlug);
-            window.applyFilters();
+            buildFilterModalRows(subCatSlug);
+            window.applyFilters(); // Apply ilk yükleme
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.resetCategorySelection = () => {
             activeMainCategory = null;
             activeSubCategorySlug = null;
-            window.clearAllFilters();
+            
+            // Filtreleri tam sıfırla
+            document.getElementById('modalFilterFreeDelivery').checked = false;
+            document.getElementById('modalFilterCOD').checked = false;
+            document.getElementById('modalFilterPriceMin').value = "";
+            document.getElementById('modalFilterPriceMax').value = "";
+            selectedFilters = {};
             
             document.getElementById('heroBannerSection').classList.remove('hidden');
             document.getElementById('homeResultsTitle').classList.remove('hidden');
@@ -416,140 +458,6 @@
             document.getElementById('categoryTopBar').classList.remove('flex');
             
             window.applyFilters();
-        };
-
-        // --- MODAL YÖNETİMİ ---
-        window.openSortModal = () => {
-            document.querySelectorAll('.sort-check').forEach(el => el.classList.add('hidden'));
-            document.getElementById('check-' + currentSort).classList.remove('hidden');
-            
-            const modal = document.getElementById('sortModal');
-            const content = document.getElementById('sortModalContent');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10);
-        };
-        window.closeSortModal = () => {
-            const modal = document.getElementById('sortModal');
-            const content = document.getElementById('sortModalContent');
-            modal.classList.add('opacity-0'); content.classList.add('translate-y-full');
-            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
-        };
-        window.setSort = (sortType) => {
-            currentSort = sortType;
-            window.closeSortModal();
-            window.applyFilters();
-        };
-
-        window.openFilterModal = () => {
-            const modal = document.getElementById('filterModal');
-            const content = document.getElementById('filterModalContent');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10);
-        };
-        window.closeFilterModal = () => {
-            const modal = document.getElementById('filterModal');
-            const content = document.getElementById('filterModalContent');
-            modal.classList.add('opacity-0'); content.classList.add('translate-y-full');
-            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
-        };
-        window.applyAndCloseFilters = () => {
-            window.applyFilters();
-            window.closeFilterModal();
-        };
-
-       // --- DİNAMİK FİLTRE OLUŞTURMA (MODAL İÇİN - AKILLI FİLTRE) ---
-        function buildFilterModal(subCatSlug) {
-            const container = document.getElementById('modalDynamicFilters');
-            const quickFiltersContainer = document.getElementById('quickFilterPills');
-            container.innerHTML = '';
-            quickFiltersContainer.innerHTML = '';
-            
-            const catData = allCategories.find(c => c.slug === subCatSlug);
-            if(!catData || !catData.attributes || catData.attributes.length === 0) return;
-
-            // 1. ADIM: Sadece bu kategorideki AKTİF (yayınlanmış) ürünleri bul
-            const categoryProducts = allProducts.filter(p => p.categorySlug === subCatSlug);
-
-            let modalHtml = '';
-            let quickHtml = '';
-
-            catData.attributes.forEach(attr => {
-                // 2. ADIM: Bu filtrenin (Örn: Renk) hangi seçeneklerinin(Örn: Mavi, Kırmızı) ürünlerde GERÇEKTEN kullanıldığını bul
-                const availableOptionsInProducts = new Set();
-                
-                categoryProducts.forEach(product => {
-                    if (product.dynamicAttributes) {
-                        const productAttr = product.dynamicAttributes.find(a => a.group === attr.name);
-                        // Eğer ürünün bu özelliği doluysa, Set'in içine ekle (Set, aynı değeri iki kere eklemez, benzersiz tutar)
-                        if (productAttr && productAttr.name && productAttr.name.trim() !== '') {
-                            availableOptionsInProducts.add(productAttr.name);
-                        }
-                    }
-                });
-
-                // 3. ADIM: Admin'in belirlediği tüm seçenekleri dön, ama SADECE ürünlerde var olanları listeye al!
-                const activeOptions = attr.options.filter(opt => availableOptionsInProducts.has(opt));
-
-                // Eğer bu filtre grubu için satıcıların girdiği HİÇBİR ürün yoksa, bu filtre kutusunu ekrana hiç çizme!
-                if (activeOptions.length === 0) return;
-
-                // Modal İçi Kart (Sadece içi dolu olan seçeneklerle çiziliyor)
-                modalHtml += `
-                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm filter-group">
-                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wide mb-3">${attr.name}</h4>
-                        <div class="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">`;
-                
-                activeOptions.forEach(opt => {
-                    // Eğer bu filtre halihazırda seçiliyse checkbox'ı işaretli göster
-                    const isChecked = selectedFilters[attr.name] && selectedFilters[attr.name].includes(opt) ? 'checked' : '';
-                    
-                    modalHtml += `
-                        <label class="flex items-start gap-3 group cursor-pointer">
-                            <input type="checkbox" onchange="window.toggleDynamicFilter('${attr.name}', '${opt}', this.checked)" class="filter-checkbox dynamic-filter-cb" data-attr="${attr.name}" value="${opt}" ${isChecked}>
-                            <span class="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition leading-tight">${opt}</span>
-                        </label>
-                    `;
-                });
-                modalHtml += `</div></div>`;
-
-                // Hızlı Filtre Butonu (Üst Barda - Eğer en az 1 aktif seçenek varsa buton görünür)
-                quickHtml += `
-                    <button onclick="window.openFilterModal()" class="px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-[11px] font-bold text-slate-700 flex items-center gap-1.5 whitespace-nowrap hover:border-orange-500 transition shadow-sm">
-                        ${attr.name} <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
-                    </button>
-                `;
-            });
-            
-            container.innerHTML = modalHtml;
-            quickFiltersContainer.innerHTML = quickHtml;
-            lucide.createIcons();
-        }
-
-        window.toggleDynamicFilter = (attrName, attrValue, isChecked) => {
-            if(!selectedFilters[attrName]) selectedFilters[attrName] = [];
-            if(isChecked) {
-                if(!selectedFilters[attrName].includes(attrValue)) selectedFilters[attrName].push(attrValue);
-            } else {
-                selectedFilters[attrName] = selectedFilters[attrName].filter(v => v !== attrValue);
-                if(selectedFilters[attrName].length === 0) delete selectedFilters[attrName];
-            }
-            // Anlık uygulama yapmıyoruz, "Sonuçları Göster" butonuna bırakıyoruz.
-        };
-
-        window.clearAllFilters = () => {
-            selectedFilters = {};
-            document.getElementById('modalFilterFreeDelivery').checked = false;
-            document.getElementById('modalFilterCOD').checked = false;
-            document.getElementById('modalFilterPriceMin').value = "";
-            document.getElementById('modalFilterPriceMax').value = "";
-            
-            const cbs = document.querySelectorAll('.dynamic-filter-cb');
-            cbs.forEach(cb => cb.checked = false);
-            
-            // Eğer modal açık değilse hemen uygula, açıksa butona bırak
-            if(document.getElementById('filterModal').classList.contains('hidden')) {
-                window.applyFilters();
-            }
         };
 
         // --- ÜRÜN KARTI ŞABLONU ---
@@ -594,10 +502,255 @@
             `;
         };
 
-        // --- FİLTRELEME MOTORU ---
+        // --- SIRALAMA MODALI ---
+        window.openSortModal = () => {
+            document.querySelectorAll('.sort-check').forEach(el => el.classList.add('hidden'));
+            document.getElementById('check-' + currentSort).classList.remove('hidden');
+            const modal = document.getElementById('sortModal');
+            const content = document.getElementById('sortModalContent');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10);
+        };
+        window.closeSortModal = () => {
+            const modal = document.getElementById('sortModal');
+            const content = document.getElementById('sortModalContent');
+            modal.classList.add('opacity-0'); content.classList.add('translate-y-full');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+        };
+        window.setSort = (sortType) => {
+            currentSort = sortType;
+            window.closeSortModal();
+            window.applyFilters();
+        };
+
+        // --- TRENDYOL TİPİ DRILL-DOWN FİLTRE MODALI ---
+        window.openFilterModal = () => {
+            const modal = document.getElementById('filterModal');
+            const content = document.getElementById('filterModalContent');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10);
+            window.updateFilterPreviewCount(); // Modal açılırken anlık sayıyı hesapla
+        };
+
+        window.closeFilterModal = () => {
+            const modal = document.getElementById('filterModal');
+            const content = document.getElementById('filterModalContent');
+            modal.classList.add('opacity-0'); content.classList.add('translate-y-full');
+            setTimeout(() => { 
+                modal.classList.add('hidden'); modal.classList.remove('flex'); 
+                window.closeFilterDetail(); // Eğer içerideysek ana listeye geri dönsün
+            }, 300);
+        };
+
+        window.applyAndCloseFilters = () => {
+            window.applyFilters();
+            window.closeFilterModal();
+        };
+
+        // Kategori ilk seçildiğinde Filtre satırlarını oluştur (Smart Filter Logic)
+        function buildFilterModalRows(subCatSlug) {
+            const catData = allCategories.find(c => c.slug === subCatSlug);
+            const rowsContainer = document.getElementById('modalDynamicFilterRows');
+            const quickFiltersContainer = document.getElementById('quickFilterPills');
+            
+            rowsContainer.innerHTML = '';
+            quickFiltersContainer.innerHTML = '';
+            dynamicOptionsData = {};
+
+            if(!catData || !catData.attributes) return;
+
+            const categoryProducts = allProducts.filter(p => p.categorySlug === subCatSlug);
+
+            let rowsHtml = '';
+            let quickHtml = '';
+
+            catData.attributes.forEach(attr => {
+                const availableOptions = new Set();
+                categoryProducts.forEach(p => {
+                    if (p.dynamicAttributes) {
+                        const pAttr = p.dynamicAttributes.find(a => a.group === attr.name);
+                        if (pAttr && pAttr.name.trim() !== '') availableOptions.add(pAttr.name);
+                    }
+                });
+
+                const activeOptions = attr.options.filter(opt => availableOptions.has(opt));
+                if (activeOptions.length === 0) return;
+
+                // Veriyi listeye kaydet (İç menüyü çizerken kullanacağız)
+                dynamicOptionsData[attr.name] = activeOptions;
+
+                rowsHtml += `
+                    <button onclick="window.openFilterDetail('${attr.name}')" class="w-full flex items-center justify-between p-4 border-b border-slate-100 bg-white hover:bg-slate-50 transition">
+                        <span class="text-sm font-medium text-slate-700">${attr.name}</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-orange-500"></i>
+                    </button>
+                `;
+
+                quickHtml += `
+                    <button onclick="window.openFilterDetail('${attr.name}', true)" class="px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-[11px] font-bold text-slate-700 flex items-center gap-1.5 whitespace-nowrap hover:border-orange-500 transition shadow-sm">
+                        ${attr.name} <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+                    </button>
+                `;
+            });
+
+            rowsContainer.innerHTML = rowsHtml;
+            quickFiltersContainer.innerHTML = quickHtml;
+            window.renderSelectedFilterPills();
+            lucide.createIcons();
+        }
+
+        // Seçilen Filtreler Balonlarını (Pills) Çizer
+        window.renderSelectedFilterPills = () => {
+            const container = document.getElementById('selectedFiltersContainer');
+            const list = document.getElementById('selectedFiltersList');
+            let html = '';
+            let hasFilters = false;
+
+            if (document.getElementById('modalFilterFreeDelivery')?.checked) {
+                html += `<button onclick="document.getElementById('modalFilterFreeDelivery').checked=false; window.handleFilterChange();" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">Kargo Bedava <i data-lucide="x" class="w-3 h-3"></i></button>`;
+                hasFilters = true;
+            }
+            if (document.getElementById('modalFilterCOD')?.checked) {
+                html += `<button onclick="document.getElementById('modalFilterCOD').checked=false; window.handleFilterChange();" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">Kapıda Ödeme <i data-lucide="x" class="w-3 h-3"></i></button>`;
+                hasFilters = true;
+            }
+
+            for (const attrName in selectedFilters) {
+                selectedFilters[attrName].forEach(val => {
+                    html += `<button onclick="window.toggleDynamicFilter('${attrName}', '${val}', false)" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">${val} <i data-lucide="x" class="w-3 h-3"></i></button>`;
+                    hasFilters = true;
+                });
+            }
+
+            list.innerHTML = html;
+            if (hasFilters) container.classList.remove('hidden');
+            else container.classList.add('hidden');
+            lucide.createIcons();
+        };
+
+        // Alt Detay Çekmecesini (Checkbox'ların olduğu ekranı) Açar
+        window.openFilterDetail = (attrName, fromQuickFilter = false) => {
+            const options = dynamicOptionsData[attrName];
+            if(!options) return;
+
+            document.getElementById('filterDetailTitle').innerText = attrName;
+            
+            let html = '';
+            options.forEach(opt => {
+                const isChecked = selectedFilters[attrName] && selectedFilters[attrName].includes(opt) ? 'checked' : '';
+                html += `
+                    <label class="flex justify-between items-center p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 group">
+                        <span class="text-sm font-medium text-slate-700">${opt}</span>
+                        <input type="checkbox" onchange="window.toggleDynamicFilter('${attrName}', '${opt}', this.checked)" class="custom-checkbox" ${isChecked}>
+                    </label>
+                `;
+            });
+            document.getElementById('filterDetailOptions').innerHTML = html;
+
+            // Görünüm geçişi yap
+            document.getElementById('filterMainHeader').classList.add('hidden');
+            document.getElementById('filterDetailHeader').classList.remove('hidden');
+            document.getElementById('filterDetailHeader').classList.add('flex');
+
+            document.getElementById('filterMainView').classList.add('-translate-x-full');
+            document.getElementById('filterDetailView').classList.remove('translate-x-full');
+            document.getElementById('filterDetailView').classList.add('translate-x-0');
+
+            // Eğer üst bardaki hızlı filtreye tıklandıysa modal kapalı olabilir, modalı aç
+            if(fromQuickFilter) {
+                window.openFilterModal();
+            }
+        };
+
+        // Detaydan Ana Menüye Dön
+        window.closeFilterDetail = () => {
+            document.getElementById('filterDetailHeader').classList.add('hidden');
+            document.getElementById('filterDetailHeader').classList.remove('flex');
+            document.getElementById('filterMainHeader').classList.remove('hidden');
+
+            document.getElementById('filterDetailView').classList.remove('translate-x-0');
+            document.getElementById('filterDetailView').classList.add('translate-x-full');
+            document.getElementById('filterMainView').classList.remove('-translate-x-full');
+        };
+
+        // Checkbox tıklamaları
+        window.toggleDynamicFilter = (attrName, attrValue, isChecked) => {
+            if(!selectedFilters[attrName]) selectedFilters[attrName] = [];
+            if(isChecked) {
+                if(!selectedFilters[attrName].includes(attrValue)) selectedFilters[attrName].push(attrValue);
+            } else {
+                selectedFilters[attrName] = selectedFilters[attrName].filter(v => v !== attrValue);
+                if(selectedFilters[attrName].length === 0) delete selectedFilters[attrName];
+            }
+            window.handleFilterChange();
+            
+            // Eğer detay ekranındaysak HTML'i tazelemeye gerek yok, checked durumu input'tan yönetilir. 
+            // Ancak "x" butonuna basıldıysa (false gönderilir), detay ekranı açıksa oradaki checkbox'ın tikini de kaldırmamız lazım.
+            const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]');
+            cbxList.forEach(cb => {
+                // Eğer o an açık olan detay ekranındaki değerse ve tiki kaldırıldıysa:
+                if(cb.nextElementSibling && cb.previousElementSibling && cb.previousElementSibling.innerText === attrValue && !isChecked) {
+                    cb.checked = false;
+                }
+            });
+        };
+
+        // Herhangi bir filtreye tıklandığında (Checkbox, Fiyat vs) sayıyı güncelle ve hapları çiz
+        window.handleFilterChange = () => {
+            window.renderSelectedFilterPills();
+            window.updateFilterPreviewCount();
+        };
+
+        // Tüm filtreleri sıfırla
+        window.clearAllFilters = () => {
+            selectedFilters = {};
+            document.getElementById('modalFilterFreeDelivery').checked = false;
+            document.getElementById('modalFilterCOD').checked = false;
+            document.getElementById('modalFilterPriceMin').value = "";
+            document.getElementById('modalFilterPriceMax').value = "";
+            
+            window.handleFilterChange();
+            
+            // Eğer detay açıkken temizle denirse, ekrandaki tikleri de sil
+            const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]');
+            cbxList.forEach(cb => cb.checked = false);
+        };
+
+        // Butonun içindeki (462 İlan) yazısını hesaplar
+        window.updateFilterPreviewCount = () => {
+            let filtered = allProducts;
+            if (activeSubCategorySlug) filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
+
+            if(document.getElementById('modalFilterFreeDelivery')?.checked) filtered = filtered.filter(p => p.freeDelivery === true);
+            if(document.getElementById('modalFilterCOD')?.checked) filtered = filtered.filter(p => p.cashOnDelivery === true);
+
+            const minP = document.getElementById('modalFilterPriceMin')?.value;
+            const maxP = document.getElementById('modalFilterPriceMax')?.value;
+            if(minP) filtered = filtered.filter(p => p.price >= parseFloat(minP));
+            if(maxP) filtered = filtered.filter(p => p.price <= parseFloat(maxP));
+
+            if (Object.keys(selectedFilters).length > 0) {
+                filtered = filtered.filter(p => {
+                    if (!p.dynamicAttributes || p.dynamicAttributes.length === 0) return false;
+                    for (const attrName in selectedFilters) {
+                        const wantedValues = selectedFilters[attrName];
+                        if (wantedValues.length === 0) continue;
+                        const productAttr = p.dynamicAttributes.find(a => a.group === attrName);
+                        if (!productAttr || !wantedValues.includes(productAttr.name)) return false; 
+                    }
+                    return true;
+                });
+            }
+
+            document.getElementById('btnApplyFilters').innerText = `Tüm Sonuçları Listele (${filtered.length})`;
+        };
+
+        // --- ANA FİLTRELEME MOTORU VE GRID RENDER ---
         window.applyFilters = () => {
             const grid = document.getElementById('productsGrid');
             const noResults = document.getElementById('noResults');
+            const resultsTitle = document.getElementById('resultsTitle');
+            const countBadge = document.getElementById('resultsCountBadge');
 
             let filtered = allProducts;
 
@@ -612,8 +765,7 @@
                 filtered = filtered.filter(p => 
                     (p.title && p.title.toLowerCase().includes(q)) || 
                     (p.storeName && p.storeName.toLowerCase().includes(q)) ||
-                    (p.category && p.category.toLowerCase().includes(q)) ||
-                    (p.description && p.description.toLowerCase().includes(q))
+                    (p.category && p.category.toLowerCase().includes(q))
                 );
             }
 
@@ -650,10 +802,12 @@
                 });
             }
 
-            // Badge'leri Güncelle
+            // Üst Bardaki Badge'i Güncelle
             const filterBadge = document.getElementById('filterActiveBadge');
+            let totalActiveFilters = (document.getElementById('modalFilterFreeDelivery')?.checked ? 1 : 0) + (document.getElementById('modalFilterCOD')?.checked ? 1 : 0) + activeFilterCount;
+            
             if(filterBadge) {
-                if(activeFilterCount > 0) { filterBadge.innerText = `(${activeFilterCount})`; filterBadge.classList.remove('hidden'); }
+                if(totalActiveFilters > 0) { filterBadge.innerText = `(${totalActiveFilters})`; filterBadge.classList.remove('hidden'); }
                 else { filterBadge.classList.add('hidden'); }
             }
 
@@ -666,12 +820,22 @@
                 filtered.sort((a,b) => b.createdAt - a.createdAt); // En yeni
             }
 
-            // SONUÇLARI BAS
+            // SONUÇLARI EKRANA BAS
+            if (countBadge) countBadge.innerText = `${filtered.length} İlan`;
             const catCount = document.getElementById('catProductCount');
             if(catCount) catCount.innerText = `${filtered.length} Ürün`;
             
             const homeBadge = document.getElementById('homeCountBadge');
             if(homeBadge) homeBadge.innerText = `${filtered.length} İlan`;
+
+            if(activeSubCategorySlug && activeMainCategory) {
+                const subCat = allCategories.find(c => c.slug === activeSubCategorySlug);
+                resultsTitle.innerHTML = `${subCat ? subCat.name : 'Ürünler'} <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg" id="resultsCountBadge">${filtered.length} İlan</span>`;
+            } else if (searchQuery) {
+                resultsTitle.innerHTML = `Arama Sonuçları <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg" id="resultsCountBadge">${filtered.length} İlan</span>`;
+            } else {
+                resultsTitle.innerHTML = `Sizin İçin Seçtiklerimiz <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg" id="resultsCountBadge">${filtered.length} İlan</span>`;
+            }
 
             if (filtered.length === 0) {
                 grid.classList.add('hidden');
