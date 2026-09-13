@@ -29,19 +29,19 @@
 
     <div class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shadow-sm">
         <div class="w-1/3 flex justify-start">
-            <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
+            <a href="/" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i> <span class="hidden sm:inline">Vitrine Dön</span>
             </a>
         </div>
         
         <div class="w-1/3 flex justify-center items-center">
-            <a href="index.html" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
+            <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
                 KIBRIS<span class="text-orange-500">BAZAR</span>
             </a>
         </div>
         
         <div class="w-1/3 flex justify-end">
-            <a href="sepet.html" class="flex items-center justify-center p-2 text-slate-600 hover:text-orange-500 transition-colors relative bg-white border border-slate-200 hover:border-orange-200 rounded-lg">
+            <a href="/sepet.html" class="flex items-center justify-center p-2 text-slate-600 hover:text-orange-500 transition-colors relative bg-white border border-slate-200 hover:border-orange-200 rounded-lg">
                 <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                 <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-sm hidden">0</span>
             </a>
@@ -50,7 +50,7 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 w-full">
         <nav class="flex items-center gap-2 text-xs font-bold text-slate-400 mb-6 overflow-x-auto whitespace-nowrap no-scrollbar">
-            <a href="index.html" class="hover:text-orange-500 transition">Anasayfa</a>
+            <a href="/" class="hover:text-orange-500 transition">Anasayfa</a>
             <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             <span id="breadcrumbCategory" class="text-slate-600">Kategori</span>
             <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
@@ -122,8 +122,9 @@
         </div>
     </footer>
 
+    <!-- DİKKAT: firebase-config.js import yolu "/" ile başlar -->
     <script type="module">
-        import { db } from "./js/firebase-config.js";
+        import { db } from "/js/firebase-config.js";
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const APP_ID = 'kibris-pazar';
@@ -134,7 +135,6 @@
         
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
 
-        // SEO Uyumlu Slug Üretici
         window.generateSlug = (text) => {
             if (!text) return 'kibris-bazar';
             return text.toString().toLowerCase()
@@ -146,7 +146,6 @@
                 .replace(/^-+|-+$/g, '');
         };
 
-        // YENİ: Slug + ID yapısından sadece ID'yi çeken fonksiyon
         function getProductIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             let rawPath = urlParams.get('id');
@@ -200,7 +199,6 @@
                 document.title = `${currentProduct.title} | ${currentProduct.storeName || 'Kıbrıs Bazar'}`;
                 document.getElementById('pageTitle').innerText = `${currentProduct.title} | Kıbrıs Bazar`;
 
-                // Eğer doğrudan slug link ile gelindiyse URL'yi tarayıcıda temiz göster
                 const expectedSlug = window.generateSlug(currentProduct.title) + '-' + currentProduct.id;
                 const currentPath = window.location.pathname;
                 if(currentPath.includes('/urun/') && !currentPath.endsWith(expectedSlug)) {
@@ -217,7 +215,6 @@
                 
                 document.getElementById('storeNameBadge').innerText = currentProduct.storeName || 'Mağaza';
                 
-                // Mağazaya giden linki Slug sistemine uyarla
                 const storeSlug = window.generateSlug(currentProduct.storeName);
                 document.getElementById('storeProfileLink').href = `/magaza/${storeSlug}-${currentProduct.storeId}`;
 
