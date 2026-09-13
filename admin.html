@@ -179,7 +179,6 @@
                                 <button type="button" id="btnLoadDefaults" onclick="window.loadDefaultRichCategories()" class="w-full bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-600/30 font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-[11px]">
                                     <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Trendyol Şablonunu Yükle
                                 </button>
-                                <!-- YENİ: TÜM KATEGORİLERİ SİL BUTONU -->
                                 <button type="button" id="btnDeleteAllCategories" onclick="window.deleteAllCategories()" class="w-full bg-rose-500/10 text-rose-500 hover:bg-rose-600 hover:text-white border border-rose-500/30 font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-[11px]">
                                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Tüm Kategorileri Sıfırla
                                 </button>
@@ -849,121 +848,224 @@
             });
         };
 
-        // --- DEVASA ZENGİN VE SPESİFİK FİLTRELİ KATEGORİ YÜKLEYİCİSİ (TRENDYOL STANDARTLARI) ---
+        // --- TRENDYOL STANDARTLARINDA 3 KATMANLI DEVASA KATEGORİ YÜKLEYİCİSİ ---
         window.loadDefaultRichCategories = async () => {
-            window.customConfirm("DİKKAT: Bu işlem veri tabanınıza HER BİR ALT KATEGORİYE ÖZEL ZORUNLU FİLTRELER ile birlikte zengin kategorileri yükleyecektir. Eski özellikleriniz ezilebilir. Onaylıyor musunuz?", async () => {
+            window.customConfirm("DİKKAT: Bu işlem veri tabanınıza TRENDYOL MEGAMENU MANTIĞINDA 3 katmanlı zengin kategorileri yükleyecektir. Eski özellikleriniz ezilebilir. Onaylıyor musunuz?", async () => {
                 const btn = document.getElementById('btnLoadDefaults');
                 if(btn) { btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Yükleniyor...`; btn.disabled = true; }
                 document.getElementById('fullScreenLoader').classList.remove('hidden');
                 document.getElementById('loaderText').innerText = "Kategori ağacı oluşturuluyor...";
 
-                const defaultTree = [
+                // TRENDYOL 3 KATMANLI MEGAMENU YAPISI (Ana Menü -> Grup -> Alt Kategori)
+                const trendyolTree = [
                     { 
-                        name: "Elektronik", icon: "monitor", 
-                        attributes: [{name: "Garanti Süresi", options: ["1 Yıl", "2 Yıl", "3 Yıl", "Garantisiz"]}],
-                        sub: [
-                            { name: "Cep Telefonu", attrs: [{name: "Marka", options: ["Apple", "Samsung", "Xiaomi", "Huawei", "Oppo", "Vivo", "Poco"]}, {name: "Dahili Hafıza", options: ["64 GB", "128 GB", "256 GB", "512 GB", "1 TB"]}, {name: "RAM Kapasitesi", options: ["4 GB", "6 GB", "8 GB", "12 GB", "16 GB"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Gümüş", "Altın", "Mavi", "Yeşil", "Kırmızı"]}] },
-                            { name: "Cep Telefonu Aksesuarları", attrs: [{name: "Uyumlu Marka", options: ["Apple", "Samsung", "Xiaomi", "Huawei", "Evrensel"]}, {name: "Ürün Tipi", options: ["Kılıf", "Ekran Koruyucu", "Şarj Kablosu", "Şarj Adaptörü", "Powerbank"]}] },
-                            { name: "Bilgisayar & Tablet", attrs: [{name: "Marka", options: ["Apple", "Lenovo", "Asus", "HP", "Dell", "MSI", "Monster", "Casper"]}, {name: "İşlemci Tipi", options: ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen 5", "AMD Ryzen 7", "Apple M1", "Apple M2", "Apple M3"]}, {name: "RAM Kapasitesi", options: ["8 GB", "16 GB", "32 GB", "64 GB"]}, {name: "SSD Kapasitesi", options: ["256 GB", "512 GB", "1 TB", "2 TB"]}] },
-                            { name: "Bilgisayar Bileşenleri", attrs: [{name: "Ürün Tipi", options: ["Ekran Kartı", "Anakart", "İşlemci", "RAM", "SSD", "Kasa", "Güç Kaynağı (PSU)"]}, {name: "Marka", options: ["Asus", "MSI", "Gigabyte", "Intel", "AMD", "Corsair"]}] },
-                            { name: "Televizyon", attrs: [{name: "Marka", options: ["Samsung", "LG", "Sony", "Philips", "TCL", "Vestel"]}, {name: "Ekran Boyutu", options: ["32 inç", "43 inç", "50 inç", "55 inç", "65 inç", "75 inç", "85+ inç"]}, {name: "Görüntü Teknolojisi", options: ["LED", "OLED", "QLED", "NanoCell"]}] },
-                            { name: "Ses Sistemleri", attrs: [{name: "Ürün Tipi", options: ["Bluetooth Hoparlör", "Soundbar", "Ev Sinema Sistemi", "Kulak Üstü Kulaklık", "Kulak İçi Kulaklık"]}, {name: "Marka", options: ["JBL", "Sony", "Bose", "Sennheiser", "Apple", "Samsung"]}] },
-                            { name: "Beyaz Eşya", attrs: [{name: "Ürün Tipi", options: ["Buzdolabı", "Çamaşır Makinesi", "Bulaşık Makinesi", "Fırın", "Derin Dondurucu"]}, {name: "Marka", options: ["Bosch", "Samsung", "LG", "Arçelik", "Beko", "Vestel", "Profilo"]}, {name: "Enerji Sınıfı", options: ["A", "A+", "A++", "A+++", "B", "C", "D"]}, {name: "Renk", options: ["Beyaz", "Inox", "Siyah", "Gri"]}] },
-                            { name: "Küçük Ev Aletleri", attrs: [{name: "Ürün Tipi", options: ["Elektrikli Süpürge", "Robot Süpürge", "Kahve Makinesi", "Tost Makinesi", "Blender & Mikser", "Ütü", "Airfryer"]}, {name: "Marka", options: ["Philips", "Dyson", "Tefal", "Bosch", "Arzum", "Karaca", "Fakir"]}] },
-                            { name: "Giyilebilir Teknoloji", attrs: [{name: "Ürün Tipi", options: ["Akıllı Saat", "Akıllı Bileklik", "Sanal Gerçeklik Gözlüğü"]}, {name: "Marka", options: ["Apple", "Samsung", "Huawei", "Xiaomi", "Garmin"]}, {name: "Uyumlu İşletim Sistemi", options: ["iOS", "Android", "Evrensel"]}] },
-                            { name: "Oyun Konsolları", attrs: [{name: "Marka", options: ["Sony PlayStation", "Microsoft Xbox", "Nintendo"]}, {name: "Ürün Tipi", options: ["Oyun Konsolu", "Oyun Kolu (Gamepad)", "Konsol Aksesuarı", "Fiziksel Oyun CD'si"]}] }
-                        ] 
+                        name: "Kadın", icon: "user", 
+                        groups: [
+                            { 
+                                name: "Giyim", 
+                                sub: [
+                                    { name: "Elbise", attrs: [{name: "Beden", options: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Kırmızı", "Mavi", "Yeşil", "Sarı", "Çok Renkli", "Desenli"]}, {name: "Boy", options: ["Mini", "Midi", "Maxi"]}] },
+                                    { name: "Tişört", attrs: [{name: "Beden", options: ["XS", "S", "M", "L", "XL", "XXL"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Gri", "Kırmızı"]}, {name: "Kalıp", options: ["Oversize", "Slim Fit", "Regular Fit"]}] },
+                                    { name: "Gömlek", attrs: [{name: "Beden", options: ["34", "36", "38", "40", "42", "44"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Mavi", "Desenli"]}] },
+                                    { name: "Kot Pantolon", attrs: [{name: "Beden", options: ["24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34"]}, {name: "Renk", options: ["Mavi", "Açık Mavi", "Siyah", "Gri"]}, {name: "Kalıp", options: ["Skinny", "Mom", "Boyfriend", "İspanyol Paça"]}] },
+                                    { name: "Mont & Kaban", attrs: [{name: "Beden", options: ["XS", "S", "M", "L", "XL", "XXL"]}, {name: "Renk", options: ["Siyah", "Camel", "Bej", "Lacivert"]}] },
+                                    { name: "Tesettür", attrs: [{name: "Ürün Tipi", options: ["Tunik", "Ferace", "Abaya", "Eşarp", "Şal"]}, {name: "Beden", options: ["36", "38", "40", "42", "44", "46", "48", "50", "Standart"]}] }
+                                ]
+                            },
+                            {
+                                name: "Ayakkabı",
+                                sub: [
+                                    { name: "Sneaker", attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39", "40", "41"]}, {name: "Renk", options: ["Beyaz", "Siyah", "Çok Renkli"]}] },
+                                    { name: "Topuklu Ayakkabı", attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39", "40"]}, {name: "Topuk Boyu", options: ["Kısa Topuk (1-4 cm)", "Orta Topuk (5-9 cm)", "Yüksek Topuk (10 cm ve üzeri)"]}] },
+                                    { name: "Bot & Çizme", attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39", "40"]}, {name: "Materyal", options: ["Hakiki Deri", "Suni Deri", "Süet"]}] }
+                                ]
+                            },
+                            {
+                                name: "Aksesuar & Çanta",
+                                sub: [
+                                    { name: "Omuz Çantası", attrs: [{name: "Materyal", options: ["Hakiki Deri", "Suni Deri", "Kumaş", "Hasır"]}, {name: "Renk", options: ["Siyah", "Taba", "Beyaz", "Kırmızı"]}] },
+                                    { name: "Sırt Çantası", attrs: [{name: "Materyal", options: ["Kumaş", "Suni Deri", "Hakiki Deri"]}] },
+                                    { name: "Saat", attrs: [{name: "Marka", options: ["Casio", "Fossil", "Michael Kors", "Guess", "Swatch"]}, {name: "Kordon Materyali", options: ["Çelik", "Deri", "Silikon"]}] },
+                                    { name: "Takı", attrs: [{name: "Ürün Tipi", options: ["Kolye", "Küpe", "Yüzük", "Bileklik"]}, {name: "Materyal", options: ["Altın", "Gümüş", "Çelik", "Bijuteri"]}] }
+                                ]
+                            },
+                            {
+                                name: "Ev & İç Giyim",
+                                sub: [
+                                    { name: "Pijama Takımı", attrs: [{name: "Beden", options: ["S", "M", "L", "XL", "XXL"]}, {name: "Materyal", options: ["Pamuk", "Saten", "Polar"]}] },
+                                    { name: "İç Çamaşırı Takımları", attrs: [{name: "Beden", options: ["75B", "80B", "85B", "90B", "S", "M", "L"]}] }
+                                ]
+                            }
+                        ]
                     },
                     { 
-                        name: "Moda & Giyim", icon: "shirt", 
-                        attributes: [{name: "Sezon", options: ["İlkbahar/Yaz", "Sonbahar/Kış", "Dört Mevsim"]}],
-                        sub: [
-                            { name: "Kadın Giyim", attrs: [{name: "Ürün Tipi", options: ["Elbise", "Tişört", "Gömlek", "Kazak", "Pantolon", "Etek", "Mont & Kaban", "İç Giyim"]}, {name: "Beden", options: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "Standart"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Kırmızı", "Mavi", "Yeşil", "Sarı", "Çok Renkli", "Desenli"]}, {name: "Kalıp", options: ["Oversize", "Slim Fit", "Regular Fit", "Relaxed"]}] },
-                            { name: "Erkek Giyim", attrs: [{name: "Ürün Tipi", options: ["Tişört", "Gömlek", "Kazak & Hırka", "Pantolon", "Kot Pantolon", "Eşofman", "Mont & Kaban", "Takım Elbise", "İç Giyim"]}, {name: "Beden", options: ["XS", "S", "M", "L", "XL", "XXL", "3XL"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Lacivert", "Gri", "Haki", "Bordo", "Bej"]}, {name: "Kalıp", options: ["Slim Fit", "Regular Fit", "Oversize", "Comfort Fit"]}] },
-                            { name: "Kadın Ayakkabı", attrs: [{name: "Ayakkabı Tipi", options: ["Sneaker", "Topuklu Ayakkabı", "Bot & Çizme", "Sandalet", "Terlik", "Spor Ayakkabı"]}, {name: "Numara", options: ["35", "36", "37", "38", "39", "40", "41", "42"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Bej", "Taba", "Kırmızı", "Çok Renkli"]}] },
-                            { name: "Erkek Ayakkabı", attrs: [{name: "Ayakkabı Tipi", options: ["Sneaker", "Klasik Ayakkabı", "Bot & Çizme", "Sandalet & Terlik", "Spor Ayakkabı", "Krampon"]}, {name: "Numara", options: ["39", "40", "41", "42", "43", "44", "45", "46"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Kahverengi", "Lacivert", "Gri"]}] },
-                            { name: "Çanta & Cüzdan", attrs: [{name: "Cinsiyet", options: ["Kadın", "Erkek", "Unisex"]}, {name: "Ürün Tipi", options: ["Omuz Çantası", "Sırt Çantası", "Çapraz Çanta", "El Çantası", "Cüzdan", "Kartlık"]}, {name: "Materyal", options: ["Hakiki Deri", "Suni Deri", "Kumaş", "Hasır"]}] },
-                            { name: "Saat & Aksesuar", attrs: [{name: "Cinsiyet", options: ["Kadın", "Erkek", "Unisex"]}, {name: "Ürün Tipi", options: ["Kol Saati", "Güneş Gözlüğü", "Kolye", "Küpe", "Yüzük", "Bileklik", "Kemer", "Şapka"]}, {name: "Materyal", options: ["Altın", "Gümüş", "Çelik", "Deri", "Plastik"]}] },
-                            { name: "Çocuk & Bebek Giyim", attrs: [{name: "Yaş Grubu", options: ["0-3 Ay", "3-6 Ay", "6-9 Ay", "9-12 Ay", "1-2 Yaş", "3-4 Yaş", "5-6 Yaş", "7-8 Yaş", "9-10 Yaş", "11-12 Yaş"]}, {name: "Cinsiyet", options: ["Kız", "Erkek", "Unisex"]}, {name: "Ürün Tipi", options: ["Zıbın & Body", "Tulum", "Tişört", "Pantolon & Şort", "Elbise", "Mont"]}] }
-                        ] 
+                        name: "Erkek", icon: "user", 
+                        groups: [
+                            { 
+                                name: "Giyim", 
+                                sub: [
+                                    { name: "Tişört", attrs: [{name: "Beden", options: ["XS", "S", "M", "L", "XL", "XXL", "3XL"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Gri", "Lacivert"]}, {name: "Yaka Tipi", options: ["Bisiklet Yaka", "V Yaka", "Polo Yaka"]}] },
+                                    { name: "Gömlek", attrs: [{name: "Beden", options: ["S", "M", "L", "XL", "XXL", "3XL"]}, {name: "Kalıp", options: ["Slim Fit", "Regular Fit"]}, {name: "Desen", options: ["Düz Renk", "Kareli", "Çizgili"]}] },
+                                    { name: "Pantolon", attrs: [{name: "Beden", options: ["28", "29", "30", "31", "32", "33", "34", "36", "38"]}, {name: "Renk", options: ["Siyah", "Lacivert", "Haki", "Bej"]}, {name: "Kalıp", options: ["Slim Fit", "Regular Fit"]}] },
+                                    { name: "Eşofman", attrs: [{name: "Beden", options: ["S", "M", "L", "XL", "XXL"]}] },
+                                    { name: "Mont & Kaban", attrs: [{name: "Beden", options: ["S", "M", "L", "XL", "XXL"]}] }
+                                ]
+                            },
+                            {
+                                name: "Ayakkabı",
+                                sub: [
+                                    { name: "Sneaker", attrs: [{name: "Numara", options: ["39", "40", "41", "42", "43", "44", "45", "46"]}, {name: "Renk", options: ["Beyaz", "Siyah", "Çok Renkli"]}] },
+                                    { name: "Klasik Ayakkabı", attrs: [{name: "Numara", options: ["39", "40", "41", "42", "43", "44", "45"]}, {name: "Renk", options: ["Siyah", "Kahverengi", "Lacivert"]}] },
+                                    { name: "Bot", attrs: [{name: "Numara", options: ["40", "41", "42", "43", "44", "45"]}, {name: "Materyal", options: ["Hakiki Deri", "Suni Deri", "Süet", "Nubuk"]}] }
+                                ]
+                            },
+                            {
+                                name: "Aksesuar & Çanta",
+                                sub: [
+                                    { name: "Saat", attrs: [{name: "Marka", options: ["Casio", "Seiko", "Fossil", "Diesel", "G-Shock"]}, {name: "Kordon Materyali", options: ["Çelik", "Deri", "Silikon"]}] },
+                                    { name: "Cüzdan", attrs: [{name: "Materyal", options: ["Hakiki Deri", "Suni Deri"]}] },
+                                    { name: "Kemer", attrs: [{name: "Materyal", options: ["Hakiki Deri", "Suni Deri"]}, {name: "Renk", options: ["Siyah", "Kahverengi"]}] }
+                                ]
+                            }
+                        ]
+                    },
+                    { 
+                        name: "Kozmetik", icon: "sparkles", 
+                        groups: [
+                            { 
+                                name: "Parfüm & Deodorant", 
+                                sub: [
+                                    { name: "Kadın Parfüm", attrs: [{name: "Hacim", options: ["30 ml", "50 ml", "75 ml", "100 ml", "150 ml"]}, {name: "Koku Tipi", options: ["Çiçeksi", "Odunsu", "Meyvemsi", "Baharatlı"]}] },
+                                    { name: "Erkek Parfüm", attrs: [{name: "Hacim", options: ["50 ml", "100 ml", "150 ml", "200 ml"]}, {name: "Koku Tipi", options: ["Odunsu", "Baharatlı", "Okyanus", "Oryantal"]}] }
+                                ]
+                            },
+                            { 
+                                name: "Makyaj", 
+                                sub: [
+                                    { name: "Göz Makyajı", attrs: [{name: "Ürün Tipi", options: ["Maskara", "Far Paleti", "Eyeliner", "Göz Kalemi"]}] },
+                                    { name: "Yüz Makyajı", attrs: [{name: "Ürün Tipi", options: ["Fondöten", "Kapatıcı", "Allık", "Aydınlatıcı", "Pudra"]}] },
+                                    { name: "Dudak Makyajı", attrs: [{name: "Ürün Tipi", options: ["Ruj", "Dudak Parlatıcısı", "Dudak Kalemi", "Dudak Nemlendirici"]}] }
+                                ]
+                            },
+                            { 
+                                name: "Cilt Bakımı", 
+                                sub: [
+                                    { name: "Yüz Bakımı", attrs: [{name: "Ürün Tipi", options: ["Nemlendirici", "Yüz Yıkama Jeli", "Serum", "Maske"]}, {name: "Cilt Tipi", options: ["Kuru", "Yağlı", "Karma", "Normal", "Hassas"]}] },
+                                    { name: "Vücut Bakımı", attrs: [{name: "Ürün Tipi", options: ["Vücut Losyonu", "Duş Jeli", "Peeling", "Güneş Kremi"]}] }
+                                ]
+                            }
+                        ]
+                    },
+                    { 
+                        name: "Elektronik", icon: "monitor", 
+                        groups: [
+                            { 
+                                name: "Telefon & Aksesuar", 
+                                sub: [
+                                    { name: "Cep Telefonu", attrs: [{name: "Marka", options: ["Apple", "Samsung", "Xiaomi", "Huawei", "Poco"]}, {name: "Dahili Hafıza", options: ["64 GB", "128 GB", "256 GB", "512 GB", "1 TB"]}, {name: "RAM Kapasitesi", options: ["4 GB", "6 GB", "8 GB", "12 GB"]}] },
+                                    { name: "Telefon Aksesuarları", attrs: [{name: "Ürün Tipi", options: ["Kılıf", "Ekran Koruyucu", "Şarj Kablosu", "Şarj Adaptörü", "Powerbank"]}] },
+                                    { name: "Giyilebilir Teknoloji", attrs: [{name: "Ürün Tipi", options: ["Akıllı Saat", "Akıllı Bileklik"]}, {name: "Marka", options: ["Apple", "Samsung", "Huawei", "Xiaomi"]}] }
+                                ]
+                            },
+                            { 
+                                name: "Bilgisayar & Tablet", 
+                                sub: [
+                                    { name: "Dizüstü Bilgisayar", attrs: [{name: "Marka", options: ["Apple", "Lenovo", "Asus", "HP", "Dell", "MSI", "Monster"]}, {name: "İşlemci Tipi", options: ["Intel Core i5", "Intel Core i7", "AMD Ryzen 5", "AMD Ryzen 7", "Apple M1", "Apple M2"]}, {name: "RAM", options: ["8 GB", "16 GB", "32 GB"]}] },
+                                    { name: "Tablet", attrs: [{name: "Marka", options: ["Apple", "Samsung", "Lenovo", "Huawei"]}, {name: "Dahili Hafıza", options: ["64 GB", "128 GB", "256 GB"]}] },
+                                    { name: "Bilgisayar Bileşenleri", attrs: [{name: "Ürün Tipi", options: ["Ekran Kartı", "Anakart", "İşlemci", "RAM", "SSD"]}] }
+                                ]
+                            },
+                            { 
+                                name: "TV, Görüntü & Ses", 
+                                sub: [
+                                    { name: "Televizyon", attrs: [{name: "Ekran Boyutu", options: ["32 inç", "43 inç", "50 inç", "55 inç", "65 inç", "75 inç"]}, {name: "Marka", options: ["Samsung", "LG", "Sony", "Philips", "TCL"]}] },
+                                    { name: "Ses Sistemleri", attrs: [{name: "Ürün Tipi", options: ["Bluetooth Hoparlör", "Soundbar", "Kulaklık"]}] }
+                                ]
+                            }
+                        ]
                     },
                     { 
                         name: "Ev & Yaşam", icon: "home", 
-                        attributes: [{name: "Marka", options: ["Vivense", "IKEA", "Koçtaş", "Karaca", "English Home", "Madame Coco", "Taç", "Diğer"]}],
-                        sub: [
-                            { name: "Oturma Odası Mobilyası", attrs: [{name: "Ürün Tipi", options: ["Koltuk Takımı", "Köşe Koltuk", "Kanepe", "TV Ünitesi", "Sehpa", "Berjer", "Kitaplık"]}, {name: "Malzeme", options: ["Ahşap", "Metal", "MDF", "Sunta"]}, {name: "Kumaş Tipi", options: ["Suni Deri", "Kadife", "Keten", "Nubuk", "Tay Tüyü"]}, {name: "Renk", options: ["Ceviz", "Beyaz", "Siyah", "Gri", "Antrasit", "Krem", "Hardal", "Yeşil"]}] },
-                            { name: "Yatak Odası Mobilyası", attrs: [{name: "Ürün Tipi", options: ["Yatak", "Baza & Başlık", "Gardırop", "Şifonyer", "Komodin"]}, {name: "Yatak Ölçüsü", options: ["90x190", "100x200", "120x200", "140x190", "150x200", "160x200", "180x200"]}, {name: "Renk", options: ["Beyaz", "Ceviz", "Siyah", "Meşe"]}] },
-                            { name: "Yemek Odası & Mutfak Mobilyası", attrs: [{name: "Ürün Tipi", options: ["Yemek Masası Takımı", "Yemek Masası", "Sandalye", "Konsol", "Mutfak Dolabı"]}, {name: "Kapasite", options: ["2 Kişilik", "4 Kişilik", "6 Kişilik", "8 Kişilik", "Açılabilir Masa"]}] },
-                            { name: "Ev Tekstili", attrs: [{name: "Ürün Tipi", options: ["Nevresim Takımı", "Yatak Örtüsü", "Yorgan & Yastık", "Battaniye", "Havlu & Bornoz", "Perde"]}, {name: "Boyut", options: ["Tek Kişilik", "Çift Kişilik", "Battal Boy"]}, {name: "Kumaş", options: ["%100 Pamuk", "Bambu", "Polyester", "Keten", "Saten"]}] },
-                            { name: "Halı & Kilim", attrs: [{name: "Boyut", options: ["80x150 cm", "100x200 cm", "120x180 cm", "160x230 cm", "200x290 cm", "Özel Ölçü"]}, {name: "Ürün Tipi", options: ["Halı", "Kilim", "Yolluk", "Paspas", "Çocuk Halısı"]}, {name: "Malzeme", options: ["Akrilik", "Polyester", "Pamuk", "Yün", "Bambu"]}] },
-                            { name: "Aydınlatma", attrs: [{name: "Ürün Tipi", options: ["Avize", "Lambader", "Masa Lambası", "Aplik", "Ampul"]}, {name: "Duy Tipi", options: ["E27", "E14", "GU10", "LED Entegre"]}] },
-                            { name: "Mutfak Gereçleri", attrs: [{name: "Ürün Tipi", options: ["Tencere & Tava", "Yemek Takımı", "Çatal Kaşık Bıçak", "Bardak & Kupa", "Saklama Kabı", "Çaydanlık"]}, {name: "Malzeme", options: ["Porselen", "Cam", "Çelik", "Granit", "Teflon", "Ahşap"]}] }
-                        ] 
+                        groups: [
+                            { 
+                                name: "Mobilya", 
+                                sub: [
+                                    { name: "Oturma Odası", attrs: [{name: "Ürün Tipi", options: ["Koltuk Takımı", "Köşe Koltuk", "Kanepe", "TV Ünitesi", "Sehpa"]}] },
+                                    { name: "Yatak Odası", attrs: [{name: "Ürün Tipi", options: ["Yatak", "Baza & Başlık", "Gardırop", "Şifonyer"]}] },
+                                    { name: "Yemek Odası", attrs: [{name: "Ürün Tipi", options: ["Yemek Masası", "Sandalye", "Konsol"]}] }
+                                ]
+                            },
+                            { 
+                                name: "Elektrikli Ev Aletleri", 
+                                sub: [
+                                    { name: "Beyaz Eşya", attrs: [{name: "Ürün Tipi", options: ["Buzdolabı", "Çamaşır Makinesi", "Bulaşık Makinesi", "Fırın"]}, {name: "Marka", options: ["Bosch", "Samsung", "LG", "Arçelik", "Beko"]}] },
+                                    { name: "Küçük Ev Aletleri", attrs: [{name: "Ürün Tipi", options: ["Elektrikli Süpürge", "Robot Süpürge", "Kahve Makinesi", "Tost Makinesi", "Airfryer"]}] }
+                                ]
+                            },
+                            { 
+                                name: "Ev Tekstili", 
+                                sub: [
+                                    { name: "Yatak Odası Tekstili", attrs: [{name: "Ürün Tipi", options: ["Nevresim Takımı", "Yatak Örtüsü", "Yorgan", "Yastık", "Battaniye"]}] },
+                                    { name: "Banyo Tekstili", attrs: [{name: "Ürün Tipi", options: ["Havlu", "Bornoz Takımı", "Banyo Paspası"]}] },
+                                    { name: "Halı & Kilim", attrs: [{name: "Boyut", options: ["80x150 cm", "100x200 cm", "120x180 cm", "160x230 cm"]}] }
+                                ]
+                            }
+                        ]
                     },
                     { 
                         name: "Anne, Bebek & Oyuncak", icon: "baby", 
-                        attributes: [{name: "Cinsiyet", options: ["Kız", "Erkek", "Unisex"]}], 
-                        sub: [
-                            { name: "Bebek Bezi & Islak Mendil", attrs: [{name: "Beden/Numara", options: ["1 Yenidoğan", "2 Mini", "3 Midi", "4 Maxi", "5 Junior", "6 Extra Large", "7 XXL", "Kilot Bez"]}, {name: "Adet/Miktar", options: ["10-30 Adet", "30-50 Adet", "50-100 Adet", "100+ Adet", "Aylık Fırsat Paketi"]}, {name: "Marka", options: ["Prima", "Sleepy", "Molfix", "Huggies", "Baby Turco"]}] },
-                            { name: "Bebek Arabası & Oto Koltuğu", attrs: [{name: "Ürün Tipi", options: ["Travel Sistem Bebek Arabası", "Baston Bebek Arabası", "İkiz Bebek Arabası", "Oto Koltuğu", "Ana Kucağı"]}, {name: "Taşıma Kapasitesi", options: ["0-13 kg", "9-18 kg", "15-36 kg", "0-36 kg"]}] },
-                            { name: "Bebek Beslenme", attrs: [{name: "Ürün Tipi", options: ["Biberon", "Emzik", "Mama Sandalyesi", "Göğüs Pompası", "Bebek Maması", "Sterilizatör"]}] },
-                            { name: "Oyuncaklar", attrs: [{name: "Ürün Tipi", options: ["Eğitici Oyuncaklar", "Peluş Oyuncaklar", "Arabalar & Araçlar", "Bebekler & Figürler", "Yapı Oyuncakları (Lego vb.)", "Kutu Oyunları", "Dış Mekan Oyunları"]}, {name: "Yaş Grubu", options: ["0-6 Ay", "6-12 Ay", "1-3 Yaş", "4-6 Yaş", "7-9 Yaş", "10-12 Yaş", "13+ Yaş"]}] }
-                        ] 
-                    },
-                    { 
-                        name: "Kozmetik & Kişisel Bakım", icon: "sparkles", 
-                        attributes: [{name: "Cinsiyet", options: ["Kadın", "Erkek", "Unisex"]}], 
-                        sub: [
-                            { name: "Parfüm & Deodorant", attrs: [{name: "Hacim", options: ["30 ml", "50 ml", "75 ml", "100 ml", "150 ml", "200 ml"]}, {name: "Koku Tipi", options: ["Çiçeksi", "Odunsu", "Meyvemsi", "Baharatlı", "Ferah", "Oryantal"]}, {name: "Marka", options: ["Avon", "Calvin Klein", "Bvlgari", "Versace", "Tom Ford", "Privacy"]}] },
-                            { name: "Makyaj", attrs: [{name: "Ürün Tipi", options: ["Ruj", "Fondöten", "Maskara", "Far Paleti", "Eyeliner", "Allık", "Kapatıcı"]}, {name: "Marka", options: ["Maybelline", "L'Oreal Paris", "Mac", "Flormar", "Golden Rose", "Kiko"]}] },
-                            { name: "Cilt Bakımı", attrs: [{name: "Ürün Tipi", options: ["Nemlendirici", "Güneş Kremi", "Temizleyici", "Serum", "Maske", "Göz Kremi"]}, {name: "Cilt Tipi", options: ["Kuru Cilt", "Yağlı Cilt", "Karma Cilt", "Normal Cilt", "Hassas Cilt", "Tüm Cilt Tipleri"]}] },
-                            { name: "Saç Bakımı", attrs: [{name: "Ürün Tipi", options: ["Şampuan", "Saç Kremi", "Saç Boyası", "Saç Şekillendirici", "Saç Maskesi"]}, {name: "Saç Tipi", options: ["Dökülen Saçlar", "Kepekli Saçlar", "Boyalı Saçlar", "Kıvırcık Saçlar", "Tüm Saçlar"]}] }
-                        ] 
-                    },
-                    { 
-                        name: "Süpermarket", icon: "shopping-basket", 
-                        attributes: [], 
-                        sub: [
-                            { name: "Gıda Ürünleri", attrs: [{name: "Ürün Tipi", options: ["Sıvı Yağ", "Çay & Kahve", "Şeker & Tuz", "Makarna & Bakliyat", "Atıştırmalık & Cips", "Çikolata & Bisküvi", "Kahvaltılık"]}] },
-                            { name: "İçecekler", attrs: [{name: "Ürün Tipi", options: ["Su", "Gazlı İçecek", "Meyve Suyu", "Enerji İçeceği", "Maden Suyu"]}] },
-                            { name: "Temizlik Ürünleri", attrs: [{name: "Ürün Tipi", options: ["Çamaşır Deterjanı", "Bulaşık Deterjanı", "Yüzey Temizleyici", "Çamaşır Suyu", "Oda Kokusu"]}, {name: "Marka", options: ["Ariel", "Omo", "Fairy", "Domestos", "Marc", "Bingo"]}] },
-                            { name: "Kağıt Ürünleri", attrs: [{name: "Ürün Tipi", options: ["Tuvalet Kağıdı", "Kağıt Havlu", "Peçete", "Islak Mendil"]}, {name: "Kat Sayısı", options: ["2 Katlı", "3 Katlı", "4 Katlı"]}] }
-                        ] 
-                    },
-                    { 
-                        name: "Oto & Yapı Market", icon: "wrench", 
-                        attributes: [], 
-                        sub: [
-                            { name: "Oto Aksesuar", attrs: [{name: "Ürün Tipi", options: ["Paspas", "Koltuk Kılıfı", "Oto Teyp", "Oto Lastik", "Motor Yağı", "Akü", "Oto Temizlik Ürünü"]}] },
-                            { name: "Yapı Market & Hırdavat", attrs: [{name: "Ürün Tipi", options: ["Elektrikli El Aletleri", "Matkap", "Tornavida Seti", "Boya & Fırça", "Vida & Çivi", "İş Güvenliği", "Tesisat Malzemeleri"]}] },
-                            { name: "Bahçe", attrs: [{name: "Ürün Tipi", options: ["Bahçe Mobilyası", "Mangal & Barbekü", "Saksı & Bitki", "Bahçe Aletleri", "Aydınlatma"]}] }
-                        ] 
-                    },
-                    { 
-                        name: "Spor & Outdoor", icon: "tent", 
-                        attributes: [{name: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex"]}], 
-                        sub: [
-                            { name: "Spor Giyim & Ayakkabı", attrs: [{name: "Ürün Tipi", options: ["Eşofman", "Tişört", "Tayt", "Şort", "Spor Ayakkabı", "Krampon", "Forma"]}, {name: "Spor Dalı", options: ["Koşu", "Futbol", "Basketbol", "Fitness", "Yürüyüş", "Yüzme"]}] },
-                            { name: "Fitness & Kondisyon", attrs: [{name: "Ürün Tipi", options: ["Dambıl & Ağırlık", "Koşu Bandı", "Kondisyon Bisikleti", "Pilates & Yoga Matı", "Sporcu Besini (Protein Tozu vb.)"]}] },
-                            { name: "Kamp & Outdoor", attrs: [{name: "Ürün Tipi", options: ["Çadır", "Uyku Tulumu", "Kamp Sandalyesi", "Termos", "Kamp Mutfağı", "El Feneri"]}] },
-                            { name: "Bisiklet & Aksesuar", attrs: [{name: "Ürün Tipi", options: ["Dağ Bisikleti", "Şehir Bisikleti", "Elektrikli Bisiklet", "Kask", "Bisiklet Kilidi", "Aydınlatma"]}] }
-                        ] 
+                        groups: [
+                            { 
+                                name: "Bebek Bakım", 
+                                sub: [
+                                    { name: "Bebek Bezi & Islak Mendil", attrs: [{name: "Beden", options: ["1 Yenidoğan", "2 Mini", "3 Midi", "4 Maxi", "5 Junior", "6 Extra Large"]}, {name: "Marka", options: ["Prima", "Sleepy", "Molfix", "Huggies"]}] },
+                                    { name: "Bebek Beslenme", attrs: [{name: "Ürün Tipi", options: ["Biberon", "Emzik", "Mama Sandalyesi", "Bebek Maması"]}] },
+                                    { name: "Banyo & Sağlık", attrs: [{name: "Ürün Tipi", options: ["Bebek Şampuanı", "Bebek Yağı", "Pişik Kremi", "Ateş Ölçer"]}] }
+                                ]
+                            },
+                            { 
+                                name: "Bebek Arabası & Oto Koltuğu", 
+                                sub: [
+                                    { name: "Bebek Arabası", attrs: [{name: "Ürün Tipi", options: ["Travel Sistem", "Baston", "İkiz"]}] },
+                                    { name: "Oto Koltuğu", attrs: [{name: "Taşıma Kapasitesi", options: ["0-13 kg", "9-18 kg", "15-36 kg", "0-36 kg"]}] }
+                                ]
+                            },
+                            { 
+                                name: "Oyuncak", 
+                                sub: [
+                                    { name: "Bebek Oyuncakları", attrs: [{name: "Yaş Grubu", options: ["0-6 Ay", "6-12 Ay", "1-2 Yaş"]}] },
+                                    { name: "Kız Çocuk Oyuncakları", attrs: [{name: "Ürün Tipi", options: ["Bebekler", "Evcilik Setleri", "Peluş Oyuncaklar"]}] },
+                                    { name: "Erkek Çocuk Oyuncakları", attrs: [{name: "Ürün Tipi", options: ["Arabalar", "Aksiyon Figürleri", "Robotlar"]}] }
+                                ]
+                            }
+                        ]
                     }
                 ];
 
                 try {
-                    for(let p of defaultTree) {
-                        const pRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
-                        await setDoc(pRef, { name: p.name, slug: window.generateSlug(p.name), icon: p.icon, attributes: p.attributes || [], parentId: "", createdAt: Date.now() });
+                    // TRENDYOL STANDARTLARINDA 3 KATMANLI VERİ TABANI YAZIMI
+                    for(let mainCategory of trendyolTree) {
+                        // 1. Katman: Ana Menü (Örn: Kadın)
+                        const mainRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
+                        await setDoc(mainRef, { name: mainCategory.name, slug: window.generateSlug(mainCategory.name), icon: mainCategory.icon, isMegaMenu: true, parentId: "", createdAt: Date.now() });
 
-                        if(p.sub && p.sub.length > 0) {
-                            for(let s of p.sub) {
-                                const sRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
-                                await setDoc(sRef, { name: s.name, slug: window.generateSlug(s.name), icon: "", attributes: s.attrs || [], parentId: pRef.id, createdAt: Date.now() });
+                        if(mainCategory.groups && mainCategory.groups.length > 0) {
+                            for(let group of mainCategory.groups) {
+                                // 2. Katman: Grup Başlığı (Örn: Giyim) - Bunu filtre seçilemez, sadece başlık olarak kaydediyoruz
+                                const groupRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
+                                await setDoc(groupRef, { name: group.name, slug: window.generateSlug(group.name), isGroupTitle: true, parentId: mainRef.id, createdAt: Date.now() });
+
+                                if(group.sub && group.sub.length > 0) {
+                                    for(let sub of group.sub) {
+                                        // 3. Katman: Tıklanabilir Alt Kategori (Örn: Elbise) - Filtreler burada!
+                                        const subRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
+                                        await setDoc(subRef, { name: sub.name, slug: window.generateSlug(sub.name), icon: "", attributes: sub.attrs || [], parentId: groupRef.id, createdAt: Date.now() });
+                                    }
+                                }
                             }
                         }
                     }
-                    window.showMessage("Dinamik filtreli zengin kategoriler başarıyla sisteme entegre edildi!");
+                    window.showMessage("TRENDYOL MEGAMENU STANDARTLARINDA 3 katmanlı zengin kategoriler başarıyla sisteme entegre edildi!");
                 } catch(e) {
                     console.error(e);
                     window.showMessage("Yükleme sırasında hata oluştu.", "error");
@@ -975,7 +1077,7 @@
             });
         };
 
-        // --- MAĞAZALAR VE KOMPLE SİLME ---
+        // --- DİĞER MAĞAZA VE KONTROL İŞLEMLERİ ---
         function renderStores() {
             const tbody = document.getElementById('storesTableBody');
             if(!tbody) return;
