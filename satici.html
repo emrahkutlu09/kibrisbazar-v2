@@ -1071,7 +1071,7 @@
             document.getElementById('statPendingOrders').innerText = pending;
         }
 
-        // --- TRENDYOL 3 KATMANLI KİME GÖRE SEÇİCİ LOGİCİ ---
+        // --- TRENDYOL 3 KATMANLI SEÇİCİ LOGİCİ ---
         function initCategoriesForSeller() {
             const mainSelect = document.getElementById('pMainCategory');
             if(!mainSelect) return;
@@ -1136,24 +1136,27 @@
 
             const catData = dbCategories.find(c => c.id === catId);
             if(catData && catData.attributes && catData.attributes.length > 0) {
-                let html = `<div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl"><h4 class="text-xs font-black text-orange-600 uppercase mb-3 flex items-center gap-1.5"><i data-lucide="sliders" class="w-4 h-4"></i> Ürün Özellikleri (Zorunlu)</h4><div class="space-y-3">`;
+                // Sadece "Ürün Tipi" haricindeki gerçek filtreleri alıyoruz
+                const validAttributes = catData.attributes.filter(attr => attr.name !== "Ürün Tipi");
                 
-                catData.attributes.forEach((attr, index) => {
-                    if(attr.name === "Ürün Tipi") return; // Çift "Ürün Tipi" çakışmasını önleyen akıllı filtre
-
-                    html += `
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">${attr.name} <span class="text-rose-500">*</span></label>
-                            <select required name="dynamic_attr_${index}" data-attr-name="${attr.name}" class="dynamic-attribute-select w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-bold text-slate-800 cursor-pointer">
-                                <option value="">Lütfen ${attr.name} seçin</option>
-                    `;
-                    attr.options.forEach(opt => { html += `<option value="${opt}">${opt}</option>`; });
-                    html += `</select></div>`;
-                });
-                
-                html += `</div></div>`;
-                attrContainer.innerHTML = html;
-                lucide.createIcons();
+                if (validAttributes.length > 0) {
+                    let html = `<div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl"><h4 class="text-xs font-black text-orange-600 uppercase mb-3 flex items-center gap-1.5"><i data-lucide="sliders" class="w-4 h-4"></i> Ürün Özellikleri (Zorunlu)</h4><div class="space-y-3">`;
+                    
+                    validAttributes.forEach((attr, index) => {
+                        html += `
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">${attr.name} <span class="text-rose-500">*</span></label>
+                                <select required name="dynamic_attr_${index}" data-attr-name="${attr.name}" class="dynamic-attribute-select w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-bold text-slate-800 cursor-pointer">
+                                    <option value="">Lütfen ${attr.name} seçin</option>
+                        `;
+                        attr.options.forEach(opt => { html += `<option value="${opt}">${opt}</option>`; });
+                        html += `</select></div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                    attrContainer.innerHTML = html;
+                    lucide.createIcons();
+                }
             }
         };
 
