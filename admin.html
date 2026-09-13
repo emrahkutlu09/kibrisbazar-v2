@@ -95,7 +95,7 @@
             <div class="flex items-center gap-2 border-b border-slate-800 pb-px overflow-x-auto no-scrollbar">
                 <button onclick="window.switchTab('stores')" id="tab-stores" class="px-6 py-3 font-bold text-sm border-b-2 border-rose-500 text-rose-400 transition flex items-center gap-2 whitespace-nowrap"><i data-lucide="store" class="w-4 h-4"></i> Mağazalar & Paketler</button>
                 <button onclick="window.switchTab('requests')" id="tab-requests" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 transition flex items-center gap-2 whitespace-nowrap"><i data-lucide="bell" class="w-4 h-4"></i> Gelen Talepler <span id="requestBadge" class="hidden bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full"></span></button>
-                <button onclick="window.switchTab('categories')" id="tab-categories" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 transition flex items-center gap-2 whitespace-nowrap"><i data-lucide="list-tree" class="w-4 h-4"></i> Kategoriler & Filtreler</button>
+                <button onclick="window.switchTab('categories')" id="tab-categories" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 transition flex items-center gap-2 whitespace-nowrap"><i data-lucide="list-tree" class="w-4 h-4"></i> Kategoriler & Özellikler</button>
                 <button onclick="window.switchTab('products')" id="tab-products" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 transition flex items-center gap-2 whitespace-nowrap"><i data-lucide="layers" class="w-4 h-4"></i> İlan Denetimi</button>
                 <button onclick="window.switchTab('reviews')" id="tab-reviews" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 transition flex items-center gap-2 whitespace-nowrap"><i data-lucide="message-square" class="w-4 h-4"></i> Müşteri Yorumları</button>
                 <button onclick="window.switchTab('settings')" id="tab-settings" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 transition flex items-center gap-2 whitespace-nowrap"><i data-lucide="layout-template" class="w-4 h-4"></i> Sistem Ayarları</button>
@@ -597,7 +597,7 @@
             });
         }
 
-        // --- KATEGORİ YÖNETİMİ VE DİNAMİK FİLTRELER (ÖZELLİKLER) ---
+        // --- KATEGORİ YÖNETİMİ VE DİNAMİK FİLTRELER ---
 
         window.addAttributeRow = (name = '', options = '') => {
             const id = Date.now() + Math.random().toString(36).substr(2, 5);
@@ -797,66 +797,53 @@
             });
         };
 
+        // --- DEVASA ZENGİN VE SPESİFİK FİLTRELİ KATEGORİ YÜKLEYİCİSİ ---
         window.loadDefaultRichCategories = async () => {
-            window.customConfirm("DİKKAT: Bu işlem veri tabanınıza ZORUNLU FİLTRELER ile birlikte zengin kategorileri yükleyecektir. Onaylıyor musunuz?", async () => {
+            window.customConfirm("DİKKAT: Bu işlem veri tabanınıza HER BİR ALT KATEGORİYE ÖZEL ZORUNLU FİLTRELER ile birlikte zengin kategorileri yükleyecektir. Eski özellikleriniz ezilebilir. Onaylıyor musunuz?", async () => {
                 const btn = document.getElementById('btnLoadDefaults');
                 if(btn) { btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Yükleniyor...`; btn.disabled = true; }
 
                 const defaultTree = [
                     { 
-                        name: "Elektronik & Teknoloji", icon: "monitor", 
-                        attributes: [{name: "Marka", options: ["Apple", "Samsung", "Xiaomi", "Huawei", "Lenovo", "Asus", "HP"]}, {name: "Garanti Süresi", options: ["1 Yıl", "2 Yıl", "3 Yıl", "Garantisiz"]}],
-                        sub: ["Cep Telefonu & Aksesuar", "Bilgisayar & Tablet", "Beyaz Eşya", "Televizyon & Görüntü", "Ses Sistemleri & Kulaklık", "Küçük Ev Aletleri", "Oyun & Konsol", "Giyilebilir Teknoloji", "Fotoğraf & Kamera"] 
+                        name: "Elektronik & Teknoloji", icon: "monitor", attributes: [],
+                        sub: [
+                            { name: "Cep Telefonu & Aksesuar", attrs: [{name: "Marka", options: ["Apple", "Samsung", "Xiaomi", "Huawei", "Oppo", "Vivo"]}, {name: "Dahili Hafıza", options: ["64 GB", "128 GB", "256 GB", "512 GB", "1 TB"]}, {name: "RAM Kapasitesi", options: ["4 GB", "6 GB", "8 GB", "12 GB", "16 GB"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Gümüş", "Altın", "Mavi", "Yeşil"]}] },
+                            { name: "Bilgisayar & Tablet", attrs: [{name: "Marka", options: ["Apple", "Lenovo", "Asus", "HP", "Dell", "MSI", "Monster"]}, {name: "İşlemci Tipi", options: ["Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen 5", "AMD Ryzen 7", "Apple M1/M2/M3"]}, {name: "RAM Kapasitesi", options: ["8 GB", "16 GB", "32 GB", "64 GB"]}, {name: "Ekran Boyutu", options: ["13 inç", "14 inç", "15.6 inç", "17 inç"]}] },
+                            { name: "Beyaz Eşya", attrs: [{name: "Marka", options: ["Bosch", "Samsung", "LG", "Arçelik", "Beko", "Vestel"]}, {name: "Enerji Sınıfı", options: ["A", "A+", "A++", "A+++", "B", "C", "D"]}, {name: "Kapasite", options: ["5 kg", "7 kg", "9 kg", "10 kg", "12 kg"]}] },
+                            { name: "Televizyon & Görüntü", attrs: [{name: "Marka", options: ["Samsung", "LG", "Sony", "Philips", "TCL"]}, {name: "Ekran Boyutu", options: ["32 inç", "43 inç", "50 inç", "55 inç", "65 inç", "75 inç"]}, {name: "Çözünürlük", options: ["Full HD", "4K Ultra HD", "8K Ultra HD"]}] }
+                        ] 
                     },
                     { 
-                        name: "Moda & Giyim", icon: "shirt", 
-                        attributes: [{name: "Beden", options: ["XS", "S", "M", "L", "XL", "XXL", "Standart"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Kırmızı", "Mavi", "Yeşil", "Sarı", "Çok Renkli"]}],
-                        sub: ["Kadın Giyim", "Erkek Giyim", "Çocuk & Bebek Giyim", "Ayakkabı", "Çanta & Cüzdan", "İç Giyim & Pijama", "Takı, Saat & Aksesuar", "Tesettür Giyim"] 
+                        name: "Moda & Giyim", icon: "shirt", attributes: [],
+                        sub: [
+                            { name: "Kadın Giyim", attrs: [{name: "Beden", options: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "Standart"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Kırmızı", "Mavi", "Yeşil", "Sarı", "Çok Renkli", "Desenli"]}, {name: "Kalıp", options: ["Oversize", "Slim Fit", "Regular", "Relaxed"]}] },
+                            { name: "Erkek Giyim", attrs: [{name: "Beden", options: ["XS", "S", "M", "L", "XL", "XXL", "3XL"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Lacivert", "Gri", "Haki", "Bordo", "Bej"]}, {name: "Kalıp", options: ["Slim Fit", "Regular Fit", "Oversize"]}] },
+                            { name: "Ayakkabı", attrs: [{name: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex", "Çocuk"]}, {name: "Ayakkabı Numarası", options: ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Kahverengi", "Lacivert"]}] },
+                            { name: "Çocuk & Bebek Giyim", attrs: [{name: "Yaş Grubu", options: ["0-3 Ay", "3-6 Ay", "6-9 Ay", "9-12 Ay", "1-2 Yaş", "3-4 Yaş", "5-6 Yaş", "7-8 Yaş", "9-10 Yaş", "11-12 Yaş"]}, {name: "Renk", options: ["Pembe", "Mavi", "Sarı", "Beyaz", "Kırmızı"]}] }
+                        ] 
                     },
                     { 
-                        name: "Ev, Mobilya & Yaşam", icon: "home", 
-                        attributes: [{name: "Malzeme", options: ["Ahşap", "Metal", "MDF", "Plastik", "Kumaş", "Suni Deri"]}, {name: "Renk", options: ["Ceviz", "Meşe", "Beyaz", "Siyah", "Gri"]}],
-                        sub: ["Oturma Odası Mobilyası", "Yatak Odası Mobilyası", "Yemek Odası", "Ev Tekstili & Havlu", "Halı & Kilim", "Aydınlatma", "Banyo & Dekorasyon", "Mutfak Gereçleri", "Ev Düzenleme & Depolama"] 
+                        name: "Ev, Mobilya & Yaşam", icon: "home", attributes: [],
+                        sub: [
+                            { name: "Oturma Odası Mobilyası", attrs: [{name: "Malzeme", options: ["Ahşap", "Metal", "MDF", "Suni Deri", "Kadife", "Keten", "Nubuk"]}, {name: "Oturma Kapasitesi", options: ["Tekli", "İkili", "Üçlü", "Köşe Takımı"]}, {name: "Renk", options: ["Ceviz", "Beyaz", "Siyah", "Gri", "Antrasit", "Krem", "Hardal"]}] },
+                            { name: "Yatak Odası Mobilyası", attrs: [{name: "Yatak Ölçüsü", options: ["90x190", "100x200", "120x200", "140x190", "150x200", "160x200", "180x200"]}, {name: "Malzeme", options: ["MDF", "Sunta", "Masif Ahşap", "Metal"]}] },
+                            { name: "Ev Tekstili & Havlu", attrs: [{name: "Malzeme", options: ["%100 Pamuk", "Bambu", "Polyester", "Keten", "Mikrofiber"]}, {name: "Boyut", options: ["Tek Kişilik", "Çift Kişilik", "Battal Boy", "50x90 cm", "70x140 cm"]}] },
+                            { name: "Halı & Kilim", attrs: [{name: "Boyut", options: ["80x150 cm", "100x200 cm", "120x180 cm", "160x230 cm", "200x290 cm"]}, {name: "Malzeme", options: ["Akrilik", "Polyester", "Pamuk", "Yün", "Bambu"]}] }
+                        ] 
                     },
                     { 
-                        name: "Süpermarket & Gıda", icon: "shopping-basket", 
-                        attributes: [], 
-                        sub: ["Meyve & Sebze", "Et, Tavuk & Balık", "Süt & Süt Ürünleri", "Temel Gıda", "Atıştırmalık & Tatlı", "İçecekler", "Temizlik Ürünleri", "Kağıt Ürünleri"] 
+                        name: "Anne, Bebek & Oyuncak", icon: "baby", attributes: [], 
+                        sub: [
+                            { name: "Bebek Bezi & Islak Mendil", attrs: [{name: "Beden/Numara", options: ["1 Yenidoğan", "2 Mini", "3 Midi", "4 Maxi", "5 Junior", "6 Extra Large", "7 XXL"]}, {name: "Adet/Miktar", options: ["10-30 Adet", "30-50 Adet", "50-100 Adet", "100+ Adet", "Fırsat Paketi"]}] },
+                            { name: "Oyuncaklar", attrs: [{name: "Yaş Grubu", options: ["0-6 Ay", "6-12 Ay", "1-3 Yaş", "4-6 Yaş", "7-9 Yaş", "10-12 Yaş", "13+ Yaş"]}, {name: "Cinsiyet", options: ["Kız", "Erkek", "Unisex"]}] }
+                        ] 
                     },
                     { 
-                        name: "Anne, Bebek & Oyuncak", icon: "baby", 
-                        attributes: [{name: "Yaş Grubu", options: ["0-6 Ay", "6-12 Ay", "1-2 Yaş", "3-5 Yaş", "6-9 Yaş", "10+ Yaş"]}], 
-                        sub: ["Bebek Arabası & Puset", "Oto Koltuğu", "Bebek Giyim", "Bebek Beslenme", "Bebek Bezi & Islak Mendil", "Anne Bakım & Hamile", "Oyuncaklar", "Eğitici Kutu Oyunları"] 
-                    },
-                    { 
-                        name: "Kozmetik & Kişisel Bakım", icon: "sparkles", 
-                        attributes: [{name: "Cilt Tipi", options: ["Kuru", "Yağlı", "Karma", "Normal", "Hassas"]}], 
-                        sub: ["Parfüm & Deodorant", "Makyaj Ürünleri", "Cilt & Yüz Bakımı", "Saç Bakımı", "Tıraş & Erkek Bakım", "Ağız & Diş Bakımı", "Güneş Ürünleri"] 
-                    },
-                    { 
-                        name: "Oto, Yapı Market & Bahçe", icon: "wrench", 
-                        attributes: [], 
-                        sub: ["Oto Aksesuar", "Oto Yedek Parça", "Elektrikli El Aletleri", "Hırdavat & Nalbur", "Boya & Dekorasyon", "Elektrik & Tesisat", "Bahçe Mobilyası", "Mangal & Barbekü"] 
-                    },
-                    { 
-                        name: "Spor, Outdoor & Kamp", icon: "tent", 
-                        attributes: [{name: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex"]}], 
-                        sub: ["Spor Giyim & Ayakkabı", "Fitness & Kondisyon", "Sporcu Besinleri", "Kamp & Doğa Sporları", "Bisiklet & Scooter", "Balıkçılık & Avcılık"] 
-                    },
-                    { 
-                        name: "Kırtasiye, Hobi & Ofis", icon: "book-open", 
-                        attributes: [], 
-                        sub: ["Kitap & Dergi", "Kırtasiye Malzemeleri", "Ofis Sarf Malzemeleri", "Sanat & El İşi", "Müzik Enstrümanları", "Koleksiyon Ürünleri"] 
-                    },
-                    { 
-                        name: "Pet Shop", icon: "dog", 
-                        attributes: [{name: "Evcil Hayvan", options: ["Kedi", "Köpek", "Kuş", "Balık", "Kemirgen"]}], 
-                        sub: ["Kedi Maması & Kum", "Köpek Maması & Aksesuar", "Kuş Ürünleri", "Balık & Akvaryum", "Kemirgen & Sürüngen"] 
-                    },
-                    { 
-                        name: "Yöresel & Kıbrıs", icon: "map-pin", 
-                        attributes: [], 
-                        sub: ["Yöresel Gıda (Hellim vb.)", "Kıbrıs El Sanatları", "Hediyelik Eşyalar", "Yöresel İçecekler"] 
+                        name: "Kozmetik & Kişisel Bakım", icon: "sparkles", attributes: [], 
+                        sub: [
+                            { name: "Parfüm & Deodorant", attrs: [{name: "Cinsiyet", options: ["Kadın", "Erkek", "Unisex"]}, {name: "Hacim", options: ["30 ml", "50 ml", "75 ml", "100 ml", "150 ml", "200 ml"]}, {name: "Koku Tipi", options: ["Çiçeksi", "Odunsu", "Meyvemsi", "Baharatlı", "Ferah"]}] },
+                            { name: "Cilt & Yüz Bakımı", attrs: [{name: "Cilt Tipi", options: ["Kuru Cilt", "Yağlı Cilt", "Karma Cilt", "Normal Cilt", "Hassas Cilt", "Tüm Cilt Tipleri"]}, {name: "Hacim", options: ["30 ml", "50 ml", "100 ml", "150 ml", "200 ml", "250 ml+"]}] }
+                        ] 
                     }
                 ];
 
@@ -867,10 +854,10 @@
 
                         for(let s of p.sub) {
                             const sRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
-                            await setDoc(sRef, { name: s, slug: window.generateSlug(s), icon: "", attributes: p.attributes || [], parentId: pRef.id, createdAt: Date.now() });
+                            await setDoc(sRef, { name: s.name, slug: window.generateSlug(s.name), icon: "", attributes: s.attrs || [], parentId: pRef.id, createdAt: Date.now() });
                         }
                     }
-                    window.showMessage("Dinamik filtreli zengin kategoriler başarıyla sisteme entegre edildi!");
+                    window.showMessage("Her bir alt kategoriye özel detaylı filtreleriyle birlikte zengin kategoriler sisteme entegre edildi!");
                 } catch(e) {
                     console.error(e);
                     window.showMessage("Yükleme sırasında hata oluştu.", "error");
