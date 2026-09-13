@@ -359,7 +359,7 @@
             lucide.createIcons();
         }
 
-        // Ana kategoriye tıklandığında: Sol dikey grup sekmeleri + Sağ 3'lü grid alt kategoriler (Örn: Giyim -> Elbise, Tshirt...)
+        // Ana kategoriye tıklandığında: Sol dikey grup sekmeleri + Sağ 3'lü grid alt kategoriler
         window.openMainCategoryDetails = (mainId, mainName) => {
             const container = document.getElementById('hamburgerMenuCategories');
             const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -396,10 +396,8 @@
                 
                 html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4">`;
                 
-                // Grup Başlığı (Örn: GİYİM)
                 html += `<h4 class="text-[11px] font-black uppercase text-slate-400 tracking-wider pb-1 border-b border-slate-100">${grp.name}</h4>`;
                 
-                // 3'lü Grid Resimli Kartlar
                 html += `<div class="grid grid-cols-3 gap-2.5">`;
                 subs.forEach(sub => {
                     const subImg = sub.image && sub.image.trim() !== '' ? sub.image : 'https://placehold.co/150x150/f1f5f9/475569?text=' + encodeURIComponent(sub.name);
@@ -420,7 +418,6 @@
             lucide.createIcons();
         };
 
-        // Sol Dikey Sekme Değiştirme Fonksiyonu
         window.switchGroupTab = (groupId, btnElement) => {
             document.querySelectorAll('.group-pane').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('.group-tab-btn').forEach(b => {
@@ -864,7 +861,7 @@
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
-                renderVisualHamburgerMenu(); // Tam ekran resimli menüyü tetikle
+                renderVisualHamburgerMenu();
 
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
                 const snap = await getDocs(q);
