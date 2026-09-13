@@ -107,7 +107,6 @@
                         Kategorileri Keşfet <i data-lucide="menu" class="w-4 h-4"></i>
                     </button>
                 </div>
-                <img src="https://cdni.iconscout.com/illustration/premium/thumb/online-shopping-4560967-3786270.png" class="absolute -right-10 sm:right-10 bottom-0 w-56 sm:w-96 opacity-30 sm:opacity-100 pointer-events-none drop-shadow-2xl" alt="Shopping">
             </div>
         </div>
     </div>
@@ -189,37 +188,27 @@
     <div id="filterModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[300] hidden drawer-overlay opacity-0 flex-col justify-end">
         <div class="bg-white w-full h-[90vh] md:h-[80vh] md:max-w-md md:mx-auto rounded-t-3xl flex flex-col transform translate-y-full drawer-content relative overflow-hidden" id="filterModalContent">
             
-            <!-- Modal Genel Başlık (Hem Main hem Detail view'da kullanılır) -->
             <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
-                <!-- Ana Görünüm Header -->
                 <div id="filterMainHeader" class="w-full flex justify-between items-center">
                     <button onclick="window.closeFilterModal()" class="p-2 -ml-2 text-slate-600 hover:text-rose-500"><i data-lucide="x" class="w-6 h-6"></i></button>
                     <h3 class="font-black text-lg text-slate-800">Filtrele</h3>
-                    <div class="w-10"></div> <!-- Denge -->
+                    <div class="w-10"></div> 
                 </div>
-                <!-- Detay Görünüm Header (Gizli) -->
                 <div id="filterDetailHeader" class="w-full flex justify-between items-center hidden">
                     <button onclick="window.closeFilterDetail()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
                     <h3 id="filterDetailTitle" class="font-black text-lg text-slate-800">Renk</h3>
-                    <div class="w-10"></div> <!-- Denge -->
+                    <div class="w-10"></div> 
                 </div>
             </div>
             
-            <!-- GÖRÜNÜM ALANI (View Container) -->
             <div class="flex-1 bg-white relative overflow-hidden">
-                
-                <!-- ANA FİLTRE LİSTESİ -->
                 <div id="filterMainView" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-0">
                     
-                    <!-- Seçilen Filtreler Kutusu (Gizli Başlar) -->
                     <div id="selectedFiltersContainer" class="p-4 bg-white border-b border-slate-200 hidden">
                         <h4 class="text-xs font-bold text-slate-800 mb-3">Seçilen Filtreler</h4>
-                        <div class="flex flex-wrap gap-2" id="selectedFiltersList">
-                            <!-- JS İle Balonlar Gelecek -->
-                        </div>
+                        <div class="flex flex-wrap gap-2" id="selectedFiltersList"></div>
                     </div>
 
-                    <!-- Sabit Filtreler (App Tipi Toggle Switch) -->
                     <div class="bg-white border-b border-slate-200 flex flex-col">
                         <label class="flex justify-between items-center p-4 border-b border-slate-100 cursor-pointer">
                             <span class="text-sm font-medium text-slate-700">Kargo Bedava</span>
@@ -237,12 +226,10 @@
                         </label>
                     </div>
 
-                    <!-- Dinamik Filtre Satırları (> İşaretli) -->
                     <div id="modalDynamicFilterRows" class="flex flex-col bg-white border-b border-slate-200 mt-2">
                         <!-- JS Dinamik Dolduracak -->
                     </div>
 
-                    <!-- Fiyat Aralığı -->
                     <div class="bg-white p-4 border-b border-slate-200 mt-2">
                         <h4 class="text-sm font-medium text-slate-700 mb-3">Fiyat</h4>
                         <div class="flex items-center gap-3">
@@ -251,20 +238,16 @@
                             <input type="number" id="modalFilterPriceMax" oninput="window.handleFilterChange()" placeholder="En Çok" class="w-1/2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-orange-500 outline-none">
                         </div>
                     </div>
-                    
-                    <div class="h-10"></div> <!-- Scroll Boşluğu -->
+                    <div class="h-10"></div> 
                 </div>
 
-                <!-- DETAY FİLTRE LİSTESİ (Örn: Renk seçenekleri) -->
                 <div id="filterDetailView" class="absolute inset-0 w-full h-full bg-white overflow-y-auto custom-scrollbar transition-transform duration-300 transform translate-x-full">
                     <div class="flex flex-col" id="filterDetailOptions">
                         <!-- JS İle Checkboxlar Gelecek -->
                     </div>
                 </div>
-
             </div>
 
-            <!-- Footer Uygula Butonu -->
             <div class="p-4 border-t border-slate-200 bg-white shrink-0">
                 <button id="btnApplyFilters" onclick="window.applyAndCloseFilters()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl py-3.5 shadow-lg shadow-orange-500/30 transition text-sm">
                     Tüm Sonuçları Listele
@@ -294,10 +277,9 @@
         let activeSubCategorySlug = null; 
         let searchQuery = '';
         
-        // Yeni Filtre State'leri
         let selectedFilters = {}; 
         let currentSort = 'newest';
-        let dynamicOptionsData = {}; // Sadece mevcut kategorinin aktif filtre verilerini tutar
+        let dynamicOptionsData = {}; 
 
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
@@ -354,7 +336,6 @@
             setTimeout(() => { toast.classList.add('translate-y-[-20px]', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 2500);
         };
 
-        // --- HAMBURGER MENÜ LOGİC ---
         window.toggleHamburgerMenu = () => {
             const drawer = document.getElementById('hamburgerMenuDrawer');
             const content = document.getElementById('hamburgerMenuContentArea');
@@ -414,7 +395,6 @@
             lucide.createIcons();
         }
 
-        // --- KATEGORİ SEÇİMİ VE GÖRÜNÜM ---
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             activeMainCategory = mainCatId;
             activeSubCategorySlug = subCatSlug;
@@ -437,7 +417,7 @@
             document.getElementById('catTitleText').innerText = subCatName;
             
             buildFilterModalRows(subCatSlug);
-            window.applyFilters(); // Apply ilk yükleme
+            window.applyFilters();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
@@ -445,7 +425,6 @@
             activeMainCategory = null;
             activeSubCategorySlug = null;
             
-            // Filtreleri tam sıfırla
             document.getElementById('modalFilterFreeDelivery').checked = false;
             document.getElementById('modalFilterCOD').checked = false;
             document.getElementById('modalFilterPriceMin').value = "";
@@ -460,7 +439,6 @@
             window.applyFilters();
         };
 
-        // --- ÜRÜN KARTI ŞABLONU ---
         window.createProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
             const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
@@ -502,7 +480,6 @@
             `;
         };
 
-        // --- SIRALAMA MODALI ---
         window.openSortModal = () => {
             document.querySelectorAll('.sort-check').forEach(el => el.classList.add('hidden'));
             document.getElementById('check-' + currentSort).classList.remove('hidden');
@@ -523,13 +500,12 @@
             window.applyFilters();
         };
 
-        // --- TRENDYOL TİPİ DRILL-DOWN FİLTRE MODALI ---
         window.openFilterModal = () => {
             const modal = document.getElementById('filterModal');
             const content = document.getElementById('filterModalContent');
             modal.classList.remove('hidden'); modal.classList.add('flex');
             setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10);
-            window.updateFilterPreviewCount(); // Modal açılırken anlık sayıyı hesapla
+            window.updateFilterPreviewCount(); 
         };
 
         window.closeFilterModal = () => {
@@ -538,7 +514,7 @@
             modal.classList.add('opacity-0'); content.classList.add('translate-y-full');
             setTimeout(() => { 
                 modal.classList.add('hidden'); modal.classList.remove('flex'); 
-                window.closeFilterDetail(); // Eğer içerideysek ana listeye geri dönsün
+                window.closeFilterDetail(); 
             }, 300);
         };
 
@@ -547,7 +523,7 @@
             window.closeFilterModal();
         };
 
-        // Kategori ilk seçildiğinde Filtre satırlarını oluştur (Smart Filter Logic)
+        // --- AKILLI FİLTRE & DRILL-DOWN MENÜ ---
         function buildFilterModalRows(subCatSlug) {
             const catData = allCategories.find(c => c.slug === subCatSlug);
             const rowsContainer = document.getElementById('modalDynamicFilterRows');
@@ -576,7 +552,6 @@
                 const activeOptions = attr.options.filter(opt => availableOptions.has(opt));
                 if (activeOptions.length === 0) return;
 
-                // Veriyi listeye kaydet (İç menüyü çizerken kullanacağız)
                 dynamicOptionsData[attr.name] = activeOptions;
 
                 rowsHtml += `
@@ -599,7 +574,6 @@
             lucide.createIcons();
         }
 
-        // Seçilen Filtreler Balonlarını (Pills) Çizer
         window.renderSelectedFilterPills = () => {
             const container = document.getElementById('selectedFiltersContainer');
             const list = document.getElementById('selectedFiltersList');
@@ -628,7 +602,6 @@
             lucide.createIcons();
         };
 
-        // Alt Detay Çekmecesini (Checkbox'ların olduğu ekranı) Açar
         window.openFilterDetail = (attrName, fromQuickFilter = false) => {
             const options = dynamicOptionsData[attrName];
             if(!options) return;
@@ -647,7 +620,6 @@
             });
             document.getElementById('filterDetailOptions').innerHTML = html;
 
-            // Görünüm geçişi yap
             document.getElementById('filterMainHeader').classList.add('hidden');
             document.getElementById('filterDetailHeader').classList.remove('hidden');
             document.getElementById('filterDetailHeader').classList.add('flex');
@@ -656,13 +628,9 @@
             document.getElementById('filterDetailView').classList.remove('translate-x-full');
             document.getElementById('filterDetailView').classList.add('translate-x-0');
 
-            // Eğer üst bardaki hızlı filtreye tıklandıysa modal kapalı olabilir, modalı aç
-            if(fromQuickFilter) {
-                window.openFilterModal();
-            }
+            if(fromQuickFilter) window.openFilterModal();
         };
 
-        // Detaydan Ana Menüye Dön
         window.closeFilterDetail = () => {
             document.getElementById('filterDetailHeader').classList.add('hidden');
             document.getElementById('filterDetailHeader').classList.remove('flex');
@@ -673,7 +641,6 @@
             document.getElementById('filterMainView').classList.remove('-translate-x-full');
         };
 
-        // Checkbox tıklamaları
         window.toggleDynamicFilter = (attrName, attrValue, isChecked) => {
             if(!selectedFilters[attrName]) selectedFilters[attrName] = [];
             if(isChecked) {
@@ -684,24 +651,19 @@
             }
             window.handleFilterChange();
             
-            // Eğer detay ekranındaysak HTML'i tazelemeye gerek yok, checked durumu input'tan yönetilir. 
-            // Ancak "x" butonuna basıldıysa (false gönderilir), detay ekranı açıksa oradaki checkbox'ın tikini de kaldırmamız lazım.
             const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]');
             cbxList.forEach(cb => {
-                // Eğer o an açık olan detay ekranındaki değerse ve tiki kaldırıldıysa:
-                if(cb.nextElementSibling && cb.previousElementSibling && cb.previousElementSibling.innerText === attrValue && !isChecked) {
+                if(cb.previousElementSibling && cb.previousElementSibling.innerText === attrValue && !isChecked) {
                     cb.checked = false;
                 }
             });
         };
 
-        // Herhangi bir filtreye tıklandığında (Checkbox, Fiyat vs) sayıyı güncelle ve hapları çiz
         window.handleFilterChange = () => {
             window.renderSelectedFilterPills();
             window.updateFilterPreviewCount();
         };
 
-        // Tüm filtreleri sıfırla
         window.clearAllFilters = () => {
             selectedFilters = {};
             document.getElementById('modalFilterFreeDelivery').checked = false;
@@ -711,12 +673,10 @@
             
             window.handleFilterChange();
             
-            // Eğer detay açıkken temizle denirse, ekrandaki tikleri de sil
             const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]');
             cbxList.forEach(cb => cb.checked = false);
         };
 
-        // Butonun içindeki (462 İlan) yazısını hesaplar
         window.updateFilterPreviewCount = () => {
             let filtered = allProducts;
             if (activeSubCategorySlug) filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
@@ -745,21 +705,16 @@
             document.getElementById('btnApplyFilters').innerText = `Tüm Sonuçları Listele (${filtered.length})`;
         };
 
-        // --- ANA FİLTRELEME MOTORU VE GRID RENDER ---
         window.applyFilters = () => {
             const grid = document.getElementById('productsGrid');
             const noResults = document.getElementById('noResults');
-            const resultsTitle = document.getElementById('resultsTitle');
-            const countBadge = document.getElementById('resultsCountBadge');
 
             let filtered = allProducts;
 
-            // 1. Kategori Filtresi
             if (activeSubCategorySlug) {
                 filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
             }
 
-            // 2. Arama Çubuğu
             if (searchQuery.trim() !== '') {
                 const q = searchQuery.toLowerCase().trim();
                 filtered = filtered.filter(p => 
@@ -769,7 +724,6 @@
                 );
             }
 
-            // 3. Sabit Filtreler
             if(document.getElementById('modalFilterFreeDelivery')?.checked) {
                 filtered = filtered.filter(p => p.freeDelivery === true);
             }
@@ -777,13 +731,11 @@
                 filtered = filtered.filter(p => p.cashOnDelivery === true);
             }
 
-            // 4. Fiyat Aralığı
             const minPrice = document.getElementById('modalFilterPriceMin')?.value;
             const maxPrice = document.getElementById('modalFilterPriceMax')?.value;
             if(minPrice) filtered = filtered.filter(p => p.price >= parseFloat(minPrice));
             if(maxPrice) filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
 
-            // 5. DİNAMİK ATTRIBUTE EŞLEŞMESİ
             let activeFilterCount = 0;
             if (Object.keys(selectedFilters).length > 0) {
                 filtered = filtered.filter(p => {
@@ -802,7 +754,6 @@
                 });
             }
 
-            // Üst Bardaki Badge'i Güncelle
             const filterBadge = document.getElementById('filterActiveBadge');
             let totalActiveFilters = (document.getElementById('modalFilterFreeDelivery')?.checked ? 1 : 0) + (document.getElementById('modalFilterCOD')?.checked ? 1 : 0) + activeFilterCount;
             
@@ -811,7 +762,6 @@
                 else { filterBadge.classList.add('hidden'); }
             }
 
-            // 6. SIRALAMA
             if(currentSort === 'price_asc') {
                 filtered.sort((a,b) => a.price - b.price);
             } else if (currentSort === 'price_desc') {
@@ -820,21 +770,19 @@
                 filtered.sort((a,b) => b.createdAt - a.createdAt); // En yeni
             }
 
-            // SONUÇLARI EKRANA BAS
-            if (countBadge) countBadge.innerText = `${filtered.length} İlan`;
             const catCount = document.getElementById('catProductCount');
             if(catCount) catCount.innerText = `${filtered.length} Ürün`;
             
             const homeBadge = document.getElementById('homeCountBadge');
             if(homeBadge) homeBadge.innerText = `${filtered.length} İlan`;
-
-            if(activeSubCategorySlug && activeMainCategory) {
-                const subCat = allCategories.find(c => c.slug === activeSubCategorySlug);
-                resultsTitle.innerHTML = `${subCat ? subCat.name : 'Ürünler'} <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg" id="resultsCountBadge">${filtered.length} İlan</span>`;
-            } else if (searchQuery) {
-                resultsTitle.innerHTML = `Arama Sonuçları <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg" id="resultsCountBadge">${filtered.length} İlan</span>`;
-            } else {
-                resultsTitle.innerHTML = `Sizin İçin Seçtiklerimiz <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg" id="resultsCountBadge">${filtered.length} İlan</span>`;
+            
+            const homeResultsTitle = document.getElementById('homeResultsTitle');
+            if(homeResultsTitle) {
+                if (searchQuery) {
+                    homeResultsTitle.innerHTML = `<h2 class="text-lg font-black text-slate-800">Arama Sonuçları</h2> <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">${filtered.length} İlan</span>`;
+                } else {
+                    homeResultsTitle.innerHTML = `<h2 class="text-lg font-black text-slate-800">Sizin İçin Seçtiklerimiz</h2> <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">${filtered.length} İlan</span>`;
+                }
             }
 
             if (filtered.length === 0) {
@@ -876,13 +824,11 @@
             if (mobileSearchInput) mobileSearchInput.addEventListener('input', handleSearch);
 
             try {
-                // 1. Kategoriler
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 renderHamburgerMenu();
 
-                // 2. Ürünler
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
                 const snap = await getDocs(q);
                 allProducts = [];
