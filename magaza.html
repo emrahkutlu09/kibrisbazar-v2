@@ -33,19 +33,19 @@
 
     <div class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shadow-sm">
         <div class="w-1/3 flex justify-start">
-            <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
+            <a href="/" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i> <span class="hidden sm:inline">Pazaryerine Dön</span>
             </a>
         </div>
         
         <div class="w-1/3 flex justify-center items-center">
-            <a href="index.html" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
+            <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
                 KIBRIS<span class="text-orange-500">BAZAR</span>
             </a>
         </div>
         
         <div class="w-1/3 flex justify-end">
-            <a href="sepet.html" class="flex items-center justify-center p-2 text-slate-600 hover:text-orange-500 transition-colors relative bg-white border border-slate-200 hover:border-orange-200 rounded-lg">
+            <a href="/sepet.html" class="flex items-center justify-center p-2 text-slate-600 hover:text-orange-500 transition-colors relative bg-white border border-slate-200 hover:border-orange-200 rounded-lg">
                 <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                 <span id="spCartCountBadge" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-sm hidden">0</span>
             </a>
@@ -122,8 +122,9 @@
         </div>
     </footer>
 
+    <!-- DİKKAT: firebase-config.js import yolu "/" ile başlar -->
     <script type="module">
-        import { db, auth } from "./js/firebase-config.js";
+        import { db, auth } from "/js/firebase-config.js";
         import { doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
@@ -137,7 +138,6 @@
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
         let currentUserUid = null;
 
-        // SEO Uyumlu Slug Üretici (Hem Mağaza hem Ürün isimleri için)
         window.generateSlug = (text) => {
             if (!text) return 'kibris-bazar';
             return text.toString().toLowerCase()
@@ -149,7 +149,6 @@
                 .replace(/^-+|-+$/g, '');
         };
 
-        // YENİ: Slug + ID yapısından sadece ID'yi çeken fonksiyon
         function getStoreIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             let rawPath = urlParams.get('id');
@@ -203,7 +202,6 @@
             const isFav = favorites.includes(p.id);
             const isPremiumStore = currentStore && (currentStore.isPremium || currentStore.packageType === 'premium');
             
-            // SEO Slug ile link oluşturma
             const productLink = `/urun/${window.generateSlug(p.title)}-${p.id}`;
             
             return `
@@ -359,7 +357,6 @@
                 document.getElementById('spDistrict').innerText = currentStore.district;
                 document.title = `${currentStore.name} | Kıbrıs Bazar`;
                 
-                // Eğer doğrudan slug link ile gelindiyse URL'yi tarayıcıda temiz göster
                 const expectedSlug = window.generateSlug(currentStore.name) + '-' + currentStore.id;
                 const currentPath = window.location.pathname;
                 if(currentPath.includes('/magaza/') && !currentPath.endsWith(expectedSlug)) {
