@@ -12,7 +12,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Harita İçin Leaflet Kütüphanesi -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -27,13 +26,11 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
 
-    <!-- Yükleniyor Göstergesi -->
     <div id="loadingIndicator" class="fixed inset-0 z-[999] bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-300">
         <i data-lucide="loader-2" class="w-10 h-10 text-orange-500 animate-spin mb-4"></i>
         <p class="text-slate-500 font-bold">Mağaza Vitrini Hazırlanıyor...</p>
     </div>
 
-    <!-- Üst Sabit Navigasyon -->
     <div class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shadow-sm">
         <div class="w-1/3 flex justify-start">
             <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
@@ -55,7 +52,6 @@
         </div>
     </div>
     
-    <!-- Mağaza Kapak ve Profil -->
     <div class="relative w-full h-64 sm:h-80 bg-slate-900 overflow-hidden shrink-0">
         <img id="spCover" src="" class="w-full h-full object-cover opacity-50 hidden" alt="Kapak">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
@@ -89,7 +85,6 @@
         </div>
     </div>
 
-    <!-- Harita Alanı -->
     <div id="spMapContainerWrapper" class="bg-white border-b border-slate-200 hidden shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex items-center justify-between mb-4">
@@ -104,14 +99,12 @@
         </div>
     </div>
 
-    <!-- Kategori Filtre Çubuğu -->
     <div class="bg-white border-b border-slate-200 sticky top-[60px] sm:top-[69px] z-40 shadow-sm shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
             <div id="spCategoryContainer" class="flex items-center gap-3 overflow-x-auto no-scrollbar"></div>
         </div>
     </div>
 
-    <!-- Ürünler Alanı -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-black text-slate-900">Mağaza Ürünleri</h2>
@@ -120,7 +113,6 @@
         <div id="spProductsContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"></div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-auto pt-8 pb-8 shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
             <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
@@ -130,7 +122,6 @@
         </div>
     </footer>
 
-    <!-- Firebase ve Sayfa Mantığı -->
     <script type="module">
         import { db, auth } from "./js/firebase-config.js";
         import { doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -146,13 +137,19 @@
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
         let currentUserUid = null;
 
-        // URL'den Mağaza ID'sini al
         function getStoreIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id');
+            let id = urlParams.get('id');
+            if (!id) {
+                const pathParts = window.location.pathname.split('/');
+                const magazaIndex = pathParts.indexOf('magaza');
+                if (magazaIndex !== -1 && pathParts[magazaIndex + 1]) {
+                    id = pathParts[magazaIndex + 1];
+                }
+            }
+            return id;
         }
 
-        // Sepet rozetini güncelle
         function updateCartBadge() {
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
@@ -164,7 +161,6 @@
             }
         }
 
-        // Favoriye Ekleme
         window.toggleFavorite = (id) => {
             if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); } 
             else { favorites.push(id); }
@@ -172,7 +168,6 @@
             window.renderStoreProfileProducts();
         };
 
-        // Hızlı Sepete Ekleme
         window.quickAddToCart = (id) => {
             const product = storeProducts.find(p => p.id === id);
             if(!product) return;
@@ -185,7 +180,6 @@
             alert("Ürün sepete eklendi!"); 
         };
 
-        // Ortak Ürün Kartı Tasarımı
         window.createProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
             const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
@@ -195,7 +189,7 @@
             return `
                 <div class="bg-white rounded-2xl p-3 hover:shadow-xl hover:border-orange-200 border border-slate-200 transition-all group flex flex-col w-full h-full relative">
                     <div class="relative w-full aspect-[4/5] mb-3 overflow-hidden rounded-xl bg-slate-100 shrink-0">
-                        <a href="urun.html?id=${p.id}" class="block w-full h-full">
+                        <a href="/urun/${p.id}" class="block w-full h-full">
                             <img src="${img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${p.title}"/>
                         </a>
                         ${discount > 0 ? `<div class="absolute top-2 left-0 bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-r shadow-md">-%${discount}</div>` : ''}
@@ -214,7 +208,7 @@
                         </div>
                         
                         <h3 class="text-xs font-bold text-slate-800 mb-1 line-clamp-2">
-                            <a href="urun.html?id=${p.id}" class="hover:text-orange-500 transition-colors">${p.title}</a>
+                            <a href="/urun/${p.id}" class="hover:text-orange-500 transition-colors">${p.title}</a>
                         </h3>
                         
                         <div class="pt-2 border-t border-slate-100 flex items-end justify-between mt-auto">
@@ -231,7 +225,6 @@
             `;
         };
 
-        // Satıcıya Sor / WhatsApp
         window.contactStoreForInfo = () => {
             if (!currentStore || !currentStore.whatsapp) {
                 alert("Satıcının iletişim numarası bulunamadı.");
@@ -244,7 +237,6 @@
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
         };
 
-        // Takip Etme İşlemi
         window.toggleStoreFollow = async () => {
             if (!currentUserUid) {
                 alert("Mağazayı takip etmek için pazaryeri ana sayfasından giriş yapmalısınız.");
@@ -286,7 +278,6 @@
             lucide.createIcons();
         }
 
-        // Kategorileri Çiz
         window.renderStoreProfileCategories = () => {
             const container = document.getElementById('spCategoryContainer');
             const uniqueCats = [...new Set(storeProducts.map(p => p.category))];
@@ -307,7 +298,6 @@
             window.renderStoreProfileProducts(); 
         };
 
-        // Ürünleri Çiz
         window.renderStoreProfileProducts = () => {
             const container = document.getElementById('spProductsContainer');
             let displayList = storeProducts;
@@ -326,7 +316,6 @@
             lucide.createIcons();
         };
 
-        // Ana Başlatıcı Fonksiyon
         async function initStorePage() {
             updateCartBadge();
             lucide.createIcons();
@@ -338,7 +327,6 @@
             }
 
             try {
-                // Mağaza Bilgilerini Çek
                 const storeSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'stores', storeId));
                 if (!storeSnap.exists() || storeSnap.data().status !== 'active') {
                     document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Bu mağaza sistemde bulunamadı veya aktif değil.</p>';
@@ -347,7 +335,6 @@
                 
                 currentStore = { id: storeSnap.id, ...storeSnap.data() };
 
-                // Üst Kısım Bilgilerini Doldur
                 document.getElementById('spName').innerText = currentStore.name;
                 document.getElementById('spDistrict').innerText = currentStore.district;
                 document.title = `${currentStore.name} | Kıbrıs Bazar`;
@@ -356,7 +343,6 @@
                     document.getElementById('spPremium').classList.remove('hidden');
                 }
 
-                // Sosyal Medya Linkleri
                 const socialLinksContainer = document.getElementById('spSocialLinks');
                 let socialHtml = '';
                 if(currentStore.website) {
@@ -377,7 +363,6 @@
                     socialLinksContainer.classList.remove('hidden');
                 }
 
-                // Görseller
                 const coverEl = document.getElementById('spCover');
                 if(currentStore.coverUrl) { coverEl.src = currentStore.coverUrl; coverEl.classList.remove('hidden'); }
                 
@@ -385,17 +370,14 @@
                 const fallbackEl = document.getElementById('spLogoFallback');
                 if(currentStore.logoUrl) { logoEl.src = currentStore.logoUrl; logoEl.classList.remove('hidden'); fallbackEl.classList.add('hidden'); }
 
-                // WhatsApp Butonu
                 const waBtn = document.getElementById('spWhatsappBtn');
                 if (currentStore.whatsapp) {
                     waBtn.classList.remove('hidden');
                     waBtn.onclick = window.contactStoreForInfo;
                 }
 
-                // Takip Butonu Yetkisi
                 document.getElementById('spFollowBtn').onclick = window.toggleStoreFollow;
 
-                // Harita
                 const mapWrapper = document.getElementById('spMapContainerWrapper');
                 if (currentStore.showLocation !== false && currentStore.lat && currentStore.lng) {
                     mapWrapper.classList.remove('hidden');
@@ -408,7 +390,6 @@
                     }, 500);
                 }
 
-                // Ürünleri Çek
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("storeId", "==", storeId));
                 const prodSnap = await getDocs(q);
                 prodSnap.forEach(d => {
@@ -416,18 +397,15 @@
                     if(p.isActive !== false) storeProducts.push({id: d.id, ...p});
                 });
 
-                // Sayfayı Çiz
                 window.renderStoreProfileCategories();
                 window.renderStoreProfileProducts();
                 
-                // Auth Kontrolü (Takip butonu için)
                 onAuthStateChanged(auth, (user) => {
                     if (user && !user.isAnonymous) currentUserUid = user.uid;
                     else currentUserUid = null;
                     updateFollowButtonUI();
                 });
 
-                // Yükleyiciyi Kaldır
                 document.getElementById('loadingIndicator').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('loadingIndicator').classList.add('hidden'), 300);
                 lucide.createIcons();
