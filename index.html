@@ -20,7 +20,7 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Çekmece Animasyonları */
+        /* Çekmece & Tam Ekran Menü Animasyonları */
         .drawer-overlay { transition: opacity 0.3s ease; }
         .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
@@ -30,7 +30,6 @@
         .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
         .toggle-label { background-color: #e2e8f0; transition: all 0.3s; }
         
-        /* Checkbox Özel Stil */
         .custom-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
     </style>
 </head>
@@ -73,18 +72,26 @@
         </div>
     </header>
 
-    <!-- HAMBURGER MENÜ (ÇEKMECE) -->
-    <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] hidden drawer-overlay opacity-0">
-        <div id="hamburgerMenuContentArea" class="bg-white w-[85%] max-w-[320px] h-full flex flex-col shadow-2xl transform -translate-x-full drawer-content">
-            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
-                <span class="font-black text-slate-800 flex items-center gap-2"><i data-lucide="list" class="w-5 h-5 text-orange-500"></i> Tüm Kategoriler</span>
-                <button onclick="window.toggleHamburgerMenu()" class="p-2 text-slate-400 hover:text-rose-500 bg-white rounded-full border border-slate-200 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <!-- TRENDYOL STİLİ TAM EKRAN KATEGORİ MODALI (TÜM KATEGORİLER) -->
+    <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden drawer-overlay opacity-0 flex justify-end">
+        <div id="hamburgerMenuContentArea" class="bg-white w-full md:max-w-2xl h-full flex flex-col shadow-2xl transform translate-x-full drawer-content relative">
+            
+            <!-- Modal Başlık -->
+            <div class="p-4 sm:p-6 border-b border-slate-200 flex justify-between items-center bg-white shrink-0 sticky top-0 z-10">
+                <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+                    <i data-lucide="layout-grid" class="w-6 h-6 text-orange-500"></i> Tüm Kategoriler
+                </h2>
+                <button onclick="window.toggleHamburgerMenu()" class="p-2.5 text-slate-500 hover:text-rose-500 bg-slate-100 hover:bg-rose-50 rounded-full transition">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
             </div>
-            <div class="flex-1 overflow-y-auto no-scrollbar p-2" id="hamburgerMenuCategories">
-                <div class="py-10 text-center"><i data-lucide="loader-2" class="w-6 h-6 text-orange-500 animate-spin mx-auto"></i></div>
+
+            <!-- Kategori Grid İçeriği -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6" id="hamburgerMenuCategories">
+                <div class="py-20 text-center"><i data-lucide="loader-2" class="w-8 h-8 text-orange-500 animate-spin mx-auto"></i></div>
             </div>
         </div>
-        <div class="flex-1 h-full" onclick="window.toggleHamburgerMenu()"></div>
+        <div class="flex-1 h-full hidden md:block" onclick="window.toggleHamburgerMenu()"></div>
     </div>
 
     <!-- VİTRİN BANNER (Sadece Ana Sayfada) -->
@@ -138,10 +145,7 @@
             </button>
         </div>
 
-        <!-- Hızlı Filtre Balonları -->
-        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-2.5 bg-slate-50 border-t border-slate-100" id="quickFilterPills">
-            <!-- JS Dolduracak -->
-        </div>
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-2.5 bg-slate-50 border-t border-slate-100" id="quickFilterPills"></div>
     </div>
 
     <!-- ANA İÇERİK: ÜRÜN IZGARASI -->
@@ -168,7 +172,7 @@
         </div>
     </main>
 
-    <!-- SIRALAMA MODALI (Alttan Açılan) -->
+    <!-- SIRALAMA MODALI -->
     <div id="sortModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[300] hidden drawer-overlay opacity-0 flex-col justify-end">
         <div class="flex-1 w-full" onclick="window.closeSortModal()"></div>
         <div class="bg-white w-full rounded-t-3xl flex flex-col p-4 pb-8 transform translate-y-full drawer-content" id="sortModalContent">
@@ -184,10 +188,9 @@
         </div>
     </div>
 
-    <!-- FİLTRELEME MODALI (Tam Ekran İçi İçe Menü) -->
+    <!-- FİLTRELEME MODALI -->
     <div id="filterModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[300] hidden drawer-overlay opacity-0 flex-col justify-end">
         <div class="bg-white w-full h-[90vh] md:h-[80vh] md:max-w-md md:mx-auto rounded-t-3xl flex flex-col transform translate-y-full drawer-content relative overflow-hidden" id="filterModalContent">
-            
             <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
                 <div id="filterMainHeader" class="w-full flex justify-between items-center">
                     <button onclick="window.closeFilterModal()" class="p-2 -ml-2 text-slate-600 hover:text-rose-500"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -203,12 +206,10 @@
             
             <div class="flex-1 bg-white relative overflow-hidden">
                 <div id="filterMainView" class="absolute inset-0 w-full h-full overflow-y-auto no-scrollbar flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-0">
-                    
                     <div id="selectedFiltersContainer" class="p-4 bg-white border-b border-slate-200 hidden">
                         <h4 class="text-xs font-bold text-slate-800 mb-3">Seçilen Filtreler</h4>
                         <div class="flex flex-wrap gap-2" id="selectedFiltersList"></div>
                     </div>
-
                     <div class="bg-white border-b border-slate-200 flex flex-col">
                         <label class="flex justify-between items-center p-4 border-b border-slate-100 cursor-pointer">
                             <span class="text-sm font-medium text-slate-700">Kargo Bedava</span>
@@ -225,11 +226,7 @@
                             </div>
                         </label>
                     </div>
-
-                    <div id="modalDynamicFilterRows" class="flex flex-col bg-white border-b border-slate-200 mt-2">
-                        <!-- JS Dinamik Dolduracak -->
-                    </div>
-
+                    <div id="modalDynamicFilterRows" class="flex flex-col bg-white border-b border-slate-200 mt-2"></div>
                     <div class="bg-white p-4 border-b border-slate-200 mt-2">
                         <h4 class="text-sm font-medium text-slate-700 mb-3">Fiyat</h4>
                         <div class="flex items-center gap-3">
@@ -240,11 +237,8 @@
                     </div>
                     <div class="h-10"></div> 
                 </div>
-
                 <div id="filterDetailView" class="absolute inset-0 w-full h-full bg-white overflow-y-auto custom-scrollbar transition-transform duration-300 transform translate-x-full">
-                    <div class="flex flex-col" id="filterDetailOptions">
-                        <!-- JS İle Checkboxlar Gelecek -->
-                    </div>
+                    <div class="flex flex-col" id="filterDetailOptions"></div>
                 </div>
             </div>
 
@@ -313,29 +307,6 @@
             window.applyFilters();
         };
 
-        window.quickAddToCart = (id) => {
-            const product = allProducts.find(p => p.id === id);
-            if(!product) return;
-            const exist = cart.find(i => i.cartItemId === id);
-            if(exist) { exist.quantity++; } 
-            else {
-                cart.push({
-                    cartItemId: id, product: product, variant: null, quantity: 1,
-                    dynamicPrice: product.price, dynamicImage: (product.images && product.images.length > 0 ? product.images[0] : '')
-                });
-            }
-            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
-            updateCartBadge();
-            
-            const toast = document.createElement('div');
-            toast.className = `fixed top-20 right-4 sm:top-24 sm:right-10 bg-slate-900 text-white px-5 py-3 rounded-2xl text-sm font-bold shadow-2xl z-[500] flex items-center gap-3 transition-all duration-300 transform translate-y-[-20px] opacity-0`;
-            toast.innerHTML = `<div class="bg-emerald-500 rounded-full p-1"><i data-lucide="check" class="w-4 h-4 text-white"></i></div> Sepete Eklendi`;
-            document.body.appendChild(toast);
-            lucide.createIcons();
-            setTimeout(() => { toast.classList.remove('translate-y-[-20px]', 'opacity-0'); }, 10);
-            setTimeout(() => { toast.classList.add('translate-y-[-20px]', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 2500);
-        };
-
         window.toggleHamburgerMenu = () => {
             const drawer = document.getElementById('hamburgerMenuDrawer');
             const content = document.getElementById('hamburgerMenuContentArea');
@@ -343,57 +314,95 @@
                 drawer.classList.remove('hidden');
                 setTimeout(() => { 
                     drawer.classList.remove('opacity-0');
-                    content.classList.remove('-translate-x-full'); 
+                    content.classList.remove('translate-x-full'); 
                 }, 10);
             } else {
                 drawer.classList.add('opacity-0');
-                content.classList.add('-translate-x-full');
+                content.classList.add('translate-x-full');
                 setTimeout(() => { drawer.classList.add('hidden'); }, 300);
             }
         };
 
-        window.toggleAccordion = (id) => {
-            const el = document.getElementById(id);
-            const icon = document.getElementById('icon-' + id);
-            if(el.classList.contains('hidden')) {
-                el.classList.remove('hidden'); el.classList.add('flex');
-                if(icon) icon.classList.add('rotate-180');
-            } else {
-                el.classList.add('hidden'); el.classList.remove('flex');
-                if(icon) icon.classList.remove('rotate-180');
-            }
-        };
-
-        function renderHamburgerMenu() {
+        // --- TRENDYOL TARZI 64 RESİMLİ TAM EKRAN KATEGORİ MENÜSÜ ---
+        function renderVisualHamburgerMenu() {
             const container = document.getElementById('hamburgerMenuCategories');
             if(!container) return;
-            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a,b) => a.name.localeCompare(b.name));
-            let html = '<div class="space-y-1">';
+
+            // Ana Kategorileri sıra numarasına (order) göre diziyoruz
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
+            
+            let html = `
+                <div class="bg-gradient-to-r from-orange-500 to-rose-500 rounded-2xl p-4 text-white flex items-center justify-between shadow-lg mb-4 cursor-pointer hover:opacity-95 transition">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">Kampanya</span>
+                        <h3 class="text-base font-black mt-1">Sana Özel Kategoriler & Fırsatlar</h3>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            `;
 
             mainCats.forEach(main => {
-                const groups = allCategories.filter(c => c.parentId === main.id && c.isGroupTitle).sort((a,b) => a.name.localeCompare(b.name));
+                // Ana kategori görseli (Eğer admin panelinden eklenmediyse varsayılan bir ikon/görsel)
+                const img = main.image && main.image.trim() !== '' ? main.image : 'https://placehold.co/150x150/f1f5f9/475569?text=' + encodeURIComponent(main.name);
+                
                 html += `
-                <div class="border-b border-slate-100 last:border-0 rounded-xl overflow-hidden bg-white mb-2">
-                    <button onclick="window.toggleAccordion('acc-${main.id}')" class="w-full flex items-center justify-between p-4 hover:bg-orange-50 text-slate-800 font-bold transition">
-                        <span class="flex items-center gap-3"><i data-lucide="${main.icon || 'circle'}" class="w-5 h-5 text-orange-500"></i> ${main.name}</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-300" id="icon-acc-${main.id}"></i>
+                    <button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" class="flex flex-col items-center p-3 rounded-2xl bg-slate-50 border border-slate-100 hover:border-orange-200 hover:bg-orange-50/30 hover:shadow-md transition group text-center">
+                        <div class="w-20 h-20 rounded-2xl bg-white overflow-hidden mb-2 p-2 shadow-sm group-hover:scale-105 transition-transform flex items-center justify-center">
+                            <img src="${img}" alt="${main.name}" loading="lazy" class="w-full h-full object-contain">
+                        </div>
+                        <span class="text-xs font-black text-slate-800 group-hover:text-orange-600 leading-tight">${main.name}</span>
                     </button>
-                    <div id="acc-${main.id}" class="hidden flex-col bg-slate-50 px-5 py-3 space-y-5 border-t border-slate-100">
                 `;
-                groups.forEach(grp => {
-                    const subs = allCategories.filter(c => c.parentId === grp.id).sort((a,b) => a.name.localeCompare(b.name));
-                    html += `<div><h4 class="text-[10px] font-black uppercase text-slate-400 mb-2 tracking-wider">${grp.name}</h4><div class="flex flex-col gap-1.5 border-l-2 border-slate-200 pl-3">`;
-                    subs.forEach(sub => {
-                        html += `<button onclick="window.selectCategory('${main.id}', '${sub.slug}', '${sub.name}', '${main.name}')" class="text-xs text-slate-600 hover:text-orange-600 font-medium hover:font-bold text-left py-1 transition">${sub.name}</button>`;
-                    });
-                    html += `</div></div>`;
-                });
-                html += `</div></div>`;
             });
-            html += '</div>';
+
+            html += `</div>`;
             container.innerHTML = html;
             lucide.createIcons();
         }
+
+        // Ana kategoriye tıklandığında içindeki alt grupları ve 64 resmi gösteren detay görünümü
+        window.openMainCategoryDetails = (mainId, mainName) => {
+            const container = document.getElementById('hamburgerMenuCategories');
+            const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            let html = `
+                <div class="flex items-center gap-3 mb-4">
+                    <button onclick="renderVisualHamburgerMenu()" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-full transition flex items-center gap-1 text-xs font-bold text-slate-700">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i> Tüm Kategoriler
+                    </button>
+                    <h3 class="text-base font-black text-slate-900">${mainName}</h3>
+                </div>
+                <div class="space-y-6">
+            `;
+
+            groups.forEach(grp => {
+                const subs = allCategories.filter(c => c.parentId === grp.id).sort((a, b) => (a.order || 0) - (b.order || 0));
+                html += `
+                    <div>
+                        <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-3 pb-1 border-b border-slate-100">${grp.name}</h4>
+                        <div class="grid grid-cols-3 gap-3">
+                `;
+
+                subs.forEach(sub => {
+                    const subImg = sub.image && sub.image.trim() !== '' ? sub.image : 'https://placehold.co/150x150/f1f5f9/475569?text=' + encodeURIComponent(sub.name);
+                    html += `
+                        <button onclick="window.selectCategory('${mainId}', '${sub.slug}', '${sub.name}', '${mainName}')" class="flex flex-col items-center p-2 rounded-2xl bg-white border border-slate-100 hover:border-orange-200 hover:shadow-md transition group text-center">
+                            <div class="w-16 h-16 rounded-xl bg-slate-50 overflow-hidden mb-2 p-1 group-hover:scale-105 transition-transform">
+                                <img src="${subImg}" alt="${sub.name}" loading="lazy" class="w-full h-full object-contain">
+                            </div>
+                            <span class="text-[11px] font-bold text-slate-700 group-hover:text-orange-600 line-clamp-2 leading-tight">${sub.name}</span>
+                        </button>
+                    `;
+                });
+
+                html += `</div></div>`;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            lucide.createIcons();
+        };
 
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             activeMainCategory = mainCatId;
@@ -523,7 +532,6 @@
             window.closeFilterModal();
         };
 
-        // --- AKILLI FİLTRE & DRILL-DOWN MENÜ ---
         function buildFilterModalRows(subCatSlug) {
             const catData = allCategories.find(c => c.slug === subCatSlug);
             const rowsContainer = document.getElementById('modalDynamicFilterRows');
@@ -767,7 +775,7 @@
             } else if (currentSort === 'price_desc') {
                 filtered.sort((a,b) => b.price - a.price);
             } else {
-                filtered.sort((a,b) => b.createdAt - a.createdAt); // En yeni
+                filtered.sort((a,b) => b.createdAt - a.createdAt);
             }
 
             const catCount = document.getElementById('catProductCount');
@@ -827,7 +835,7 @@
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
-                renderHamburgerMenu();
+                renderVisualHamburgerMenu(); // Tam ekran resimli menüyü tetikle
 
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
                 const snap = await getDocs(q);
