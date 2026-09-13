@@ -497,17 +497,40 @@
                         <input type="text" id="pTitle" required class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors" placeholder="Örn: Hakiki Deri Erkek Cüzdan" />
                     </div>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- TRENDYOL TİPİ 3 KATMANLI AKILLI KATEGORİ SEÇİCİSİ -->
+                    <div class="space-y-3 p-4 bg-slate-100 rounded-2xl border border-slate-200">
+                        <label class="block text-xs font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5"><i data-lucide="list-tree" class="w-4 h-4 text-orange-500"></i> Kategori Ağacı Seçimi</label>
+                        
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-2">Kategori</label>
-                            <select id="pCategory" required class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors cursor-pointer">
-                                <!-- JS İle Dinamik Dolacak -->
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Ana Kategori <span class="text-rose-500">*</span></label>
+                            <select id="pMainCategory" required onchange="window.loadCategoryGroups()" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-bold text-slate-800 cursor-pointer">
+                                <option value="">-- Lütfen Ana Kategori Seçin --</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-2">Satış Fiyatı (TL) / (Ortalama Fiyat)</label>
-                            <input type="number" id="pPrice" required step="0.01" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm font-black text-orange-600 outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors" placeholder="0.00" />
+                        
+                        <div id="pGroupCategoryContainer" class="hidden">
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Kategori Grubu <span class="text-rose-500">*</span></label>
+                            <select id="pGroupCategory" required onchange="window.loadSubCategories()" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-bold text-slate-800 cursor-pointer">
+                                <option value="">-- Lütfen Grup Seçin --</option>
+                            </select>
                         </div>
+
+                        <div id="pSubCategoryContainer" class="hidden">
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Ürün Tipi (Alt Kategori) <span class="text-rose-500">*</span></label>
+                            <select id="productCategory" required onchange="window.loadCategoryAttributes()" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-black text-orange-600 cursor-pointer">
+                                <option value="">-- Lütfen Alt Kategori Seçin --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- DİNAMİK ZORUNLU FİLTRELER (Admin panelinden gelen özellikler buraya dolacak) -->
+                    <div id="dynamicAttributesContainer" class="space-y-3">
+                        <!-- JS ile Doldurulacak -->
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2">Satış Fiyatı (TL)</label>
+                        <input type="number" id="pPrice" required step="0.01" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm font-black text-orange-600 outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors" placeholder="0.00" />
                     </div>
 
                     <!-- Ücretsiz Teslimat ve Kapıda Ödeme Etiketleri -->
@@ -531,7 +554,6 @@
                     <!-- Gelişmiş Varyant (Seçenek) Sistemi (Premium Özel) -->
                     <div class="bg-gradient-to-br from-purple-50 to-white p-5 rounded-2xl border-2 border-purple-100 relative overflow-hidden">
                         
-                        <!-- Kilit Ekranı (Eğer Premium Değilse) -->
                         <div id="premiumVariantLock" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-6 transition-all hidden">
                             <i data-lucide="lock" class="w-10 h-10 text-purple-400 mb-3"></i>
                             <h4 class="font-black text-purple-900 text-lg mb-2">Gelişmiş Varyant Sistemi</h4>
@@ -548,7 +570,6 @@
                                 <button type="button" onclick="window.addVariantRow()" class="text-xs font-black bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 transition flex items-center gap-1 shadow-sm"><i data-lucide="plus" class="w-3 h-3"></i> Yeni Ekle</button>
                             </div>
                             
-                            <!-- Varyant Listesi Konteyneri -->
                             <div id="variantsContainer" class="space-y-3"></div>
                         </div>
                     </div>
@@ -568,7 +589,7 @@
         </div>
     </div>
 
-    <!-- Toplu Güncelleme (Fiyat/Etiket) Modalı -->
+    <!-- Toplu Güncelleme Modalı -->
     <div id="bulkPriceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl w-full max-w-md overflow-hidden flex flex-col shadow-2xl transform transition-all">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -578,7 +599,7 @@
             <div class="p-6">
                 <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 text-xs text-orange-800 font-medium mb-6 leading-relaxed flex gap-3">
                     <i data-lucide="info" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                    <p>Seçtiğiniz kategorideki (veya tüm) ilanların fiyatlarına otomatik olarak ZAM/İNDİRİM uygulayabilir veya "Ücretsiz Kargo", "Kapıda Ödeme" etiketlerini toplu olarak ekleyip/kaldırabilirsiniz.</p>
+                    <p>Seçtiğiniz kategorideki (veya tüm) ilanların fiyatlarına otomatik olarak ZAM/İNDİRİM uygulayabilir veya etiketleri güncelleyebilirsiniz.</p>
                 </div>
                 <form onsubmit="window.executeBulkAction(event)" class="space-y-6">
                     <div>
@@ -596,7 +617,6 @@
                         </select>
                     </div>
                     
-                    <!-- Fiyat İşlemleri -->
                     <div id="bulkPriceFields" class="grid grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-2">İşlem Yönü</label>
@@ -611,33 +631,31 @@
                         </div>
                     </div>
 
-                    <!-- Etiket İşlemleri (Gizli Başlar) -->
                     <div id="bulkLabelFields" class="grid grid-cols-2 gap-5 hidden">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-2">Ücretsiz Teslimat</label>
                             <select id="bulkFreeDelivery" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm font-black outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors cursor-pointer">
-                                <option value="no_change" class="text-slate-500">Değiştirme</option>
-                                <option value="add" class="text-[#0ea5e9]">Hepsine Ekle (+)</option>
-                                <option value="remove" class="text-rose-600">Hepsinden Kaldır (-)</option>
+                                <option value="no_change">Değiştirme</option>
+                                <option value="add">Hepsine Ekle</option>
+                                <option value="remove">Kaldır</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-2">Kapıda Ödeme</label>
                             <select id="bulkCashOnDelivery" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm font-black outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors cursor-pointer">
-                                <option value="no_change" class="text-slate-500">Değiştirme</option>
-                                <option value="add" class="text-emerald-600">Hepsine Ekle (+)</option>
-                                <option value="remove" class="text-rose-600">Hepsinden Kaldır (-)</option>
+                                <option value="no_change">Değiştirme</option>
+                                <option value="add">Hepsine Ekle</option>
+                                <option value="remove">Kaldır</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Durum İşlemleri (Gizli Başlar) -->
                     <div id="bulkStatusFields" class="grid grid-cols-1 gap-5 hidden">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-2">Toplu Durum İşlemi</label>
                             <select id="bulkStatusValue" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm font-black outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors cursor-pointer">
-                                <option value="active" class="text-emerald-600">Seçili İlanları AKTİF Et (Yayına Al)</option>
-                                <option value="passive" class="text-rose-600">Seçili İlanları PASİF Yap (Gizle)</option>
+                                <option value="active">Seçili İlanları AKTİF Et</option>
+                                <option value="passive">Seçili İlanları PASİF Yap</option>
                             </select>
                         </div>
                     </div>
@@ -660,41 +678,24 @@
                 <button onclick="document.getElementById('bulkDeleteModal').classList.add('hidden')" class="text-slate-400 hover:text-rose-500 bg-white shadow-sm border border-slate-200 p-2 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="p-6">
-                <div class="bg-rose-50 p-4 rounded-xl border border-rose-100 text-xs text-rose-800 font-medium mb-6 leading-relaxed flex gap-3">
-                    <i data-lucide="alert-triangle" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                    <p>Dikkat! Silinen ilanlar geri alınamaz. Lütfen hangi ilanları sileceğinizi dikkatlice seçin.</p>
-                </div>
                 <form onsubmit="window.executeBulkDelete(event)" class="space-y-4">
-                    
-                    <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition bulk-delete-option" id="opt-selected">
+                    <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition" id="opt-selected">
                         <input type="radio" name="deleteType" value="selected" id="radioDeleteSelected" class="mt-1 w-4 h-4 text-rose-600 focus:ring-rose-500" required>
                         <div class="flex-1">
                             <div class="font-bold text-slate-800 text-sm">Seçili Ürünleri Sil</div>
                             <div class="text-xs text-slate-500 mt-0.5">Şu anda <span id="delModalSelectedCount" class="font-black text-rose-600">0</span> ilan seçili.</div>
                         </div>
                     </label>
-
-                    <label class="flex flex-col gap-2 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition bulk-delete-option" id="opt-category">
+                    <label class="flex flex-col gap-2 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition" id="opt-category">
                         <div class="flex items-start gap-3">
                             <input type="radio" name="deleteType" value="category" class="mt-1 w-4 h-4 text-rose-600 focus:ring-rose-500" required>
                             <div class="flex-1">
                                 <div class="font-bold text-slate-800 text-sm">Kategoriye Göre Sil</div>
-                                <div class="text-xs text-slate-500 mt-0.5">Belirli bir kategorideki tüm ilanları siler.</div>
                             </div>
                         </div>
-                        <select id="bulkDeleteCategory" class="mt-2 w-full p-3 bg-white rounded-lg border border-slate-200 text-sm font-bold outline-none focus:ring-2 focus:ring-rose-500 transition-colors cursor-pointer ml-7 w-[calc(100%-1.75rem)]" onclick="document.querySelector('input[value=\'category\']').checked = true">
-                            <!-- JS Dinamik Dolacak -->
+                        <select id="bulkDeleteCategory" class="mt-2 w-full p-3 bg-white rounded-lg border border-slate-200 text-sm font-bold outline-none cursor-pointer ml-7 w-[calc(100%-1.75rem)]" onclick="document.querySelector('input[value=\'category\']').checked = true">
                         </select>
                     </label>
-
-                    <label class="flex items-start gap-3 p-4 border border-rose-200 bg-rose-50 rounded-xl cursor-pointer hover:bg-rose-100 transition bulk-delete-option" id="opt-all">
-                        <input type="radio" name="deleteType" value="all" class="mt-1 w-4 h-4 text-rose-600 focus:ring-rose-500" required>
-                        <div class="flex-1">
-                            <div class="font-bold text-rose-800 text-sm">Tüm Ürünlerimi Sil</div>
-                            <div class="text-xs text-rose-600/80 mt-0.5">Mağazanızdaki bütün ilanlar kalıcı olarak silinir.</div>
-                        </div>
-                    </label>
-
                     <div class="pt-4 mt-2 border-t border-slate-100">
                         <button type="submit" id="btnConfirmBulkDelete" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-xl transition flex items-center justify-center gap-2 shadow-xl shadow-rose-500/20 text-lg">
                             <i data-lucide="trash-2" class="w-5 h-5"></i> Kalıcı Olarak Sil
@@ -715,12 +716,9 @@
         import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { collection, doc, setDoc, onSnapshot, updateDoc, deleteDoc, writeBatch, getDocs, query } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        setPersistence(auth, browserLocalPersistence).catch((error) => {
-            console.error("Kalıcı oturum ayarlanırken hata:", error);
-        });
+        setPersistence(auth, browserLocalPersistence).catch((error) => { console.error("Oturum kalıcılığı hatası:", error); });
 
         const provider = new GoogleAuthProvider();
-
         const APP_ID = 'kibris-pazar'; 
         const storesRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores');
         const productsRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'products');
@@ -818,13 +816,8 @@
         window.shareMyStore = () => {
             if(!myStore) return;
             const shareUrl = `${window.location.origin}/magaza.html?id=${myStore.id}`;
-            
             if (navigator.share) {
-                navigator.share({
-                    title: myStore.name + " | Kıbrıs Bazar",
-                    text: `${myStore.name} mağazamdaki ürünleri hemen inceleyin!`,
-                    url: shareUrl
-                }).catch(() => {});
+                navigator.share({ title: myStore.name + " | Kıbrıs Bazar", text: `${myStore.name} mağazamdaki ürünleri hemen inceleyin!`, url: shareUrl }).catch(() => {});
             } else {
                 const tempInput = document.createElement('input');
                 tempInput.value = shareUrl;
@@ -841,16 +834,11 @@
             const snapshot = await getDocs(q);
             const requestedSlug = window.slugify(requestedName);
             let isAvailable = true;
-
             snapshot.forEach(doc => {
                 const existingStore = doc.data();
                 if (myStore && doc.id === myStore.id) return;
-                
-                if (window.slugify(existingStore.name) === requestedSlug) {
-                    isAvailable = false;
-                }
+                if (window.slugify(existingStore.name) === requestedSlug) isAvailable = false;
             });
-
             return isAvailable;
         }
 
@@ -858,7 +846,6 @@
             e.preventDefault();
             const btnText = document.getElementById('btnRegText');
             const btn = document.getElementById('btnRegisterSubmit');
-            
             const storeName = document.getElementById('regName').value.trim();
 
             btnText.innerText = "İsim Kontrol Ediliyor..."; btn.disabled = true;
@@ -882,9 +869,8 @@
             } else {
                 pendingRegistrationData = regData;
                 btnText.innerText = "Google Doğrulanıyor..."; 
-                try {
-                    await signInWithPopup(auth, provider);
-                } catch (err) {
+                try { await signInWithPopup(auth, provider); } 
+                catch (err) {
                     window.showMessage("Doğrulama iptal edildi.", "error");
                     btnText.innerText = "Google ile Doğrula ve Kaydol"; btn.disabled = false;
                     pendingRegistrationData = null;
@@ -897,25 +883,17 @@
             document.getElementById('loaderText').innerText = "Mağazanız Açılıyor...";
 
             const newStore = {
-                ownerUid: currentUser.uid,
-                ownerEmail: currentUser.email,
-                name: regData.name,
-                district: regData.district,
-                whatsapp: regData.whatsapp,
-                status: 'pending',
-                packageType: 'free',
-                isPremium: false,
-                createdAt: Date.now(),
-                followers: []
+                ownerUid: currentUser.uid, ownerEmail: currentUser.email,
+                name: regData.name, district: regData.district, whatsapp: regData.whatsapp,
+                status: 'pending', packageType: 'free', isPremium: false,
+                createdAt: Date.now(), followers: []
             };
 
             try {
                 await setDoc(doc(storesRef), newStore);
                 window.showMessage("Doğrulama başarılı! Mağaza başvurunuz alındı.");
-                
                 const message = `Merhaba, Kıbrıs Bazar'da yeni bir mağaza açılış talebim var. Sisteme az önce kayıt oldum, onayınızı bekliyorum.\n\n*Mağaza Adı:* ${regData.name}\n*Bölge:* ${regData.district}\n*İletişim Numarası:* ${regData.whatsapp}`;
                 window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
-                
                 checkStoreStatus();
             } catch(err) {
                 window.showMessage("Kayıt hatası.", "error");
@@ -977,28 +955,19 @@
         let locationMarker;
 
         function initLocationMap() {
-            if(locationMap) {
-                setTimeout(() => locationMap.invalidateSize(), 300);
-                return;
-            }
-            
+            if(locationMap) { setTimeout(() => locationMap.invalidateSize(), 300); return; }
             let startLat = myStore?.lat || 35.1856; 
             let startLng = myStore?.lng || 33.3823;
 
             locationMap = L.map('storeLocationMap').setView([startLat, startLng], 10);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap Kıbrıs Bazar'
-            }).addTo(locationMap);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap Kıbrıs Bazar' }).addTo(locationMap);
 
             locationMarker = L.marker([startLat, startLng], {draggable: true}).addTo(locationMap);
-
-            locationMarker.on('dragend', function(e) {
+            locationMarker.on('dragend', function() {
                 const pos = locationMarker.getLatLng();
                 document.getElementById('settingsLat').value = pos.lat;
                 document.getElementById('settingsLng').value = pos.lng;
             });
-            
             locationMap.on('click', function(e) {
                 locationMarker.setLatLng(e.latlng);
                 document.getElementById('settingsLat').value = e.latlng.lat;
@@ -1007,20 +976,16 @@
 
             document.getElementById('settingsLat').value = startLat;
             document.getElementById('settingsLng').value = startLng;
-            
             setTimeout(() => locationMap.invalidateSize(), 400);
         }
 
         window.clearStoreLocation = () => {
-            window.customConfirm("Mağaza konumunuzu tamamen temizlemek istediğinize emin misiniz? Harita müşterilere gösterilmeyecektir.", () => {
+            window.customConfirm("Konumu temizlemek istediğinize emin misiniz?", () => {
                 document.getElementById('settingsLat').value = "";
                 document.getElementById('settingsLng').value = "";
                 document.getElementById('settingsShowLocation').checked = false;
-                if(locationMarker) {
-                     locationMarker.setLatLng([35.1856, 33.3823]);
-                     locationMap.setView([35.1856, 33.3823], 10);
-                }
-                window.showMessage("Konum bilgileri temizlendi. Değişiklikleri kaydetmeyi unutmayın.", "info");
+                if(locationMarker) { locationMarker.setLatLng([35.1856, 33.3823]); locationMap.setView([35.1856, 33.3823], 10); }
+                window.showMessage("Konum bilgileri temizlendi.");
             });
         };
 
@@ -1028,7 +993,6 @@
             document.getElementById('storeNameDisplay').innerText = myStore.name;
             document.getElementById('storeDistrictDisplay').innerText = myStore.district;
             document.getElementById('storeWhatsappDisplay').innerText = myStore.whatsapp || '-';
-            
             const followerCount = myStore.followers ? myStore.followers.length : 0;
             document.getElementById('storeFollowersDisplay').innerHTML = `${followerCount} <span class="text-slate-400 font-medium">Takipçi</span>`;
             
@@ -1042,12 +1006,11 @@
             else document.getElementById('storePremiumBadge').classList.add('hidden');
 
             const coverEl = document.getElementById('dashboardCover');
-            if(myStore.coverUrl) { coverEl.src = myStore.coverUrl; coverEl.classList.remove('hidden'); }
-            else { coverEl.classList.add('hidden'); }
+            if(myStore.coverUrl) { coverEl.src = myStore.coverUrl; coverEl.classList.remove('hidden'); } else coverEl.classList.add('hidden');
 
             const logoEl = document.getElementById('dashboardLogo');
             const fallbackEl = document.getElementById('dashboardLogoFallback');
-            if(myStore.logoUrl) { logoEl.src = myStore.logoUrl; logoEl.classList.remove('hidden'); fallbackEl.classList.add('hidden'); }
+            if(myStore.logoUrl) { logoEl.src = myStore.logoUrl; logoEl.classList.remove('hidden'); fallbackEl.classList.add('hidden'); } 
             else { logoEl.classList.add('hidden'); fallbackEl.classList.remove('hidden'); }
         }
 
@@ -1055,12 +1018,10 @@
             currentTab = tab;
             ['stats', 'orders', 'products', 'packages', 'settings'].forEach(t => {
                 document.getElementById(`tab-${t}`).classList.add('hidden');
-                const btn = document.getElementById(`tabBtn-${t}`);
-                btn.className = "px-5 py-2.5 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0 transition flex items-center gap-2";
+                document.getElementById(`tabBtn-${t}`).className = "px-5 py-2.5 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0 transition flex items-center gap-2";
             });
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tabBtn-${tab}`);
-            activeBtn.className = "px-5 py-2.5 rounded-full text-sm font-bold bg-slate-900 text-white shadow-md shrink-0 transition flex items-center gap-2";
+            document.getElementById(`tabBtn-${tab}`).className = "px-5 py-2.5 rounded-full text-sm font-bold bg-slate-900 text-white shadow-md shrink-0 transition flex items-center gap-2";
             
             if(tab === 'settings') {
                 populateSettingsForm();
@@ -1087,7 +1048,7 @@
             onSnapshot(categoriesRef, (snapshot) => {
                 dbCategories = [];
                 snapshot.forEach(d => dbCategories.push({id: d.id, ...d.data()}));
-                updateCategoryDropdowns();
+                initCategoriesForSeller();
             });
         }
 
@@ -1111,49 +1072,95 @@
             document.getElementById('statPendingOrders').innerText = pending;
         }
 
-        function updateCategoryDropdowns() {
-            let optionsHtml = '';
-            if (dbCategories.length === 0) {
-                optionsHtml = '<option value="Diğer">Diğer (Kategori Bulunamadı)</option>';
-            } else {
-                const tree = buildCategoryTree(dbCategories, "");
-                optionsHtml = generateDropdownOptions(tree, 0);
+        // --- TRENDYOL 3 KATMANLI KİME GÖRE SEÇİCİ LOGİCİ ---
+        function initCategoriesForSeller() {
+            const mainSelect = document.getElementById('pMainCategory');
+            if(!mainSelect) return;
+
+            const mainCats = dbCategories.filter(c => c.isMegaMenu).sort((a,b) => a.name.localeCompare(b.name));
+            let html = '<option value="">-- Lütfen Ana Kategori Seçin --</option>';
+            mainCats.forEach(c => { html += `<option value="${c.id}">${c.name}</option>`; });
+            mainSelect.innerHTML = html;
+        }
+
+        window.loadCategoryGroups = () => {
+            const mainId = document.getElementById('pMainCategory').value;
+            const groupSelect = document.getElementById('pGroupCategory');
+            const groupContainer = document.getElementById('pGroupCategoryContainer');
+            const subContainer = document.getElementById('pSubCategoryContainer');
+            document.getElementById('dynamicAttributesContainer').innerHTML = '';
+
+            if(!mainId) {
+                groupContainer.classList.add('hidden');
+                subContainer.classList.add('hidden');
+                return;
             }
 
-            const pCategorySelect = document.getElementById('pCategory');
-            if (pCategorySelect) pCategorySelect.innerHTML = optionsHtml;
-        }
+            const groups = dbCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a,b) => a.name.localeCompare(b.name));
+            let html = '<option value="">-- Lütfen Grup Seçin --</option>';
+            groups.forEach(c => { html += `<option value="${c.id}">${c.name}</option>`; });
+            
+            groupSelect.innerHTML = html;
+            groupContainer.classList.remove('hidden');
+            subContainer.classList.add('hidden');
+        };
 
-        function buildCategoryTree(categories, parentId) {
-            let tree = [];
-            categories.forEach(cat => {
-                if ((cat.parentId || "") === parentId) {
-                    const children = buildCategoryTree(categories, cat.id);
-                    if (children.length > 0) cat.children = children;
-                    tree.push(cat);
-                }
-            });
-            return tree.sort((a, b) => a.name.localeCompare(b.name));
-        }
+        window.loadSubCategories = () => {
+            const groupId = document.getElementById('pGroupCategory').value;
+            const subSelect = document.getElementById('productCategory');
+            const subContainer = document.getElementById('pSubCategoryContainer');
+            document.getElementById('dynamicAttributesContainer').innerHTML = '';
 
-        function generateDropdownOptions(nodes, depth) {
-            let html = '';
-            const prefix = '- '.repeat(depth);
-            nodes.forEach(node => {
-                html += `<option value="${node.name}">${prefix}${node.name}</option>`;
-                if (node.children) {
-                    html += generateDropdownOptions(node.children, depth + 1);
-                }
+            if(!groupId) {
+                subContainer.classList.add('hidden');
+                return;
+            }
+
+            const subs = dbCategories.filter(c => c.parentId === groupId && !c.isGroupTitle).sort((a,b) => a.name.localeCompare(b.name));
+            let html = '<option value="">-- Lütfen Alt Kategori Seçin --</option>';
+            subs.forEach(c => { 
+                html += `<option value="${c.name}" data-id="${c.id}">${c.name}</option>`; 
             });
-            return html;
-        }
+            
+            subSelect.innerHTML = html;
+            subContainer.classList.remove('hidden');
+        };
+
+        window.loadCategoryAttributes = () => {
+            const subSelect = document.getElementById('productCategory');
+            const selectedOption = subSelect.options[subSelect.selectedIndex];
+            const catId = selectedOption ? selectedOption.getAttribute('data-id') : null;
+            const attrContainer = document.getElementById('dynamicAttributesContainer');
+            
+            attrContainer.innerHTML = '';
+            if(!catId) return;
+
+            const catData = dbCategories.find(c => c.id === catId);
+            if(catData && catData.attributes && catData.attributes.length > 0) {
+                let html = `<div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl"><h4 class="text-xs font-black text-orange-600 uppercase mb-3 flex items-center gap-1.5"><i data-lucide="sliders" class="w-4 h-4"></i> Ürün Özellikleri (Zorunlu)</h4><div class="space-y-3">`;
+                
+                catData.attributes.forEach((attr, index) => {
+                    html += `
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">${attr.name} <span class="text-rose-500">*</span></label>
+                            <select required name="dynamic_attr_${index}" data-attr-name="${attr.name}" class="dynamic-attribute-select w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-bold text-slate-800 cursor-pointer">
+                                <option value="">Lütfen ${attr.name} seçin</option>
+                    `;
+                    attr.options.forEach(opt => { html += `<option value="${opt}">${opt}</option>`; });
+                    html += `</select></div>`;
+                });
+                
+                html += `</div></div>`;
+                attrContainer.innerHTML = html;
+                lucide.createIcons();
+            }
+        };
 
         function initCategoryFilters() {
             const container = document.getElementById('vendorCategoryFilter');
             let html = `<button onclick="window.filterVendorProducts('')" class="px-5 py-2 rounded-full text-xs font-bold transition ${currentFilterCategory === '' ? 'bg-slate-800 text-white shadow-sm' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'} filter-btn whitespace-nowrap" data-cat="">Tüm Ürünler</button>`;
             
             const uniqueCategories = [...new Set(myProducts.map(p => p.category))].filter(c => c).sort();
-
             let bulkHtml = '<option value="ALL" class="font-black text-slate-800">-- Tüm Ürünlerim --</option>';
 
             uniqueCategories.forEach(catName => {
@@ -1177,11 +1184,8 @@
         };
 
         window.toggleProductSelection = (id, checked) => {
-            if(checked) {
-                if(!selectedProductIds.includes(id)) selectedProductIds.push(id);
-            } else {
-                selectedProductIds = selectedProductIds.filter(x => x !== id);
-            }
+            if(checked) { if(!selectedProductIds.includes(id)) selectedProductIds.push(id); }
+            else { selectedProductIds = selectedProductIds.filter(x => x !== id); }
             window.updateSelectionUI();
             renderProducts(); 
         };
@@ -1189,13 +1193,9 @@
         window.toggleSelectAllProducts = (checked) => {
             let displayList = myProducts;
             if(currentFilterCategory) displayList = displayList.filter(p => p.category === currentFilterCategory);
-            
             displayList.forEach(p => {
-                if(checked) {
-                    if(!selectedProductIds.includes(p.id)) selectedProductIds.push(p.id);
-                } else {
-                    selectedProductIds = selectedProductIds.filter(x => x !== p.id);
-                }
+                if(checked) { if(!selectedProductIds.includes(p.id)) selectedProductIds.push(p.id); }
+                else { selectedProductIds = selectedProductIds.filter(x => x !== p.id); }
             });
             window.updateSelectionUI();
             renderProducts(); 
@@ -1205,24 +1205,13 @@
             const count = selectedProductIds.length;
             const badge = document.getElementById('selectedCountBadge');
             if(badge) {
-                if(count > 0) {
-                    badge.innerText = count;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
+                if(count > 0) { badge.innerText = count; badge.classList.remove('hidden'); }
+                else { badge.classList.add('hidden'); }
             }
-            
             let displayList = myProducts;
             if(currentFilterCategory) displayList = displayList.filter(p => p.category === currentFilterCategory);
             const cb = document.getElementById('selectAllCheckbox');
-            if(cb) {
-                if(displayList.length > 0 && displayList.every(p => selectedProductIds.includes(p.id))) {
-                    cb.checked = true;
-                } else {
-                    cb.checked = false;
-                }
-            }
+            if(cb) { cb.checked = displayList.length > 0 && displayList.every(p => selectedProductIds.includes(p.id)); }
         };
 
         function renderProducts() {
@@ -1242,39 +1231,30 @@
             displayList.forEach(p => {
                 const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
                 const hasVariants = p.variants && p.variants.length > 0;
-                
                 const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
+                
                 let ribbonHtml = '<div class="absolute top-2 left-0 flex flex-col gap-1 items-start z-10 pointer-events-none">';
-                if (discount > 0) {
-                     ribbonHtml += `<div class="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-r shadow-md">-%${discount}</div>`;
-                }
-                if (p.freeDelivery) {
-                     ribbonHtml += `<div class="bg-[#0ea5e9] text-white text-[9px] font-black px-2 py-0.5 rounded-r shadow-md flex items-center gap-1 uppercase tracking-wider"><i data-lucide="truck" class="w-3 h-3 shrink-0"></i> Ücretsiz Teslimat</div>`;
-                }
-                if (p.cashOnDelivery) {
-                     ribbonHtml += `<div class="bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-r shadow-md flex items-center gap-1 uppercase tracking-wider"><i data-lucide="banknote" class="w-3 h-3 shrink-0"></i> Kapıda Ödeme</div>`;
-                }
+                if (discount > 0) ribbonHtml += `<div class="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-r shadow-md">-%${discount}</div>`;
+                if (p.freeDelivery) ribbonHtml += `<div class="bg-[#0ea5e9] text-white text-[9px] font-black px-2 py-0.5 rounded-r shadow-md flex items-center gap-1 uppercase tracking-wider"><i data-lucide="truck" class="w-3 h-3 shrink-0"></i> Ücretsiz Teslimat</div>`;
+                if (p.cashOnDelivery) ribbonHtml += `<div class="bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-r shadow-md flex items-center gap-1 uppercase tracking-wider"><i data-lucide="banknote" class="w-3 h-3 shrink-0"></i> Kapıda Ödeme</div>`;
                 ribbonHtml += '</div>';
 
                 const isChecked = selectedProductIds.includes(p.id);
                 const activeOpacityClass = p.isActive !== false ? '' : 'opacity-60 grayscale-[50%]';
                 const borderClass = isChecked ? 'border-rose-400 ring-2 ring-rose-100' : 'border-slate-200 hover:border-orange-200';
-                const checkboxOpacityClass = isChecked ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100';
-
+                
                 html += `
                     <div class="border rounded-3xl p-3 relative group bg-white shadow-sm hover:shadow-xl transition-all flex flex-col ${borderClass} ${activeOpacityClass}">
-                        <div class="absolute top-3 right-3 z-20 transition-opacity ${checkboxOpacityClass}">
+                        <div class="absolute top-3 right-3 z-20 transition-opacity">
                             <input type="checkbox" onchange="window.toggleProductSelection('${p.id}', this.checked)" class="w-6 h-6 rounded border-slate-300 text-rose-500 focus:ring-rose-500 cursor-pointer shadow-md bg-white" ${isChecked ? 'checked' : ''}>
                         </div>
-                        
                         ${p.isActive === false ? '<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 bg-slate-900/80 text-white font-black px-3 py-1 rounded-xl text-xs pointer-events-none">PASİF</div>' : ''}
-
                         <div class="relative w-full aspect-[4/5] rounded-2xl overflow-hidden mb-3 bg-slate-100">
-                            <img src="${img}" onerror="this.onerror=null; this.src='https://placehold.co/400x500/cbd5e1/475569?text=Gorsel+Yuklenemedi';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Product Image">
+                            <img src="${img}" onerror="this.onerror=null; this.src='https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             ${ribbonHtml}
                         </div>
                         <div class="flex-1 px-1">
-                            <div class="text-[10px] font-bold text-slate-500 bg-slate-100 inline-block px-2 py-1 rounded-lg mb-2 line-clamp-1" title="${p.category}">${p.category}</div>
+                            <div class="text-[10px] font-bold text-slate-500 bg-slate-100 inline-block px-2 py-1 rounded-lg mb-2 line-clamp-1">${p.category}</div>
                             <h4 class="text-sm font-bold line-clamp-2 mb-1 text-slate-800 leading-snug">${p.title}</h4>
                             ${hasVariants ? `<div class="text-[10px] text-purple-600 font-bold mb-2 flex items-center gap-1"><i data-lucide="layers" class="w-3 h-3"></i> ${p.variants.length} Seçenek</div>` : '<div class="h-4"></div>'}
                         </div>
@@ -1283,11 +1263,10 @@
                                 ${p.originalPrice > p.price ? `<span class="block text-[10px] text-slate-400 line-through mb-0.5">${p.originalPrice.toLocaleString('tr-TR')} TL</span>` : ''}
                                 <span class="text-lg font-black text-slate-900">${p.price.toLocaleString('tr-TR')} TL</span>
                             </div>
-                            <div class="flex gap-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                                <button onclick="window.toggleProductStatus('${p.id}', ${p.isActive !== false})" class="${p.isActive !== false ? 'bg-emerald-50 text-emerald-500 hover:bg-emerald-500 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-500 hover:text-white'} p-2 rounded-xl transition shadow-sm" title="${p.isActive !== false ? 'Pasife Al (Gizle)' : 'Aktif Et (Göster)'}"><i data-lucide="${p.isActive !== false ? 'eye' : 'eye-off'}" class="w-4 h-4"></i></button>
-                                <button onclick="window.editProduct('${p.id}')" class="bg-blue-50 hover:bg-blue-500 text-blue-500 hover:text-white p-2 rounded-xl transition shadow-sm" title="Düzenle"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                                <button onclick="window.duplicateProduct('${p.id}')" class="bg-slate-100 hover:bg-slate-800 text-slate-600 hover:text-white p-2 rounded-xl transition shadow-sm" title="Kopyala Çoğalt"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                                <button onclick="window.deleteProduct('${p.id}')" class="bg-rose-50 hover:bg-rose-500 text-rose-500 hover:text-white p-2 rounded-xl transition shadow-sm" title="Sil"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <div class="flex gap-1.5">
+                                <button onclick="window.toggleProductStatus('${p.id}', ${p.isActive !== false})" class="${p.isActive !== false ? 'bg-emerald-50 text-emerald-500' : 'bg-slate-100 text-slate-500'} p-2 rounded-xl transition shadow-sm"><i data-lucide="${p.isActive !== false ? 'eye' : 'eye-off'}" class="w-4 h-4"></i></button>
+                                <button onclick="window.editProduct('${p.id}')" class="bg-blue-50 text-blue-500 p-2 rounded-xl transition shadow-sm"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                <button onclick="window.deleteProduct('${p.id}')" class="bg-rose-50 text-rose-500 p-2 rounded-xl transition shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                             </div>
                         </div>
                     </div>
@@ -1299,13 +1278,9 @@
 
         window.toggleProductStatus = async (id, currentStatus) => {
             try {
-                const newStatus = !currentStatus;
-                const pRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', id);
-                await updateDoc(pRef, { isActive: newStatus, updatedAt: Date.now() });
-                window.showMessage(newStatus ? "Ürün aktif edildi (Yayında)." : "Ürün pasife alındı (Gizlendi).");
-            } catch(err) {
-                window.showMessage("Durum güncellenirken hata oluştu.", "error");
-            }
+                await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', id), { isActive: !currentStatus, updatedAt: Date.now() });
+                window.showMessage(!currentStatus ? "Ürün aktif edildi." : "Ürün pasife alındı.");
+            } catch(err) { window.showMessage("Durum güncellenemedi.", "error"); }
         };
 
         let variantCount = 0;
@@ -1315,27 +1290,21 @@
             row.className = 'flex flex-col sm:flex-row gap-3 items-start sm:items-center variant-row animate-fade-in bg-white p-3 rounded-xl border border-purple-100 shadow-sm relative';
             row.id = `var-${variantCount}`;
             
-            const imgPreviewHtml = imageUrl 
-                ? `<img src="${imageUrl}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/cbd5e1/475569?text=X';" class="w-full h-full object-cover rounded-lg">`
-                : `<i data-lucide="image" class="w-5 h-5"></i>`;
+            const imgPreviewHtml = imageUrl ? `<img src="${imageUrl}" class="w-full h-full object-cover rounded-lg">` : `<i data-lucide="image" class="w-5 h-5"></i>`;
 
             row.innerHTML = `
                 <div class="flex w-full sm:w-auto gap-2 flex-1">
-                    <input type="text" placeholder="Grup (Örn: Renk)" class="w-1/3 p-3 rounded-lg border border-slate-200 text-xs font-bold outline-none focus:border-purple-500 var-group" value="${group}">
-                    <input type="text" placeholder="İsim (Örn: Mavi)" class="w-2/3 p-3 rounded-lg border border-slate-200 text-sm font-semibold outline-none focus:border-purple-500 var-name" value="${name}">
+                    <input type="text" placeholder="Grup" class="w-1/3 p-3 rounded-lg border border-slate-200 text-xs font-bold outline-none var-group" value="${group}">
+                    <input type="text" placeholder="İsim" class="w-2/3 p-3 rounded-lg border border-slate-200 text-sm font-semibold outline-none var-name" value="${name}">
                 </div>
                 <div class="flex w-full sm:w-auto gap-2 items-center">
-                    <div class="relative w-24">
-                        <input type="number" step="0.01" placeholder="Fiyat" class="w-full p-3 rounded-lg border border-slate-200 text-sm font-black text-center outline-none focus:border-purple-500 var-price text-orange-600" value="${price}">
-                    </div>
-                    
+                    <input type="number" step="0.01" placeholder="Fiyat" class="w-24 p-3 rounded-lg border border-slate-200 text-sm font-black text-center outline-none var-price text-orange-600" value="${price}">
                     <input type="hidden" class="var-image-url" value="${imageUrl}">
-                    <button type="button" onclick="document.getElementById('var-file-${variantCount}').click()" class="var-img-btn relative w-12 h-12 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center text-slate-400 hover:text-purple-500 hover:border-purple-300 transition shrink-0 overflow-hidden" title="Seçeneğe Özel Resim Ekle">
+                    <button type="button" onclick="document.getElementById('var-file-${variantCount}').click()" class="var-img-btn relative w-12 h-12 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center text-slate-400 overflow-hidden shrink-0">
                         ${imgPreviewHtml}
                     </button>
                     <input type="file" id="var-file-${variantCount}" accept="image/*" class="hidden" onchange="window.uploadVariantImage(this, '${variantCount}')">
-
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 p-3 bg-rose-50 rounded-lg hover:bg-rose-500 hover:text-white transition shrink-0"><i data-lucide="trash" class="w-5 h-5"></i></button>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 p-3 bg-rose-50 rounded-lg"><i data-lucide="trash" class="w-5 h-5"></i></button>
                 </div>
             `;
             container.appendChild(row);
@@ -1346,43 +1315,28 @@
         window.uploadVariantImage = async (input, vId) => {
             const file = input.files[0];
             if(!file) return;
-
             const row = document.getElementById(`var-${vId}`);
             const btn = row.querySelector('.var-img-btn');
             const hiddenInput = row.querySelector('.var-image-url');
-
             btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-500"></i>`;
-            lucide.createIcons();
-
             try {
                 const url = await uploadFileToCloudinary(file, 'image');
                 hiddenInput.value = url;
                 btn.innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded-lg">`;
-            } catch (err) {
-                window.showMessage("Resim yüklenemedi.", "error");
-                btn.innerHTML = `<i data-lucide="image" class="w-5 h-5"></i>`;
-                lucide.createIcons();
-            }
+            } catch(e) { window.showMessage("Resim yüklenemedi.", "error"); }
         };
 
         window.renderActiveMediaPreview = () => {
             const container = document.getElementById('pMediaPreviewContainer');
             if(!container) return;
-
-            if(activeMediaList.length === 0) {
-                container.innerHTML = `<span class="text-xs text-slate-400 italic">Henüz fotoğraf seçilmedi.</span>`;
-                return;
-            }
-
+            if(activeMediaList.length === 0) { container.innerHTML = `<span class="text-xs text-slate-400 italic">Henüz fotoğraf seçilmedi.</span>`; return; }
             let html = '';
             activeMediaList.forEach((item, index) => {
                 html += `
                     <div class="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-md border-2 border-slate-200 media-thumb-item group" draggable="true" ondragstart="window.onMediaDragStart(event, ${index})" ondragover="event.preventDefault()" ondrop="window.onMediaDrop(event, ${index})">
-                        <img src="${item.url}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100x100/cbd5e1/475569?text=X';">
+                        <img src="${item.url}" class="w-full h-full object-cover">
                         <span class="absolute top-1 left-1 bg-black/70 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">${index+1}</span>
-                        <button type="button" onclick="window.removeActiveMedia(${index})" class="absolute top-1 right-1 bg-rose-600 hover:bg-rose-700 text-white p-1 rounded-full shadow transition" title="Kaldır">
-                            <i data-lucide="x" class="w-3 h-3"></i>
-                        </button>
+                        <button type="button" onclick="window.removeActiveMedia(${index})" class="absolute top-1 right-1 bg-rose-600 text-white p-1 rounded-full"><i data-lucide="x" class="w-3 h-3"></i></button>
                     </div>
                 `;
             });
@@ -1391,10 +1345,7 @@
         };
 
         let draggedMediaIndex = null;
-        window.onMediaDragStart = (e, index) => {
-            draggedMediaIndex = index;
-        };
-
+        window.onMediaDragStart = (e, i) => { draggedMediaIndex = i; };
         window.onMediaDrop = (e, targetIndex) => {
             e.preventDefault();
             if (draggedMediaIndex === null || draggedMediaIndex === targetIndex) return;
@@ -1403,27 +1354,15 @@
             draggedMediaIndex = null;
             window.renderActiveMediaPreview();
         };
+        window.removeActiveMedia = (i) => { activeMediaList.splice(i, 1); window.renderActiveMediaPreview(); };
 
-        window.removeActiveMedia = (index) => {
-            activeMediaList.splice(index, 1);
-            window.renderActiveMediaPreview();
-        };
-
-        document.getElementById('pImages').addEventListener('change', async function(e) {
+        document.getElementById('pImages').addEventListener('change', function() {
             const files = Array.from(this.files);
             const pkg = myStore.packageType || 'free';
             const maxImages = pkg === 'free' ? 1 : (pkg === 'standard' ? 3 : 999);
-
             for(let f of files) {
-                if(f.type.startsWith('image/')) {
-                    const currentImagesCount = activeMediaList.filter(m => m.type === 'image').length;
-                    if(currentImagesCount >= maxImages) {
-                        window.showMessage(`Paket limitiniz (${maxImages} görsel) doldu.`, "error");
-                        continue;
-                    }
-                    const url = URL.createObjectURL(f);
-                    activeMediaList.push({ type: 'image', url: url, file: f });
-                }
+                if(activeMediaList.length >= maxImages) { window.showMessage(`Paket limitiniz (${maxImages}) doldu.`, "error"); break; }
+                activeMediaList.push({ type: 'image', url: URL.createObjectURL(f), file: f });
             }
             this.value = ""; 
             window.renderActiveMediaPreview();
@@ -1432,12 +1371,10 @@
         window.openAddProduct = () => {
             const pkg = myStore.packageType || 'free';
             const limit = pkg === 'free' ? 20 : (pkg === 'standard' ? 50 : 9999);
-            
-            if(myProducts.length >= limit) { window.showMessage(`Paket limitinize (${limit}) ulaştınız. Yeni ürün eklemek için paketinizi yükseltin.`, "error"); return; }
+            if(myProducts.length >= limit) { window.showMessage(`Paket limitinize ulaştınız.`, "error"); return; }
             
             document.getElementById('productModalTitle').innerHTML = `<i data-lucide="package-plus" class="w-6 h-6 text-orange-500"></i> Ürün Ekle`;
             document.getElementById('pEditingId').value = "";
-            document.getElementById('pImages').value = "";
             activeMediaList = [];
             window.renderActiveMediaPreview();
 
@@ -1445,14 +1382,14 @@
             document.getElementById('pDesc').value = "";
             document.getElementById('pPrice').value = "";
             document.getElementById('variantsContainer').innerHTML = ""; 
-            
             document.getElementById('pFreeDelivery').checked = false;
             document.getElementById('pCashOnDelivery').checked = false;
             
-            updateCategoryDropdowns();
-            
-            const mediaLimitStr = pkg === 'free' ? "(Max 1 Görsel)" : (pkg === 'standard' ? "(Max 3 Görsel)" : "(Sınırsız Görsel)");
-            document.getElementById('mediaLimitText').innerText = mediaLimitStr;
+            // Kategori sıfırla
+            initCategoriesForSeller();
+            document.getElementById('pGroupCategoryContainer').classList.add('hidden');
+            document.getElementById('pSubCategoryContainer').classList.add('hidden');
+            document.getElementById('dynamicAttributesContainer').innerHTML = '';
 
             const isPremium = myStore.isPremium || myStore.packageType === 'premium';
             if(isPremium) {
@@ -1475,68 +1412,38 @@
 
             document.getElementById('productModalTitle').innerHTML = `<i data-lucide="edit-3" class="w-6 h-6 text-blue-500"></i> Ürünü Düzenle`;
             document.getElementById('pEditingId').value = p.id;
-            document.getElementById('pImages').value = ""; 
             
             activeMediaList = [];
-            if(p.images) {
-                p.images.forEach(imgUrl => activeMediaList.push({ type: 'image', url: imgUrl, file: null }));
-            }
+            if(p.images) p.images.forEach(imgUrl => activeMediaList.push({ type: 'image', url: imgUrl, file: null }));
             window.renderActiveMediaPreview();
 
             document.getElementById('pTitle').value = p.title;
             document.getElementById('pDesc').value = p.description || "";
-            
             document.getElementById('pFreeDelivery').checked = p.freeDelivery || false;
             document.getElementById('pCashOnDelivery').checked = p.cashOnDelivery || false;
-            
-            updateCategoryDropdowns();
-            const catSelect = document.getElementById('pCategory');
-            if([...catSelect.options].some(opt => opt.value === p.category)) {
-                 catSelect.value = p.category;
-            } else if (p.category) {
-                 catSelect.innerHTML += `<option value="${p.category}" selected>${p.category} (Pasif Kategori)</option>`;
-            }
-
             document.getElementById('pPrice').value = p.price;
-            document.getElementById('variantsContainer').innerHTML = "";
             
+            initCategoriesForSeller();
+            document.getElementById('pGroupCategoryContainer').classList.add('hidden');
+            document.getElementById('pSubCategoryContainer').classList.add('hidden');
+            document.getElementById('dynamicAttributesContainer').innerHTML = '';
+
+            document.getElementById('variantsContainer').innerHTML = "";
             const isPremium = myStore.isPremium || myStore.packageType === 'premium';
-            if(isPremium) {
-                document.getElementById('premiumVariantLock').classList.add('hidden');
-                document.getElementById('variantContent').classList.remove('opacity-50', 'pointer-events-none');
-                if(p.variants) p.variants.forEach(v => window.addVariantRow(v.group || 'Seçenek', v.name, v.price || p.price, v.image || ''));
-            } else {
-                document.getElementById('premiumVariantLock').classList.remove('hidden');
-                document.getElementById('variantContent').classList.add('opacity-50', 'pointer-events-none');
-            }
+            if(isPremium && p.variants) p.variants.forEach(v => window.addVariantRow(v.group || 'Seçenek', v.name, v.price || p.price, v.image || ''));
 
             document.getElementById('productModal').classList.remove('hidden');
             lucide.createIcons();
         };
 
-        window.duplicateProduct = async (id) => {
-            const p = myProducts.find(x => x.id === id);
-            if(!p) return;
-            const limit = (myStore.packageType === 'free') ? 20 : (myStore.packageType === 'standard' ? 50 : 9999);
-            if(myProducts.length >= limit) { window.showMessage("Paket limitinize ulaştınız.", "error"); return; }
-
-            let clone = {...p}; delete clone.id; clone.title = clone.title + " (Kopya)"; clone.createdAt = Date.now();
-            try { await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products')), clone); window.showMessage("Ürün başarıyla çoğaltıldı."); }
-            catch(err) { window.showMessage("Çoğaltma hatası.", "error"); }
-        };
-
-        async function uploadFileToCloudinary(file, resourceType = 'image') {
+        async function uploadFileToCloudinary(file) {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-            
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-                method: 'POST',
-                body: formData
-            });
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
             const data = await response.json();
             if(data.secure_url) return data.secure_url;
-            throw new Error("Cloudinary yükleme başarısız: " + (data.error ? data.error.message : 'Bilinmeyen hata'));
+            throw new Error("Görsel yüklenemedi.");
         }
 
         window.saveProduct = async (e) => {
@@ -1544,63 +1451,63 @@
             const btn = document.getElementById('btnSaveProduct'); 
             btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin inline"></i> Kaydediliyor...`; 
             btn.disabled = true;
-            lucide.createIcons();
 
             const editId = document.getElementById('pEditingId').value;
             const isPremium = myStore.isPremium || myStore.packageType === 'premium';
 
             try {
-                if(activeMediaList.length === 0) {
-                    throw new Error("En az 1 görsel eklemelisiniz.");
-                }
+                if(activeMediaList.length === 0) throw new Error("En az 1 görsel eklemelisiniz.");
 
                 let finalImages = [];
                 for(let item of activeMediaList) {
-                    if(item.file) {
-                        const imgUrl = await uploadFileToCloudinary(item.file, 'image');
-                        finalImages.push(imgUrl);
-                    } else {
-                        finalImages.push(item.url);
-                    }
+                    if(item.file) finalImages.push(await uploadFileToCloudinary(item.file));
+                    else finalImages.push(item.url);
                 }
 
                 const price = parseFloat(document.getElementById('pPrice').value);
                 const variants = [];
-                
                 if (isPremium) {
                     document.querySelectorAll('.variant-row').forEach(row => {
                         const g = row.querySelector('.var-group').value || 'Seçenek';
                         const n = row.querySelector('.var-name').value;
                         const p = row.querySelector('.var-price').value;
                         const img = row.querySelector('.var-image-url').value;
-                        if(n) variants.push({
-                            group: g, 
-                            name: n, 
-                            price: p ? parseFloat(p) : price, 
-                            image: img,
-                            stock: 999 
-                        });
+                        if(n) variants.push({ group: g, name: n, price: p ? parseFloat(p) : price, image: img });
                     });
                 }
+
+                // Dinamik Filtreleri Topla
+                const attrSelects = document.querySelectorAll('.dynamic-attribute-select');
+                let selectedAttributes = [];
+                attrSelects.forEach(select => {
+                    selectedAttributes.push({
+                        group: select.getAttribute('data-attr-name'),
+                        name: select.value
+                    });
+                });
 
                 const productData = {
                     storeId: myStore.id, storeName: myStore.name, storeWhatsapp: myStore.whatsapp, district: myStore.district,
                     title: document.getElementById('pTitle').value, description: document.getElementById('pDesc').value,
-                    category: document.getElementById('pCategory').value, price: price,
+                    category: document.getElementById('productCategory').value,
+                    categorySlug: window.slugify(document.getElementById('productCategory').value),
+                    price: price,
                     freeDelivery: document.getElementById('pFreeDelivery').checked,
                     cashOnDelivery: document.getElementById('pCashOnDelivery').checked,
-                    images: finalImages, variants: variants, updatedAt: Date.now()
+                    images: finalImages, variants: variants, 
+                    dynamicAttributes: selectedAttributes, // Admin filtre eşlemesi
+                    updatedAt: Date.now()
                 };
 
                 if (editId) {
                     await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', editId), productData);
-                    window.showMessage("Ürün başarıyla güncellendi.");
+                    window.showMessage("Ürün güncellendi.");
                 } else {
                     productData.createdAt = Date.now();
                     productData.originalPrice = price; 
                     productData.isActive = true; 
                     await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products')), productData);
-                    window.showMessage("Yeni ilan başarıyla yayınlandı.");
+                    window.showMessage("Ürün yayınlandı.");
                 }
 
                 window.closeProductModal();
@@ -1613,150 +1520,27 @@
         };
 
         window.deleteProduct = (id) => {
-            window.customConfirm("Bu ilanı kalıcı olarak silmek istediğinize emin misiniz?", async () => {
-                try { await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', id)); window.showMessage("Ürün başarıyla silindi."); }
-                catch(err) { window.showMessage("Silme hatası.", "error"); }
-            });
-        };
-
-        window.openBulkDeleteModal = () => {
-            const count = selectedProductIds.length;
-            document.getElementById('delModalSelectedCount').innerText = count;
-            
-            const radioSelected = document.getElementById('radioDeleteSelected');
-            const optSelected = document.getElementById('opt-selected');
-            
-            if(count === 0) {
-                radioSelected.disabled = true;
-                optSelected.classList.add('opacity-50', 'pointer-events-none');
-                document.querySelector('input[value="category"]').checked = true;
-            } else {
-                radioSelected.disabled = false;
-                optSelected.classList.remove('opacity-50', 'pointer-events-none');
-                radioSelected.checked = true;
-            }
-
-            const uniqueCategories = [...new Set(myProducts.map(p => p.category))].filter(c => c).sort();
-            let bulkHtml = '';
-            uniqueCategories.forEach(catName => {
-                bulkHtml += `<option value="${catName}">${catName}</option>`;
-            });
-            
-            if(uniqueCategories.length === 0) {
-                bulkHtml = '<option value="">Kategori Bulunamadı</option>';
-                document.querySelector('input[value="category"]').disabled = true;
-                document.getElementById('opt-category').classList.add('opacity-50', 'pointer-events-none');
-                if(count === 0) document.querySelector('input[value="all"]').checked = true;
-            } else {
-                document.querySelector('input[value="category"]').disabled = false;
-                document.getElementById('opt-category').classList.remove('opacity-50', 'pointer-events-none');
-            }
-            document.getElementById('bulkDeleteCategory').innerHTML = bulkHtml;
-            
-            if(currentFilterCategory && uniqueCategories.includes(currentFilterCategory)) {
-                document.getElementById('bulkDeleteCategory').value = currentFilterCategory;
-            }
-
-            document.getElementById('bulkDeleteModal').classList.remove('hidden');
-        };
-
-        window.executeBulkDelete = async (e) => {
-            e.preventDefault();
-            const deleteType = document.querySelector('input[name="deleteType"]:checked').value;
-            let targetIds = [];
-
-            if (deleteType === 'selected') {
-                targetIds = [...selectedProductIds];
-            } else if (deleteType === 'category') {
-                const cat = document.getElementById('bulkDeleteCategory').value;
-                if(!cat) return;
-                targetIds = myProducts.filter(p => p.category === cat).map(p => p.id);
-            } else if (deleteType === 'all') {
-                targetIds = myProducts.map(p => p.id);
-            }
-
-            if (targetIds.length === 0) {
-                window.showMessage("Silinecek ürün bulunamadı.", "error");
-                return;
-            }
-
-            window.customConfirm(`${targetIds.length} adet ilanı kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`, async () => {
-                const btn = document.getElementById('btnConfirmBulkDelete');
-                btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin inline"></i> Siliniyor...`;
-                btn.disabled = true;
-                lucide.createIcons();
-
-                try {
-                    let batches = [];
-                    let currentBatch = writeBatch(db);
-                    let opCount = 0;
-
-                    targetIds.forEach(id => {
-                        const pRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', id);
-                        currentBatch.delete(pRef);
-                        opCount++;
-                        if (opCount === 490) {
-                            batches.push(currentBatch.commit());
-                            currentBatch = writeBatch(db);
-                            opCount = 0;
-                        }
-                    });
-
-                    if (opCount > 0) batches.push(currentBatch.commit());
-                    await Promise.all(batches);
-
-                    window.showMessage(`${targetIds.length} ilan başarıyla silindi.`);
-                    
-                    selectedProductIds = [];
-                    window.updateSelectionUI();
-                    
-                    const cb = document.getElementById('selectAllCheckbox');
-                    if(cb) cb.checked = false;
-                    
-                    document.getElementById('bulkDeleteModal').classList.add('hidden');
-                } catch (err) {
-                    console.error(err);
-                    window.showMessage("Toplu silme hatası.", "error");
-                }
-
-                btn.innerHTML = `<i data-lucide="trash-2" class="w-5 h-5"></i> Kalıcı Olarak Sil`;
-                btn.disabled = false;
-                lucide.createIcons();
+            window.customConfirm("Bu ilanı silmek istediğinize emin misiniz?", async () => {
+                try { await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', id)); window.showMessage("Ürün silindi."); }
+                catch(e) { window.showMessage("Silme hatası.", "error"); }
             });
         };
 
         function renderOrders() {
             const tbody = document.getElementById('ordersTableBody');
             if(myOrders.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400 font-bold bg-white">Sipariş bulunmuyor.</td></tr>'; return; }
-            
-            const sortedOrders = [...myOrders].sort((a,b) => b.createdAt - a.createdAt);
             let html = '';
-            
-            sortedOrders.forEach(o => {
+            myOrders.sort((a,b) => b.createdAt - a.createdAt).forEach(o => {
                 const date = new Date(o.createdAt).toLocaleDateString('tr-TR', {day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit'});
-                let statusHtml = '';
-                if(o.status === 'pending') statusHtml = '<span class="bg-amber-100 text-amber-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider"><i data-lucide="clock" class="w-3 h-3 inline mb-0.5"></i> Yeni</span>';
-                else if(o.status === 'processing') statusHtml = '<span class="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider"><i data-lucide="package" class="w-3 h-3 inline mb-0.5"></i> Hazırlanıyor</span>';
-                else if(o.status === 'shipped') statusHtml = '<span class="bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider"><i data-lucide="truck" class="w-3 h-3 inline mb-0.5"></i> Kargoda</span>';
-                else if(o.status === 'delivered') statusHtml = '<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider"><i data-lucide="check-circle" class="w-3 h-3 inline mb-0.5"></i> Teslim Edildi</span>';
-                else if(o.status === 'cancelled') statusHtml = '<span class="bg-rose-100 text-rose-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider"><i data-lucide="x-circle" class="w-3 h-3 inline mb-0.5"></i> İptal</span>';
-
-                let itemsHtml = o.items.map(i => {
-                    const pId = i.product?.id || i.productId;
-                    const pTitle = i.product?.title || i.title;
-                    const linkHtml = pId ? `<a href="urun.html?id=${pId}" target="_blank" class="text-blue-500 hover:text-blue-700 inline-flex items-center ml-1 align-middle" title="Ürüne Git"><i data-lucide="external-link" class="w-3 h-3"></i></a>` : '';
-                    return `<div class="mb-1 last:mb-0"><span class="font-black text-slate-800">${i.quantity || i.qty}x</span> ${pTitle} ${i.variant ? `<span class="text-[10px] text-purple-600">(${i.variant})</span>` : ''}${linkHtml}</div>`;
-                }).join('');
-
                 html += `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4 font-mono text-xs font-bold text-slate-500">#${o.id.substring(0,6).toUpperCase()}</td>
                         <td class="px-6 py-4"><div class="text-sm font-black text-slate-800">${o.customerName}</div><div class="text-[10px] font-bold text-slate-400 mt-1">${date}</div></td>
-                        <td class="px-6 py-4 text-xs text-slate-600 max-w-[200px] truncate whitespace-normal leading-relaxed">${itemsHtml}</td>
+                        <td class="px-6 py-4 text-xs text-slate-600">${o.items.map(i => `${i.quantity}x ${i.title}`).join(', ')}</td>
                         <td class="px-6 py-4 font-black text-orange-600 text-base">${o.totalAmount.toLocaleString('tr-TR')} TL</td>
-                        <td class="px-6 py-4">${statusHtml}</td>
+                        <td class="px-6 py-4"><span class="bg-amber-100 text-amber-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase">${o.status}</span></td>
                         <td class="px-6 py-4 text-right">
-                            <select onchange="window.updateOrderStatus('${o.id}', this.value)" class="text-xs font-bold bg-white border border-slate-200 text-slate-700 rounded-lg p-2 outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer shadow-sm">
+                            <select onchange="window.updateOrderStatus('${o.id}', this.value)" class="text-xs font-bold bg-white border border-slate-200 text-slate-700 rounded-lg p-2 outline-none cursor-pointer">
                                 <option value="" disabled selected>Durum Değiştir</option>
                                 <option value="processing">Hazırlanıyor</option>
                                 <option value="shipped">Kargoda</option>
@@ -1772,52 +1556,40 @@
         }
 
         window.updateOrderStatus = async (orderId, newStatus) => {
-            try { await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'orders', orderId), { status: newStatus }); window.showMessage("Sipariş durumu başarıyla güncellendi."); }
-            catch(err) { window.showMessage("Durum güncellenirken hata oluştu.", "error"); }
+            try { await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'orders', orderId), { status: newStatus }); window.showMessage("Sipariş güncellendi."); }
+            catch(e) { window.showMessage("Hata oluştu.", "error"); }
         };
 
-        window.createMockOrder = async () => {
-            if(myProducts.length === 0) { window.showMessage("Önce ürün eklemelisiniz.", "error"); return; }
-            const p = myProducts[0];
-            const mock = {
-                storeId: myStore.id, customerName: "Test Müşteri", customerPhone: "05330000000",
-                items: [{title: p.title, quantity: 1, price: p.price}], totalAmount: p.price,
-                status: 'pending', createdAt: Date.now()
-            };
-            await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders')), mock);
-            window.showMessage("Test siparişi oluşturuldu.");
+        window.requestPackageUpgrade = async (pkgType) => {
+            const pkgNames = { 'standard': 'Standart Paket', 'premium': 'Premium VIP Paket' };
+            window.customConfirm(`${pkgNames[pkgType]} için talep iletilsin mi?`, async () => {
+                await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'stores', myStore.id), { upgradeRequest: pkgType });
+                window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(`Merhaba, ${myStore.name} mağazam için ${pkgNames[pkgType]} talep ediyorum.`)}`, '_blank');
+                window.showMessage("Talep iletildi!");
+            });
+        };
+
+        window.contactAdminSupport = () => {
+            window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(`Merhaba, ${myStore ? myStore.name : 'Yeni Satıcı'} olarak desteğe ihtiyacım var.`)}`, '_blank');
         };
 
         function populateSettingsForm() {
             document.getElementById('settingsName').value = myStore.name || '';
             document.getElementById('settingsWhatsapp').value = myStore.whatsapp || '';
             document.getElementById('settingsDistrict').value = myStore.district || 'Girne';
-            
             document.getElementById('settingsWebsite').value = myStore.website || '';
             document.getElementById('settingsInstagram').value = myStore.instagram || '';
             document.getElementById('settingsFacebook').value = myStore.facebook || '';
-            
             document.getElementById('settingsShowLocation').checked = myStore.showLocation !== false;
-
-            if(myStore.coverUrl) {
-                document.getElementById('settingsCoverPreview').src = myStore.coverUrl;
-                document.getElementById('settingsCoverPreview').classList.remove('hidden');
-            }
-            if(myStore.logoUrl) {
-                document.getElementById('settingsLogoPreview').src = myStore.logoUrl;
-                document.getElementById('settingsLogoPreview').classList.remove('hidden');
-            }
+            if(myStore.coverUrl) { document.getElementById('settingsCoverPreview').src = myStore.coverUrl; document.getElementById('settingsCoverPreview').classList.remove('hidden'); }
+            if(myStore.logoUrl) { document.getElementById('settingsLogoPreview').src = myStore.logoUrl; document.getElementById('settingsLogoPreview').classList.remove('hidden'); }
         }
 
         window.previewImage = (input, previewId) => {
             const file = input.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.getElementById(previewId);
-                    img.src = e.target.result;
-                    img.classList.remove('hidden');
-                };
+                reader.onload = (e) => { document.getElementById(previewId).src = e.target.result; document.getElementById(previewId).classList.remove('hidden'); };
                 reader.readAsDataURL(file);
             }
         };
@@ -1825,39 +1597,20 @@
         window.saveStoreSettings = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSaveSettings');
-            
-            const newStoreName = document.getElementById('settingsName').value.trim();
-            
-            if (newStoreName !== myStore.name) {
-                btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Kontrol Ediliyor...`;
-                const isAvailable = await checkStoreNameAvailability(newStoreName);
-                if (!isAvailable) {
-                    window.showMessage(`"${newStoreName}" mağaza adı başka bir işletme tarafından kullanılıyor.`, "error");
-                    btn.innerHTML = `<i data-lucide="save" class="w-5 h-5"></i> Değişiklikleri Kaydet`;
-                    btn.disabled = false;
-                    lucide.createIcons();
-                    return;
-                }
-            }
-
             btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Kaydediliyor...`;
             btn.disabled = true;
 
             try {
                 let coverUrl = myStore.coverUrl || null;
-                const coverInputEl = document.getElementById('settingsCoverInput');
-                if (coverInputEl.files.length > 0) {
-                    coverUrl = await uploadFileToCloudinary(coverInputEl.files[0], 'image');
-                }
+                const coverInput = document.getElementById('settingsCoverInput');
+                if (coverInput.files.length > 0) coverUrl = await uploadFileToCloudinary(coverInput.files[0]);
 
                 let logoUrl = myStore.logoUrl || null;
-                const logoInputEl = document.getElementById('settingsLogoInput');
-                if (logoInputEl.files.length > 0) {
-                    logoUrl = await uploadFileToCloudinary(logoInputEl.files[0], 'image');
-                }
+                const logoInput = document.getElementById('settingsLogoInput');
+                if (logoInput.files.length > 0) logoUrl = await uploadFileToCloudinary(logoInput.files[0]);
 
                 const updates = {
-                    name: newStoreName,
+                    name: document.getElementById('settingsName').value.trim(),
                     whatsapp: document.getElementById('settingsWhatsapp').value,
                     district: document.getElementById('settingsDistrict').value,
                     lat: parseFloat(document.getElementById('settingsLat').value),
@@ -1866,353 +1619,23 @@
                     website: document.getElementById('settingsWebsite').value.trim(),
                     instagram: document.getElementById('settingsInstagram').value.replace('@', '').trim(),
                     facebook: document.getElementById('settingsFacebook').value.trim(),
-                    coverUrl: coverUrl,
-                    logoUrl: logoUrl
+                    coverUrl: coverUrl, logoUrl: logoUrl
                 };
 
                 await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'stores', myStore.id), updates);
-                window.showMessage("Mağaza ayarları ve konumunuz başarıyla kaydedildi.");
-                
-                if(updates.name !== myStore.name || updates.district !== myStore.district || updates.whatsapp !== myStore.whatsapp) {
-                    const batch = writeBatch(db);
-                    myProducts.forEach(p => {
-                        const pRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', p.id);
-                        batch.update(pRef, { storeName: updates.name, district: updates.district, storeWhatsapp: updates.whatsapp });
-                    });
-                    await batch.commit();
-                }
-
-            } catch (err) {
-                console.error(err);
-                window.showMessage("Ayarlar kaydedilirken hata oluştu.", "error");
-            }
-
+                window.showMessage("Ayarlar kaydedildi.");
+            } catch(err) { window.showMessage("Hata oluştu.", "error"); }
+            
             btn.innerHTML = `<i data-lucide="save" class="w-5 h-5"></i> Değişiklikleri Kaydet`;
             btn.disabled = false;
             lucide.createIcons();
         };
 
         window.openBulkPriceModal = () => { document.getElementById('bulkPriceModal').classList.remove('hidden'); };
-        
-        window.toggleBulkActionType = (type) => {
-            document.getElementById('bulkPriceFields').classList.add('hidden');
-            document.getElementById('bulkLabelFields').classList.add('hidden');
-            document.getElementById('bulkStatusFields').classList.add('hidden');
-            document.getElementById('bulkPercentage').required = false;
-
-            if(type === 'price') {
-                document.getElementById('bulkPriceFields').classList.remove('hidden');
-                document.getElementById('bulkPercentage').required = true;
-            } else if (type === 'labels') {
-                document.getElementById('bulkLabelFields').classList.remove('hidden');
-            } else if (type === 'status') {
-                document.getElementById('bulkStatusFields').classList.remove('hidden');
-            }
-        };
-
-        window.executeBulkAction = async (e) => {
-            e.preventDefault();
-            const cat = document.getElementById('bulkCategory').value;
-            const actionType = document.getElementById('bulkActionType').value;
-            
-            const btn = document.getElementById('btnBulkUpdate'); 
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> İşleniyor...`; 
-            btn.disabled = true;
-            lucide.createIcons();
-
-            let targets = [];
-            if (selectedProductIds.length > 0) {
-                 targets = myProducts.filter(p => selectedProductIds.includes(p.id));
-            } else {
-                 targets = cat === 'ALL' ? myProducts : myProducts.filter(p => p.category === cat);
-            }
-
-            if(targets.length === 0) { window.showMessage("Etkilenecek ürün bulunamadı. Lütfen ürün seçin veya kategori belirleyin.", "error"); btn.innerHTML = `<i data-lucide="zap" class="w-5 h-5"></i> Güncellemeyi Başlat`; btn.disabled = false; lucide.createIcons(); return; }
-
-            try {
-                const batch = writeBatch(db);
-                targets.forEach(p => {
-                    const pRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'products', p.id);
-                    let updates = { updatedAt: Date.now() };
-
-                    if (actionType === 'price') {
-                        const action = document.getElementById('bulkAction').value;
-                        const percent = parseFloat(document.getElementById('bulkPercentage').value);
-                        const oldPrice = p.price;
-                        let newPrice = 0;
-                        if(action === 'increase') newPrice = oldPrice + (oldPrice * (percent / 100));
-                        else newPrice = oldPrice - (oldPrice * (percent / 100));
-                        
-                        newPrice = Math.round(newPrice * 100) / 100;
-                        updates.price = newPrice;
-                        if(action === 'decrease') updates.originalPrice = oldPrice; 
-                    } else if (actionType === 'labels') {
-                        const fd = document.getElementById('bulkFreeDelivery').value;
-                        const cod = document.getElementById('bulkCashOnDelivery').value;
-                        
-                        if (fd === 'add') updates.freeDelivery = true;
-                        else if (fd === 'remove') updates.freeDelivery = false;
-                        
-                        if (cod === 'add') updates.cashOnDelivery = true;
-                        else if (cod === 'remove') updates.cashOnDelivery = false;
-                    } else if (actionType === 'status') {
-                        const statusVal = document.getElementById('bulkStatusValue').value;
-                        updates.isActive = (statusVal === 'active');
-                    }
-                    
-                    batch.update(pRef, updates);
-                });
-                await batch.commit();
-                window.showMessage(`${targets.length} ilan başarıyla güncellendi.`);
-                
-                selectedProductIds = [];
-                window.updateSelectionUI();
-                const cb = document.getElementById('selectAllCheckbox');
-                if(cb) cb.checked = false;
-
-                document.getElementById('bulkPriceModal').classList.add('hidden');
-            } catch(err) { window.showMessage("Toplu güncelleme hatası.", "error"); }
-            
-            btn.innerHTML = `<i data-lucide="zap" class="w-5 h-5"></i> Güncellemeyi Başlat`; 
-            btn.disabled = false;
-            lucide.createIcons();
-        };
-
-        window.exportToCSV = () => {
-            if (myProducts.length === 0) { window.showMessage("Dışa aktarılacak ürün bulunmuyor.", "error"); return; }
-            
-            const separator = ';';
-            let csvContent = `Baslik${separator}Kategori${separator}Fiyat${separator}Aciklama${separator}UcretsizKargo${separator}KapidaOdeme${separator}Gorseller${separator}Varyantlar\n`;
-            
-            myProducts.forEach(p => {
-                const baslik = `"${(p.title || '').replace(/"/g, '""')}"`;
-                const kategori = `"${p.category || ''}"`;
-                const fiyat = p.price || 0;
-                const aciklama = `"${(p.description || '').replace(/"/g, '""')}"`;
-                const kargo = p.freeDelivery ? "Evet" : "Hayir";
-                const kapida = p.cashOnDelivery ? "Evet" : "Hayir";
-                
-                let cleanImages = [];
-                if(p.images && p.images.length > 0) {
-                    cleanImages = p.images.map(img => {
-                         if(img.startsWith('data:image')) return 'BASE64_Gorsel_Dısa_Aktarilamadi';
-                         return img;
-                    });
-                }
-                const gorseller = `"${cleanImages.join('|')}"`;
-                
-                let varsStr = '';
-                if(p.variants && p.variants.length > 0){
-                    varsStr = p.variants.map(v => `${v.group || 'Seçenek'}^${v.name}^${v.price || p.price}^${v.image || ''}`).join('|');
-                }
-                const varyantlar = `"${varsStr}"`;
-                
-                csvContent += `${baslik}${separator}${kategori}${separator}${fiyat}${separator}${aciklama}${separator}${kargo}${separator}${kapida}${separator}${gorseller}${separator}${varyantlar}\n`;
-            });
-            
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); 
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", `urunler_${myStore.name.replace(/\s+/g, '_')}_${new Date().toLocaleDateString('tr-TR').replace(/\./g,'-')}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.showMessage("Ürünleriniz Excel uyumlu CSV formatında indirildi.");
-        };
-
-        async function processImportedData(data, rawHeaders, headers, event) {
-            const pkg = myStore.packageType || 'free';
-            const limit = pkg === 'free' ? 20 : (pkg === 'standard' ? 50 : 9999);
-            const imageLimit = pkg === 'free' ? 1 : (pkg === 'standard' ? 3 : 999);
-            
-            if (myProducts.length + data.length > limit) {
-                window.showMessage(`Paket limitiniz (${limit}) bu kadar ürünü içe aktarmaya yetmiyor.`, "error");
-                event.target.value = ""; 
-                return;
-            }
-
-            showScreen('fullScreenLoader');
-            document.getElementById('loaderText').innerText = "Ürünler Akıllı Sistemle Yükleniyor...";
-
-            try {
-                let batches = [];
-                let currentBatch = writeBatch(db);
-                let opCount = 0;
-                let addedCount = 0;
-
-                for (const row of data) {
-                    let extractedTitle = '';
-                    let extractedPrice = 0;
-                    let extractedCategory = 'Diğer';
-                    let extractedDesc = '';
-                    let extractedImages = [];
-                    let extractedFreeDel = false;
-                    let extractedCOD = false;
-
-                    for (let key in row) {
-                        const cleanKey = key.toString().toLowerCase().trim().replace(/['"]/g, '').replace(/^\ufeff/, '');
-                        const cellValue = row[key] ? row[key].toString().trim() : '';
-
-                        if (cleanKey.includes('baslik') || cleanKey.includes('başlık') || cleanKey.includes('title') || cleanKey.includes('name') || cleanKey === 'ürün adı') {
-                            extractedTitle = cellValue;
-                        } else if (cleanKey.includes('fiyat') || cleanKey.includes('price') || cleanKey.includes('sale')) {
-                            if(cellValue !== '') {
-                                let cleanPrice = cellValue.replace(/[^0-9.,]/g, '');
-                                if (cleanPrice.includes('.') && cleanPrice.includes(',')) {
-                                    cleanPrice = cleanPrice.replace(/\./g, '').replace(',', '.');
-                                } else if (cleanPrice.includes(',')) {
-                                    cleanPrice = cleanPrice.replace(',', '.');
-                                }
-                                extractedPrice = parseFloat(cleanPrice) || 0;
-                            }
-                        } else if (cleanKey.includes('kategori') || cleanKey.includes('category')) {
-                            if (cellValue !== '') extractedCategory = cellValue;
-                        } else if (cleanKey.includes('aciklama') || cleanKey.includes('açıklama') || cleanKey.includes('desc') || cleanKey.includes('detay')) {
-                            extractedDesc = cellValue;
-                        } else if (cleanKey.includes('kargo') || cleanKey.includes('teslimat') || cleanKey.includes('delivery')) {
-                            if (cellValue.toLowerCase() === 'evet' || cellValue.toLowerCase() === 'var' || cellValue === '1' || cellValue.toLowerCase() === 'true') {
-                                extractedFreeDel = true;
-                            }
-                        } else if (cleanKey.includes('kapida') || cleanKey.includes('ödeme') || cleanKey.includes('cod')) {
-                            if (cellValue.toLowerCase() === 'evet' || cellValue.toLowerCase() === 'var' || cellValue === '1' || cellValue.toLowerCase() === 'true') {
-                                extractedCOD = true;
-                            }
-                        } else if (cleanKey.includes('gorsel') || cleanKey.includes('görsel') || cleanKey.includes('image') || cleanKey.includes('resim') || cleanKey.includes('foto') || cleanKey.includes('src')) {
-                            if (cellValue !== '') {
-                                const splitImages = cellValue.split(/[,;|\n]/);
-                                splitImages.forEach(imgUrl => {
-                                    const cleanUrl = imgUrl.trim();
-                                    if (cleanUrl !== '' && !cleanUrl.includes('BASE64') && cleanUrl.length > 5) {
-                                        extractedImages.push(cleanUrl);
-                                    }
-                                });
-                            }
-                        }
-                    }
-
-                    if (extractedTitle === '') continue; 
-
-                    extractedImages = extractedImages.slice(0, imageLimit);
-                    if (extractedImages.length === 0) {
-                        extractedImages = ['https://placehold.co/400x500/cbd5e1/475569?text=Gorsel+Yok'];
-                    }
-
-                    const newDocRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'));
-                    const productData = {
-                        storeId: myStore.id, 
-                        storeName: myStore.name, 
-                        storeWhatsapp: myStore.whatsapp, 
-                        district: myStore.district,
-                        title: extractedTitle,
-                        description: extractedDesc,
-                        category: extractedCategory, 
-                        price: extractedPrice, 
-                        originalPrice: extractedPrice,
-                        freeDelivery: extractedFreeDel,
-                        cashOnDelivery: extractedCOD,
-                        images: extractedImages, 
-                        variants: [], 
-                        isActive: true, 
-                        createdAt: Date.now()
-                    };
-
-                    currentBatch.set(newDocRef, productData);
-                    opCount++; addedCount++;
-                    
-                    if (opCount === 490) { batches.push(currentBatch.commit()); currentBatch = writeBatch(db); opCount = 0; }
-                }
-                
-                if (opCount > 0) batches.push(currentBatch.commit());
-                await Promise.all(batches);
-
-                if (addedCount > 0) { 
-                    window.showMessage(`${addedCount} adet ilan başarıyla yüklendi!`); 
-                } else { 
-                    window.showMessage("Geçerli ürün satırı bulunamadı.", "error"); 
-                }
-            } catch (err) { 
-                console.error(err);
-                window.showMessage("İçe aktarma sırasında hata oluştu.", "error"); 
-            }
-            
-            showScreen('dashboardScreen');
-            event.target.value = ""; 
-        }
-
-        window.importFromFile = (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            window.showMessage("Dosya analiz ediliyor...", "info");
-            const fileName = file.name.toLowerCase();
-
-            if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, {type: 'array'});
-                        const firstSheetName = workbook.SheetNames[0];
-                        const worksheet = workbook.Sheets[firstSheetName];
-                        const json_data = XLSX.utils.sheet_to_json(worksheet, {defval: ""});
-                        
-                        if(json_data.length === 0) { window.showMessage("Excel dosyası boş.", "error"); return; }
-                        const rawHeaders = Object.keys(json_data[0]);
-                        processImportedData(json_data, rawHeaders, rawHeaders, event);
-                    } catch(err) {
-                        window.showMessage("Excel okunurken hata oluştu.", "error");
-                        event.target.value = "";
-                    }
-                };
-                reader.readAsArrayBuffer(file);
-            } else if (fileName.endsWith('.csv')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    let text = e.target.result;
-                    if (text.charCodeAt(0) === 0xFEFF) { text = text.substring(1); }
-                    const firstLine = text.split('\n')[0];
-                    const detectedDelimiter = firstLine.includes(';') ? ';' : ',';
-
-                    Papa.parse(text, {
-                        header: true,
-                        skipEmptyLines: 'greedy',
-                        delimiter: detectedDelimiter,
-                        complete: function(results) {
-                            const data = results.data;
-                            if(data.length === 0) { window.showMessage("CSV dosyası boş.", "error"); return; }
-                            const rawHeaders = Object.keys(data[0]);
-                            processImportedData(data, rawHeaders, rawHeaders, event);
-                        }
-                    });
-                };
-                reader.readAsText(file, 'UTF-8');
-            } else {
-                window.showMessage("Sadece .csv veya .xlsx uzantılı dosya yükleyebilirsiniz.", "error");
-                event.target.value = "";
-            }
-        };
-
-        window.requestPackageUpgrade = async (pkgType) => {
-            const pkgNames = { 'standard': 'Standart Paket', 'premium': 'Premium VIP Paket' };
-            const pkgName = pkgNames[pkgType] || pkgType;
-            
-            window.customConfirm(`Yöneticiden ${pkgName} geçişi talep edilsin ve WhatsApp üzerinden iletişime geçilsin mi?`, async () => {
-                try {
-                    await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'stores', myStore.id), { upgradeRequest: pkgType });
-                    let message = `Merhaba, *${myStore.name}* mağazam için *${pkgName}* aboneliğine geçmek istiyorum.\n\nFiyat bilgisi alabilir miyim ve ödeme için IBAN numaranızı gönderebilir misiniz?`;
-                    window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
-                    window.showMessage("Talebiniz iletildi. WhatsApp'a yönlendiriliyorsunuz...");
-                } catch (err) { window.showMessage("Talep iletilemedi.", "error"); }
-            });
-        };
-
-        window.contactAdminSupport = () => {
-            let message = `Merhaba, *${myStore ? myStore.name : 'Yeni Satıcı'}* satıcısı olarak platform hakkında desteğe ihtiyacım var. Yardımcı olabilir misiniz?`;
-            window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
-        };
+        window.openBulkDeleteModal = () => { document.getElementById('bulkDeleteModal').classList.remove('hidden'); };
 
         document.addEventListener('DOMContentLoaded', () => { lucide.createIcons(); });
     </script>
 </body>
 </html>
+```eof
