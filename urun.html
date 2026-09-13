@@ -134,17 +134,34 @@
         
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
 
+        // SEO Uyumlu Slug Üretici
+        window.generateSlug = (text) => {
+            if (!text) return 'kibris-bazar';
+            return text.toString().toLowerCase()
+                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        };
+
+        // YENİ: Slug + ID yapısından sadece ID'yi çeken fonksiyon
         function getProductIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            let id = urlParams.get('id');
-            if (!id) {
+            let rawPath = urlParams.get('id');
+            if (!rawPath) {
                 const pathParts = window.location.pathname.split('/');
                 const urunIndex = pathParts.indexOf('urun');
                 if (urunIndex !== -1 && pathParts[urunIndex + 1]) {
-                    id = pathParts[urunIndex + 1];
+                    rawPath = pathParts[urunIndex + 1];
                 }
             }
-            return id;
+            if (rawPath) {
+                const parts = rawPath.split('-');
+                return parts[parts.length - 1]; 
+            }
+            return null;
         }
 
         function updateCartBadge() {
@@ -183,6 +200,13 @@
                 document.title = `${currentProduct.title} | ${currentProduct.storeName || 'Kıbrıs Bazar'}`;
                 document.getElementById('pageTitle').innerText = `${currentProduct.title} | Kıbrıs Bazar`;
 
+                // Eğer doğrudan slug link ile gelindiyse URL'yi tarayıcıda temiz göster
+                const expectedSlug = window.generateSlug(currentProduct.title) + '-' + currentProduct.id;
+                const currentPath = window.location.pathname;
+                if(currentPath.includes('/urun/') && !currentPath.endsWith(expectedSlug)) {
+                    window.history.replaceState({}, '', `/urun/${expectedSlug}`);
+                }
+
                 document.getElementById('breadcrumbCategory').innerText = currentProduct.category || 'Genel';
                 document.getElementById('breadcrumbStore').innerText = currentProduct.storeName || 'Mağaza';
                 document.getElementById('breadcrumbTitle').innerText = currentProduct.title;
@@ -192,7 +216,10 @@
                 document.getElementById('categoryBadge').innerText = currentProduct.category || 'Genel';
                 
                 document.getElementById('storeNameBadge').innerText = currentProduct.storeName || 'Mağaza';
-                document.getElementById('storeProfileLink').href = `/magaza/${currentProduct.storeId}`;
+                
+                // Mağazaya giden linki Slug sistemine uyarla
+                const storeSlug = window.generateSlug(currentProduct.storeName);
+                document.getElementById('storeProfileLink').href = `/magaza/${storeSlug}-${currentProduct.storeId}`;
 
                 document.getElementById('productPrice').innerText = currentProduct.price.toLocaleString('tr-TR') + " TL";
                 if (currentProduct.originalPrice && currentProduct.originalPrice > currentProduct.price) {
