@@ -173,11 +173,17 @@
                         </form>
                         
                         <div class="pt-6 mt-6 border-t border-slate-700/50">
-                            <h4 class="text-[11px] font-black uppercase text-emerald-400 mb-3 tracking-wider flex items-center gap-1.5"><i data-lucide="zap" class="w-4 h-4"></i> Akıllı Kurulum</h4>
-                            <p class="text-[10px] text-slate-500 mb-3">Sistemi baştan aşağı Trendyol uyumlu detaylı kategori ve filtrelerle doldurmak için tıklayın.</p>
-                            <button type="button" id="btnLoadDefaults" onclick="window.loadDefaultRichCategories()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 text-xs">
-                                Filtrelerle Birlikte Otomatik Yükle
-                            </button>
+                            <h4 class="text-[11px] font-black uppercase text-emerald-400 mb-3 tracking-wider flex items-center gap-1.5"><i data-lucide="zap" class="w-4 h-4"></i> Otomasyon & Temizlik</h4>
+                            <p class="text-[10px] text-slate-500 mb-3">Sistemi baştan aşağı Trendyol uyumlu detaylı kategori ve filtrelerle doldurabilir veya tamamen sıfırlayabilirsiniz.</p>
+                            <div class="space-y-2">
+                                <button type="button" id="btnLoadDefaults" onclick="window.loadDefaultRichCategories()" class="w-full bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-600/30 font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-[11px]">
+                                    <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Trendyol Şablonunu Yükle
+                                </button>
+                                <!-- YENİ: TÜM KATEGORİLERİ SİL BUTONU -->
+                                <button type="button" id="btnDeleteAllCategories" onclick="window.deleteAllCategories()" class="w-full bg-rose-500/10 text-rose-500 hover:bg-rose-600 hover:text-white border border-rose-500/30 font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-[11px]">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Tüm Kategorileri Sıfırla
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -359,7 +365,7 @@
                                         <select id="setSide2LinkType" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-rose-500 outline-none">
                                             <option value="category">Kategori</option>
                                             <option value="product">Ürün</option>
-                                            <option value="store">Mağaza</option>
+                                            <option value="store">Mağazaya</option>
                                             <option value="url">URL</option>
                                         </select>
                                     </div>
@@ -798,11 +804,58 @@
             });
         };
 
+        // --- YENİ: TÜM KATEGORİLERİ VE ÖZELLİKLERİ TOPLU SİLME BUTONU ---
+        window.deleteAllCategories = async () => {
+            if(dbCategories.length === 0) {
+                window.showMessage("Sistemde silinecek kategori bulunmuyor.", "error");
+                return;
+            }
+
+            const confirmMsg = `<b>DİKKAT:</b> Sistemdeki tüm kategorileri (ve içindeki filtreleri) kalıcı olarak silmek üzeresiniz.<br><br>Bu işlem geri alınamaz. Emin misiniz?`;
+            
+            window.customConfirm(confirmMsg, async () => {
+                const btn = document.getElementById('btnDeleteAllCategories');
+                if(btn) { btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Siliniyor...`; btn.disabled = true; }
+                document.getElementById('fullScreenLoader').classList.remove('hidden');
+                document.getElementById('loaderText').innerText = "Kategoriler sıfırlanıyor...";
+
+                try {
+                    let batches = [];
+                    let currentBatch = writeBatch(db);
+                    let opCount = 0;
+
+                    dbCategories.forEach(cat => {
+                        currentBatch.delete(doc(db, 'artifacts', APP_ID, 'public', 'data', 'categories', cat.id));
+                        opCount++;
+                        if(opCount === 490) { 
+                            batches.push(currentBatch.commit()); 
+                            currentBatch = writeBatch(db); 
+                            opCount = 0; 
+                        }
+                    });
+
+                    if(opCount > 0) batches.push(currentBatch.commit());
+                    await Promise.all(batches);
+                    
+                    window.showMessage("Sistemdeki tüm kategoriler başarıyla silindi.");
+                } catch (error) {
+                    console.error("Toplu Silme Hatası:", error);
+                    window.showMessage("Kategoriler silinirken bir hata oluştu.", "error");
+                } finally {
+                    document.getElementById('fullScreenLoader').classList.add('hidden');
+                    if(btn) { btn.innerHTML = `<i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Tüm Kategorileri Sıfırla`; btn.disabled = false; }
+                    lucide.createIcons();
+                }
+            });
+        };
+
         // --- DEVASA ZENGİN VE SPESİFİK FİLTRELİ KATEGORİ YÜKLEYİCİSİ (TRENDYOL STANDARTLARI) ---
         window.loadDefaultRichCategories = async () => {
             window.customConfirm("DİKKAT: Bu işlem veri tabanınıza HER BİR ALT KATEGORİYE ÖZEL ZORUNLU FİLTRELER ile birlikte zengin kategorileri yükleyecektir. Eski özellikleriniz ezilebilir. Onaylıyor musunuz?", async () => {
                 const btn = document.getElementById('btnLoadDefaults');
-                if(btn) { btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Yükleniyor...`; btn.disabled = true; }
+                if(btn) { btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Yükleniyor...`; btn.disabled = true; }
+                document.getElementById('fullScreenLoader').classList.remove('hidden');
+                document.getElementById('loaderText').innerText = "Kategori ağacı oluşturuluyor...";
 
                 const defaultTree = [
                     { 
@@ -910,14 +963,15 @@
                             }
                         }
                     }
-                    window.showMessage("TRENDYOL STANDARTLARINDA, boşluksuz ve her bir alt kategoriye özel detaylı filtreleriyle birlikte zengin kategoriler başarıyla sisteme entegre edildi!");
+                    window.showMessage("Dinamik filtreli zengin kategoriler başarıyla sisteme entegre edildi!");
                 } catch(e) {
                     console.error(e);
                     window.showMessage("Yükleme sırasında hata oluştu.", "error");
+                } finally {
+                    document.getElementById('fullScreenLoader').classList.add('hidden');
+                    if(btn) { btn.innerHTML = `<i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Trendyol Şablonunu Yükle`; btn.disabled = false; }
+                    lucide.createIcons();
                 }
-
-                if(btn) { btn.innerHTML = `Filtrelerle Birlikte Otomatik Yükle`; btn.disabled = false; }
-                lucide.createIcons();
             });
         };
 
