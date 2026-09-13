@@ -457,7 +457,7 @@
             window.closeFilterModal();
         };
 
-        // --- DİNAMİK FİLTRE OLUŞTURMA (MODAL İÇİN) ---
+       // --- DİNAMİK FİLTRE OLUŞTURMA (MODAL İÇİN - AKILLI FİLTRE) ---
         function buildFilterModal(subCatSlug) {
             const container = document.getElementById('modalDynamicFilters');
             const quickFiltersContainer = document.getElementById('quickFilterPills');
@@ -467,27 +467,52 @@
             const catData = allCategories.find(c => c.slug === subCatSlug);
             if(!catData || !catData.attributes || catData.attributes.length === 0) return;
 
+            // 1. ADIM: Sadece bu kategorideki AKTİF (yayınlanmış) ürünleri bul
+            const categoryProducts = allProducts.filter(p => p.categorySlug === subCatSlug);
+
             let modalHtml = '';
             let quickHtml = '';
 
             catData.attributes.forEach(attr => {
-                // Modal İçi Kart
+                // 2. ADIM: Bu filtrenin (Örn: Renk) hangi seçeneklerinin(Örn: Mavi, Kırmızı) ürünlerde GERÇEKTEN kullanıldığını bul
+                const availableOptionsInProducts = new Set();
+                
+                categoryProducts.forEach(product => {
+                    if (product.dynamicAttributes) {
+                        const productAttr = product.dynamicAttributes.find(a => a.group === attr.name);
+                        // Eğer ürünün bu özelliği doluysa, Set'in içine ekle (Set, aynı değeri iki kere eklemez, benzersiz tutar)
+                        if (productAttr && productAttr.name && productAttr.name.trim() !== '') {
+                            availableOptionsInProducts.add(productAttr.name);
+                        }
+                    }
+                });
+
+                // 3. ADIM: Admin'in belirlediği tüm seçenekleri dön, ama SADECE ürünlerde var olanları listeye al!
+                const activeOptions = attr.options.filter(opt => availableOptionsInProducts.has(opt));
+
+                // Eğer bu filtre grubu için satıcıların girdiği HİÇBİR ürün yoksa, bu filtre kutusunu ekrana hiç çizme!
+                if (activeOptions.length === 0) return;
+
+                // Modal İçi Kart (Sadece içi dolu olan seçeneklerle çiziliyor)
                 modalHtml += `
                     <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm filter-group">
                         <h4 class="text-xs font-black text-slate-800 uppercase tracking-wide mb-3">${attr.name}</h4>
                         <div class="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">`;
                 
-                attr.options.forEach(opt => {
+                activeOptions.forEach(opt => {
+                    // Eğer bu filtre halihazırda seçiliyse checkbox'ı işaretli göster
+                    const isChecked = selectedFilters[attr.name] && selectedFilters[attr.name].includes(opt) ? 'checked' : '';
+                    
                     modalHtml += `
                         <label class="flex items-start gap-3 group cursor-pointer">
-                            <input type="checkbox" onchange="window.toggleDynamicFilter('${attr.name}', '${opt}', this.checked)" class="filter-checkbox dynamic-filter-cb" data-attr="${attr.name}" value="${opt}">
+                            <input type="checkbox" onchange="window.toggleDynamicFilter('${attr.name}', '${opt}', this.checked)" class="filter-checkbox dynamic-filter-cb" data-attr="${attr.name}" value="${opt}" ${isChecked}>
                             <span class="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition leading-tight">${opt}</span>
                         </label>
                     `;
                 });
                 modalHtml += `</div></div>`;
 
-                // Hızlı Filtre Butonu (Üst Barda)
+                // Hızlı Filtre Butonu (Üst Barda - Eğer en az 1 aktif seçenek varsa buton görünür)
                 quickHtml += `
                     <button onclick="window.openFilterModal()" class="px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-[11px] font-bold text-slate-700 flex items-center gap-1.5 whitespace-nowrap hover:border-orange-500 transition shadow-sm">
                         ${attr.name} <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
