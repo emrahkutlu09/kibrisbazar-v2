@@ -1,0 +1,9 @@
+[[redirects]]
+  from = "/urun/*"
+  to = "/urun.html?id=:splat"
+  status = 200
+
+[[redirects]]
+  from = "/magaza/*"
+  to = "/magaza.html?id=:splat"
+  status = 200
