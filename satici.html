@@ -1125,7 +1125,7 @@
             subContainer.classList.remove('hidden');
         };
 
-        window.loadCategoryAttributes = () => {
+      window.loadCategoryAttributes = () => {
             const subSelect = document.getElementById('productCategory');
             const selectedOption = subSelect.options[subSelect.selectedIndex];
             const catId = selectedOption ? selectedOption.getAttribute('data-id') : null;
@@ -1136,15 +1136,24 @@
 
             const catData = dbCategories.find(c => c.id === catId);
             if(catData && catData.attributes && catData.attributes.length > 0) {
-                // Tüm filtreleri eksiksiz göster (Hiçbirini elemiyoruz)
-                let html = `<div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl"><h4 class="text-xs font-black text-orange-600 uppercase mb-3 flex items-center gap-1.5"><i data-lucide="sliders" class="w-4 h-4"></i> Ürün Özellikleri (Zorunlu)</h4><div class="space-y-3">`;
+                let html = `
+                    <div class="bg-amber-50/80 border border-amber-200 p-4 rounded-2xl">
+                        <div class="flex items-start gap-2.5 mb-3">
+                            <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="text-xs font-black text-amber-800 uppercase tracking-wide">Ürün Filtre Özellikleri</h4>
+                                <p class="text-[11px] text-amber-700/90 mt-0.5 leading-relaxed">Bu alanları doldurmak isteğe bağlıdır, ancak doldurmazsanız ürününüz arama filtrelerinde listelenmeyebilir.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                `;
                 
                 catData.attributes.forEach((attr, index) => {
                     html += `
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">${attr.name} <span class="text-rose-500">*</span></label>
-                            <select required name="dynamic_attr_${index}" data-attr-name="${attr.name}" class="dynamic-attribute-select w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-bold text-slate-800 cursor-pointer">
-                                <option value="">Lütfen ${attr.name} seçin</option>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">${attr.name}</label>
+                            <select name="dynamic_attr_${index}" data-attr-name="${attr.name}" class="dynamic-attribute-select w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-orange-500 font-bold text-slate-800 cursor-pointer">
+                                <option value="">Seçiniz (Opsiyonel)</option>
                     `;
                     attr.options.forEach(opt => { html += `<option value="${opt}">${opt}</option>`; });
                     html += `</select></div>`;
