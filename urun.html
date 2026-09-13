@@ -22,13 +22,11 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
 
-    <!-- Yükleniyor Göstergesi -->
     <div id="loadingIndicator" class="fixed inset-0 z-[999] bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-300">
         <i data-lucide="loader-2" class="w-10 h-10 text-orange-500 animate-spin mb-4"></i>
         <p class="text-slate-500 font-bold">Ürün Bilgileri Yükleniyor...</p>
     </div>
 
-    <!-- Üst Sabit Navigasyon -->
     <div class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center shadow-sm">
         <div class="w-1/3 flex justify-start">
             <a href="index.html" class="flex items-center gap-2 text-slate-600 hover:text-orange-500 font-bold text-sm transition bg-white py-1.5 px-3 rounded-lg border border-slate-200 hover:border-orange-200">
@@ -50,10 +48,7 @@
         </div>
     </div>
 
-    <!-- Ana Ürün Detay Alanı -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 w-full">
-        
-        <!-- Breadcrumb / Yol Göstergesi -->
         <nav class="flex items-center gap-2 text-xs font-bold text-slate-400 mb-6 overflow-x-auto whitespace-nowrap no-scrollbar">
             <a href="index.html" class="hover:text-orange-500 transition">Anasayfa</a>
             <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
@@ -66,17 +61,14 @@
 
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             
-            <!-- Sol: Ürün Görsel Galerisi -->
             <div class="space-y-4">
                 <div class="w-full aspect-square rounded-2xl bg-slate-100 overflow-hidden border border-slate-200 relative shadow-inner">
                     <img id="mainProductImage" src="" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x600/cbd5e1/475569?text=Gorsel';">
                     <div id="productBadgesContainer" class="absolute top-4 left-4 flex flex-col gap-2 items-start z-10"></div>
                 </div>
-                <!-- Küçük Resim Önizlemeleri -->
                 <div id="thumbnailContainer" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar"></div>
             </div>
 
-            <!-- Sağ: Ürün Bilgileri ve Seçenekler -->
             <div class="space-y-6">
                 <div>
                     <div class="flex items-center justify-between mb-3">
@@ -88,7 +80,6 @@
                     <h1 id="productTitle" class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">Yükleniyor...</h1>
                 </div>
 
-                <!-- Fiyat Alanı -->
                 <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex items-center justify-between">
                     <div>
                         <span class="text-xs font-bold text-slate-400 block mb-1">Satış Fiyatı</span>
@@ -100,19 +91,16 @@
                     <div id="discountRibbon" class="hidden bg-rose-500 text-white text-xs font-black px-3 py-1.5 rounded-xl shadow-md">-%0 İndirim</div>
                 </div>
 
-                <!-- Varyant Seçenekleri (Eğer varsa) -->
                 <div id="variantsSection" class="hidden space-y-3 pt-2">
                     <label class="block text-xs font-bold text-slate-700" id="variantGroupName">Seçenekler:</label>
                     <div id="variantOptionsContainer" class="flex flex-wrap gap-2"></div>
                 </div>
 
-                <!-- Açıklama -->
                 <div class="pt-4 border-t border-slate-100">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Ürün Açıklaması</h3>
                     <p id="productDescription" class="text-sm text-slate-600 leading-relaxed whitespace-pre-line">Yükleniyor...</p>
                 </div>
 
-                <!-- Sepete Ekle Butonu -->
                 <div class="pt-4 border-t border-slate-100 space-y-3">
                     <button onclick="window.addToCart()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-2xl transition shadow-xl shadow-orange-500/20 flex items-center justify-center gap-2 text-base">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i> Sepete Ekle
@@ -125,7 +113,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-auto pt-8 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
             <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
@@ -135,7 +122,6 @@
         </div>
     </footer>
 
-    <!-- Firebase ve Detay Mantığı -->
     <script type="module">
         import { db } from "./js/firebase-config.js";
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -150,7 +136,15 @@
 
         function getProductIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id');
+            let id = urlParams.get('id');
+            if (!id) {
+                const pathParts = window.location.pathname.split('/');
+                const urunIndex = pathParts.indexOf('urun');
+                if (urunIndex !== -1 && pathParts[urunIndex + 1]) {
+                    id = pathParts[urunIndex + 1];
+                }
+            }
+            return id;
         }
 
         function updateCartBadge() {
@@ -186,24 +180,20 @@
                 currentActivePrice = currentProduct.price;
                 currentActiveImage = (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : '';
 
-                // DİNAMİK BAŞLIK (SEO & Sekme İsmi)
                 document.title = `${currentProduct.title} | ${currentProduct.storeName || 'Kıbrıs Bazar'}`;
                 document.getElementById('pageTitle').innerText = `${currentProduct.title} | Kıbrıs Bazar`;
 
-                // Breadcrumb
                 document.getElementById('breadcrumbCategory').innerText = currentProduct.category || 'Genel';
                 document.getElementById('breadcrumbStore').innerText = currentProduct.storeName || 'Mağaza';
                 document.getElementById('breadcrumbTitle').innerText = currentProduct.title;
 
-                // İçerik Doldurma
                 document.getElementById('productTitle').innerText = currentProduct.title;
                 document.getElementById('productDescription').innerText = currentProduct.description || 'Açıklama belirtilmemiş.';
                 document.getElementById('categoryBadge').innerText = currentProduct.category || 'Genel';
                 
                 document.getElementById('storeNameBadge').innerText = currentProduct.storeName || 'Mağaza';
-                document.getElementById('storeProfileLink').href = `magaza.html?id=${currentProduct.storeId}`;
+                document.getElementById('storeProfileLink').href = `/magaza/${currentProduct.storeId}`;
 
-                // Fiyat
                 document.getElementById('productPrice').innerText = currentProduct.price.toLocaleString('tr-TR') + " TL";
                 if (currentProduct.originalPrice && currentProduct.originalPrice > currentProduct.price) {
                     const origEl = document.getElementById('productOriginalPrice');
@@ -216,24 +206,19 @@
                     rib.classList.remove('hidden');
                 }
 
-                // Etiketler (Kargo vb.)
                 let badgesHtml = '';
                 if (currentProduct.freeDelivery) badgesHtml += `<div class="bg-[#0ea5e9] text-white text-[10px] font-black px-3 py-1 rounded-xl shadow-md uppercase tracking-wider">Ücretsiz Teslimat</div>`;
                 if (currentProduct.cashOnDelivery) badgesHtml += `<div class="bg-emerald-500 text-white text-[10px] font-black px-3 py-1 rounded-xl shadow-md uppercase tracking-wider">Kapıda Ödeme</div>`;
                 document.getElementById('productBadgesContainer').innerHTML = badgesHtml;
 
-                // Görseller
                 renderImages();
 
-                // Varyantlar
                 if (currentProduct.variants && currentProduct.variants.length > 0) {
                     renderVariants();
                 }
 
-                // WhatsApp Sipariş Linki
                 setupWhatsAppButton();
 
-                // Yükleyiciyi Kaldır
                 document.getElementById('loadingIndicator').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('loadingIndicator').classList.add('hidden'), 300);
                 lucide.createIcons();
