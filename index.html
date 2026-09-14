@@ -34,6 +34,11 @@
 
         /* Kategori Menüsü Özel Scrollbar Ayarları */
         .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
+
+        /* Mobil Alt Menü Padding (Mobilde menünün arkasında içerik kalmaması için) */
+        @media (max-width: 640px) {
+            body { padding-bottom: 70px; }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen overflow-x-hidden">
@@ -43,6 +48,7 @@
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
             
             <div class="flex items-center gap-3 shrink-0">
+                <!-- Mobil Hamburger Menü (Masaüstünde gösterilmeye devam etsin ama mobilde kategori açsın) -->
                 <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
@@ -58,18 +64,18 @@
                 <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-4 top-1/2 -translate-y-1/2"></i>
             </div>
 
-            <!-- Sağ Butonlar -->
-            <div class="flex items-center gap-3 shrink-0">
-                <a href="satici.html" class="hidden md:flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-xl hover:bg-orange-50">
+            <!-- Sağ Butonlar (Masaüstü) -->
+            <div class="hidden sm:flex items-center gap-3 shrink-0">
+                <a href="satici.html" class="flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-xl hover:bg-orange-50">
                     <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
                 </a>
                 <button class="p-2 text-slate-600 hover:text-rose-500 transition-colors bg-white rounded-xl group relative">
                     <i data-lucide="heart" class="w-5 h-5 group-hover:fill-rose-500"></i>
                 </button>
-                <a href="sepet.html" class="flex items-center justify-center p-2 sm:px-3 sm:py-2 text-slate-700 hover:text-orange-600 transition-colors rounded-xl relative">
+                <a href="sepet.html" class="flex items-center justify-center p-2 px-3 py-2 text-slate-700 hover:text-orange-600 transition-colors rounded-xl relative">
                     <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                    <span class="ml-2 font-bold text-sm hidden sm:block">Sepetim</span>
-                    <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-orange-600 text-white text-[10px] font-bold h-4 w-4 sm:h-5 sm:w-5 rounded-full flex items-center justify-center shadow-md hidden border-2 border-white">0</span>
+                    <span class="ml-2 font-bold text-sm">Sepetim</span>
+                    <span id="cartCountBadgeDesk" class="absolute -top-1 -right-1 bg-orange-600 text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center shadow-md hidden border-2 border-white">0</span>
                 </a>
             </div>
         </div>
@@ -107,6 +113,7 @@
 
     <!-- VİTRİN BANNER (Sadece Ana Sayfada) -->
     <div id="heroBannerSection" class="w-full bg-slate-50">
+        <!-- Arama Çubuğu (Mobil) -->
         <div class="sm:hidden p-3 bg-white border-b border-slate-200">
             <div class="relative w-full">
                 <input type="text" id="mobileSearchInput" placeholder="Marka, ürün veya kategori ara..." 
@@ -261,8 +268,37 @@
         </div>
     </div>
 
-    <!-- Alt Bilgi / Footer -->
-    <footer class="bg-slate-900 border-t border-slate-800 mt-auto py-8">
+    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[90] sm:hidden flex justify-around items-center h-16 px-2 pb-safe">
+        <a href="/" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
+            <i data-lucide="home" class="w-5 h-5 fill-current"></i>
+            <span class="text-[10px] font-bold">Ana Sayfa</span>
+        </a>
+        <a href="#" onclick="window.toggleHamburgerMenu(); return false;" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
+            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+            <span class="text-[10px] font-medium">Kategoriler</span>
+        </a>
+        <!-- Ortadaki Buton (Trendyol Go, Yemek vb. Tarzı - Şimdilik Mağazalar diyelim) -->
+        <a href="satici.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition relative -top-3">
+            <div class="w-12 h-12 bg-white rounded-full border border-slate-200 shadow-md flex items-center justify-center relative">
+                <div class="absolute inset-1 bg-gradient-to-tr from-orange-500 to-rose-500 rounded-full flex items-center justify-center">
+                    <span class="text-white font-black text-xs leading-none text-center">Bazar<br>Go</span>
+                </div>
+            </div>
+        </a>
+        <a href="#" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+            <span class="text-[10px] font-medium">Favorilerim</span>
+        </a>
+        <a href="sepet.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition relative">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            <span class="text-[10px] font-medium">Sepetim</span>
+            <span id="cartCountBadgeMob" class="absolute top-1 right-3 bg-orange-600 text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-md hidden border border-white">0</span>
+        </a>
+    </div>
+
+    <!-- Alt Bilgi / Footer (Masaüstü için) -->
+    <footer class="bg-slate-900 border-t border-slate-800 mt-auto py-8 pb-20 sm:pb-8">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
             <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
             <div class="flex items-center gap-2">
@@ -303,11 +339,17 @@
         function updateCartBadge() {
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
-            const badge = document.getElementById('cartCountBadge');
-            if(badge) {
-                badge.innerText = totalQty;
-                if(totalQty > 0) badge.classList.remove('hidden');
-                else badge.classList.add('hidden');
+            const badgeDesk = document.getElementById('cartCountBadgeDesk');
+            const badgeMob = document.getElementById('cartCountBadgeMob');
+            if(badgeDesk) {
+                badgeDesk.innerText = totalQty;
+                if(totalQty > 0) badgeDesk.classList.remove('hidden');
+                else badgeDesk.classList.add('hidden');
+            }
+            if(badgeMob) {
+                badgeMob.innerText = totalQty;
+                if(totalQty > 0) badgeMob.classList.remove('hidden');
+                else badgeMob.classList.add('hidden');
             }
         }
 
@@ -351,7 +393,6 @@
             tabContainer.innerHTML = html;
         }
 
-
         // --- EKRAN 1: TÜM KATEGORİLER GRİDİ (ANA GÖRÜNÜM) ---
         window.renderMegaMenuGrid = () => {
             const container = document.getElementById('hamburgerMenuCategories');
@@ -362,7 +403,7 @@
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             
             let html = `
-                <div class="w-full h-full p-4 overflow-y-auto category-scroll pb-20">
+                <div class="w-full h-full p-4 overflow-y-auto category-scroll pb-32">
                     <div class="bg-gradient-to-r from-orange-500 to-rose-500 rounded-2xl p-4 text-white flex items-center justify-between shadow-lg mb-4 cursor-pointer hover:opacity-95 transition">
                         <div>
                             <span class="text-[10px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">Sana Özel Kategoriler</span>
@@ -390,7 +431,6 @@
             lucide.createIcons();
         };
 
-
         // --- EKRAN 2: ANA KATEGORİ DETAYI (SOL DİKEY GRUPLAR + SAĞ 3'LÜ GRİD) ---
         window.openMainCategoryDetails = (mainId, mainName) => {
             const container = document.getElementById('hamburgerMenuCategories');
@@ -399,7 +439,7 @@
             const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
 
             let html = `
-                <div class="flex w-full h-full">
+                <div class="flex w-full h-full pb-16">
                     <!-- Sol Dikey Grup Sekmeleri -->
                     <div class="w-[30%] sm:w-[25%] border-r border-slate-100 bg-slate-50/50 flex flex-col py-2 overflow-y-auto category-scroll" id="groupTabsContainer">
             `;
@@ -757,9 +797,9 @@
             if (activeSubCategorySlug && activeSubCategorySlug !== '') {
                 filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
             } else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) {
-                // "Tümünü Gör" tıklandığında sadece ana kategoriye ait ürünleri getir (Örn: Giyim)
-                // Bu yapı ürün veritabanında p.mainCategoryId veya türevi tutuluyorsa tam verimli çalışır.
-                // Şimdilik filtrelemeyi tüm ürünlerde aramaya indirgeriz.
+                // Sadece seçili ana kategoriye ait ürünler (Tümünü Gör mantığı)
+                const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug);
+                filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug));
             }
 
             if(document.getElementById('modalFilterFreeDelivery')?.checked) filtered = filtered.filter(p => p.freeDelivery === true);
@@ -794,7 +834,10 @@
 
             if (activeSubCategorySlug && activeSubCategorySlug !== '') {
                 filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
-            } 
+            } else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) {
+                const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug);
+                filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug));
+            }
 
             if (searchQuery.trim() !== '') {
                 const q = searchQuery.toLowerCase().trim();
@@ -930,3 +973,4 @@
     </script>
 </body>
 </html>
+```eof
