@@ -129,19 +129,10 @@
         <!-- VİTRİN İÇERİKLERİ (Maks Genişlik) -->
         <div class="max-w-[1400px] mx-auto w-full px-3 sm:px-6 lg:px-8 flex flex-col gap-8 mt-2">
             
-            <!-- 1. YATAY KAYDIRMALI BÜYÜK BANNER SLIDERI (Tüm admin bannerları buraya gelir) -->
+            <!-- 1. YATAY KAYDIRMALI BÜYÜK BANNER SLIDERI -->
             <div class="w-full relative">
                 <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl">
-                    <!-- Varsayılan Yükleniyor veya Fallback -->
-                    <div class="w-full shrink-0 snap-start bg-slate-200 rounded-3xl overflow-hidden relative shadow-lg min-h-[160px] sm:min-h-[300px] flex items-center group cursor-pointer">
-                        <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-orange-400 to-rose-500 text-white p-8">
-                            <div class="max-w-xl relative z-10">
-                                <span class="bg-white text-orange-600 text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-3 inline-block shadow-sm">Hoş Geldiniz</span>
-                                <h2 class="text-2xl sm:text-4xl md:text-5xl font-black leading-tight mb-2">Kıbrıs Bazar'da<br>Alışverişe Başla!</h2>
-                                <button class="mt-2 bg-slate-900 text-white text-xs font-bold py-2.5 px-6 rounded-full shadow-lg hover:scale-105 transition-transform">Fırsatları İncele</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- JS Dolduracak (Admin verisi yoksa fallback tasarımı çizecek) -->
                 </div>
                 <!-- Banner Noktaları (Indicators) -->
                 <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
@@ -324,7 +315,7 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) z-index artırıldı -->
+    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden flex justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
@@ -369,8 +360,8 @@
         const APP_ID = 'kibris-pazar';
         let allProducts = [];
         let allCategories = [];
-        let allStores = []; // Vitrin mağazaları için
-        let systemSettings = {}; // Admin bannerları için
+        let allStores = []; 
+        let systemSettings = {}; 
 
         let activeMainCategory = null; 
         let activeSubCategorySlug = null; 
@@ -383,7 +374,6 @@
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
 
-        // --- Yardımcı Fonksiyonlar (Slug, İmaj vs) ---
         window.generateSlug = (text) => {
             if (!text) return 'kibris-bazar';
             return text.toString().toLowerCase().replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
@@ -445,7 +435,6 @@
             else if (name.includes("perde") || name.includes("halı") || name.includes("kilim") || name.includes("paspas") || name.includes("dekorasyon") || name.includes("ayna") || name.includes("tablo") || name.includes("saat") || name.includes("mum")) keyword = "homedecor,rug";
             else if (name.includes("aydınlatma") || name.includes("avize") || name.includes("lamba") || name.includes("ampul")) keyword = "lighting,lamp";
             else if (name.includes("mobilya") || name.includes("koltuk") || name.includes("yatak") || name.includes("dolap") || name.includes("masa")) keyword = "furniture,sofa";
-            else if (name.includes("ev gereçleri") || name.includes("düzenleyici") || name.includes("çöp kovası") || name.includes("hurç") || name.includes("askı")) keyword = "organizer,home";
             else if (name.includes("yapı market") || name.includes("matkap") || name.includes("boya") || name.includes("hırdavat") || name.includes("jeneratör")) keyword = "tools,hardware";
             else if (name.includes("bebek arabası") || name.includes("oto koltuğu") || name.includes("ana kucağı") || name.includes("park yatak") || name.includes("bebek bezi") || name.includes("ıslak mendil") || name.includes("bebek maması") || name.includes("biberon") || name.includes("emzik") || name.includes("çocuk") || name.includes("bebek") || name.includes("hastane çıkışı") || name.includes("tulum") || name.includes("zıbın")) keyword = "baby,stroller,baby-clothes";
             else if (name.includes("oyuncak") || name.includes("lego") || name.includes("puzzle") || name.includes("peluş") || name.includes("akülü") || name.includes("araba")) keyword = "toys,lego";
@@ -461,7 +450,6 @@
             return `https://source.unsplash.com/150x150/?${keyword}`;
         }
 
-        // --- Ortak ve Genel Sistemler ---
         function updateCartBadge() {
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
@@ -506,7 +494,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // --- TAM EKRAN KATEGORİ MENÜSÜ & SLIDER ---
         window.toggleHamburgerMenu = () => {
             const drawer = document.getElementById('hamburgerMenuDrawer');
             if(drawer) {
@@ -634,7 +621,6 @@
             const drawer = document.getElementById('hamburgerMenuDrawer');
             if(!drawer.classList.contains('hidden')) { window.toggleHamburgerMenu(); }
 
-            // Ana Sayfa Vitrini Gizle, Mevcut Ürün Listesi Yapısını Göster
             document.getElementById('heroBannerSection').classList.add('hidden');
             document.getElementById('mainProductsSection').classList.remove('hidden');
             
@@ -658,27 +644,18 @@
 
         window.resetCategorySelection = () => { window.resetToHome(); };
 
-        // --- ANA SAYFA YENİ VİTRİN BÖLÜMLERİ (BANNER SLIDER VE YATAY VİTRİNLER) ---
-
+        // --- BANNER RENDER (FALLBACK DESTEKLİ) ---
         function renderAdminBanners() {
             const sliderContainer = document.getElementById('mainBannerSlider');
             const indicatorsContainer = document.getElementById('bannerIndicators');
             
-            // Eğer admin panelden hiçbir banner yüklenmemişse boş bırak
-            if (!systemSettings.mainBanner && !systemSettings.sideBanner1 && !systemSettings.sideBanner2) {
-                sliderContainer.innerHTML = '';
-                indicatorsContainer.innerHTML = '';
-                return;
-            }
-
             let sliderHtml = '';
             let indicatorsHtml = '';
             let slideCount = 0;
 
-            // Yardımcı: Banner Slide'ı Oluşturma Şablonu
             const createSlide = (b, index) => {
-                let targetAction = `onclick="window.location.href='${b.linkValue}'"`;
-                if(b.linkType === 'category') targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; 
+                let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
+                if(b.linkType === 'category' && b.linkValue) targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; 
 
                 indicatorsHtml += `<button class="w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-orange-500 w-4' : 'bg-slate-300'}" id="indicator-${index}"></button>`;
 
@@ -698,63 +675,57 @@
                 `;
             };
 
-            // Banner 1 (Main)
+            // Eğer adminden girilmiş veri varsa
             if (systemSettings.mainBanner && systemSettings.mainBanner.image) {
-                sliderHtml += createSlide(systemSettings.mainBanner, slideCount);
-                slideCount++;
+                sliderHtml += createSlide(systemSettings.mainBanner, slideCount); slideCount++;
             }
-            // Banner 2 (Side 1)
             if (systemSettings.sideBanner1 && systemSettings.sideBanner1.image) {
-                sliderHtml += createSlide(systemSettings.sideBanner1, slideCount);
-                slideCount++;
+                sliderHtml += createSlide(systemSettings.sideBanner1, slideCount); slideCount++;
             }
-            // Banner 3 (Side 2)
             if (systemSettings.sideBanner2 && systemSettings.sideBanner2.image) {
-                sliderHtml += createSlide(systemSettings.sideBanner2, slideCount);
-                slideCount++;
+                sliderHtml += createSlide(systemSettings.sideBanner2, slideCount); slideCount++;
+            }
+
+            // FALLBACK (Eğer adminden hiç resim gelmediyse, varsayılan test bannerını göster)
+            if (slideCount === 0) {
+                const fallbackBanner = {
+                    tag: "Özel Teklif",
+                    title: "Kıbrıs Bazar'a<br>Hoş Geldiniz",
+                    subtitle: "Yerel mağazaların dijital pazaryerinde binlerce ürünü keşfedin.",
+                    btnText: "Alışverişe Başla",
+                    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000"
+                };
+                sliderHtml += createSlide(fallbackBanner, slideCount); slideCount++;
             }
 
             sliderContainer.innerHTML = sliderHtml;
             indicatorsContainer.innerHTML = indicatorsHtml;
             lucide.createIcons();
 
-            // Slider Scroll Olayını Dinleyerek Noktaları (Indicators) Güncelle
             if (slideCount > 1) {
                 sliderContainer.addEventListener('scroll', () => {
                     const slideWidth = sliderContainer.clientWidth;
                     const scrollPosition = sliderContainer.scrollLeft;
-                    // Hangi slide'ın daha çok görünür olduğunu hesapla
                     const activeIndex = Math.round(scrollPosition / slideWidth);
 
-                    // Noktaları güncelle
                     for (let i = 0; i < slideCount; i++) {
                         const ind = document.getElementById(`indicator-${i}`);
                         if(ind) {
-                            if (i === activeIndex) {
-                                ind.classList.remove('bg-slate-300', 'w-2');
-                                ind.classList.add('bg-orange-500', 'w-4');
-                            } else {
-                                ind.classList.add('bg-slate-300', 'w-2');
-                                ind.classList.remove('bg-orange-500', 'w-4');
-                            }
+                            if (i === activeIndex) { ind.classList.remove('bg-slate-300', 'w-2'); ind.classList.add('bg-orange-500', 'w-4'); } 
+                            else { ind.classList.add('bg-slate-300', 'w-2'); ind.classList.remove('bg-orange-500', 'w-4'); }
                         }
                     }
                 });
 
-                // Otomatik Geçiş (Auto-Play) - Sadece masaüstü veya her yerde isteğe bağlı
                 let currentSlide = 0;
                 setInterval(() => {
                     currentSlide = (currentSlide + 1) % slideCount;
                     const slideWidth = sliderContainer.clientWidth;
-                    sliderContainer.scrollTo({
-                        left: currentSlide * slideWidth,
-                        behavior: 'smooth'
-                    });
-                }, 5000); // Her 5 saniyede bir geçer
+                    sliderContainer.scrollTo({ left: currentSlide * slideWidth, behavior: 'smooth' });
+                }, 5000);
             }
         }
 
-        // --- VİTRİN ÜRÜN KARTI (Mini versiyon, slider için) ---
         window.createMiniProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
             const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
@@ -789,12 +760,11 @@
             `;
         };
 
-        // --- VİTRİN SLIDER DOLDURUCULARI ---
         function renderVitrinPopularProducts() {
             const container = document.getElementById('vitrinPopularProducts');
             if(!container) return;
-            // Popüler: Şimdilik karışık/rastgele 8 ürün alıyoruz
             const shuffled = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 8);
+            if(shuffled.length === 0) { container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Henüz ürün bulunmuyor.</div>`; return; }
             container.innerHTML = shuffled.map(p => window.createMiniProductCard(p)).join('');
             lucide.createIcons();
         }
@@ -802,10 +772,9 @@
         function renderVitrinFavoriteProducts() {
             const container = document.getElementById('vitrinFavoriteProducts');
             if(!container) return;
-            // Favoriler: LocalStorage'daki ID'lerle eşleşenleri getir
             let favProducts = allProducts.filter(p => favorites.includes(p.id));
             if(favProducts.length === 0) favProducts = [...allProducts].reverse().slice(0, 6);
-            
+            if(favProducts.length === 0) { container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Henüz ürün bulunmuyor.</div>`; return; }
             container.innerHTML = favProducts.map(p => window.createMiniProductCard(p)).join('');
             lucide.createIcons();
         }
@@ -813,8 +782,8 @@
         function renderVitrinNewProducts() {
             const container = document.getElementById('vitrinNewProducts');
             if(!container) return;
-            // Yeni Eklenenler: createdAt'a göre en yeniler 
             const newProducts = [...allProducts].sort((a,b) => b.createdAt - a.createdAt).slice(0, 10);
+            if(newProducts.length === 0) { container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Henüz ürün bulunmuyor.</div>`; return; }
             container.innerHTML = newProducts.map(p => window.createMiniProductCard(p)).join('');
             lucide.createIcons();
         }
@@ -823,12 +792,7 @@
             const container = document.getElementById('vitrinStores');
             if(!container) return;
             
-            if(allStores.length === 0) {
-                container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Öne çıkan mağaza bulunamadı.</div>`;
-                return;
-            }
-
-            // Öne çıkanları/premium olanları öne al, aktif olanlardan max 8 tane göster
+            if(allStores.length === 0) { container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Öne çıkan mağaza bulunamadı.</div>`; return; }
             const storesToShow = allStores.filter(s => s.status === 'active').sort((a,b) => (b.isPremium ? 1 : 0) - (a.isPremium ? 1 : 0)).slice(0, 8);
 
             let html = '';
@@ -836,7 +800,6 @@
                 const storeUrl = `/magaza/${window.generateSlug(s.name)}-${s.id}`;
                 const followerCount = s.followers ? s.followers.length : 0;
                 const logoHtml = s.logo ? `<img src="${s.logo}" class="w-full h-full object-cover">` : `<span class="text-xl font-black text-indigo-500">${s.name.charAt(0)}</span>`;
-                
                 html += `
                     <a href="${storeUrl}" class="flex flex-col items-center gap-2 p-4 bg-slate-50 border border-slate-100 rounded-2xl min-w-[120px] hover:border-indigo-200 hover:shadow-md hover:bg-white transition group">
                         <div class="w-14 h-14 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden group-hover:scale-105 transition shadow-sm relative">
@@ -854,8 +817,6 @@
             lucide.createIcons();
         }
 
-
-        // --- MEVCUT ÜRÜN KARTI (Ana Kategori Listesi İçin Korundu) ---
         window.createProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
             const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
@@ -879,7 +840,6 @@
                             <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : 'text-slate-400 hover:text-rose-500'}"></i>
                         </button>
                     </div>
-
                     <div class="flex-1 flex flex-col px-1">
                         <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center gap-1 truncate w-full">
                             <i data-lucide="store" class="w-3 h-3 shrink-0"></i> 
@@ -897,7 +857,6 @@
             `;
         };
 
-        // --- FİLTRELEME VE SIRALAMA MANTIKLARI KORUNDU ---
         window.openSortModal = () => { document.querySelectorAll('.sort-check').forEach(el => el.classList.add('hidden')); document.getElementById('check-' + currentSort).classList.remove('hidden'); const modal = document.getElementById('sortModal'); const content = document.getElementById('sortModalContent'); modal.classList.remove('hidden'); modal.classList.add('flex'); setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10); };
         window.closeSortModal = () => { const modal = document.getElementById('sortModal'); const content = document.getElementById('sortModalContent'); modal.classList.add('opacity-0'); content.classList.add('translate-y-full'); setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); };
         window.setSort = (sortType) => { currentSort = sortType; window.closeSortModal(); window.applyFilters(); };
@@ -981,7 +940,6 @@
             else { noResults.classList.add('hidden'); grid.innerHTML = filtered.map(p => window.createProductCard(p)).join(''); grid.classList.remove('hidden'); lucide.createIcons(); }
         };
 
-        // --- INITIALIZE & FIREBASE DATA FETCH ---
         async function initPage() {
             updateCartBadge();
             lucide.createIcons();
@@ -1008,14 +966,11 @@
             if (mobileSearchInput) mobileSearchInput.addEventListener('input', handleSearch);
 
             try {
-                // 1. Ayarları ve Bannerları Çek (Admin Panel)
+                // Ayarları Çek
                 const settingsSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'settings'));
-                if (settingsSnap.exists()) {
-                    systemSettings = settingsSnap.data();
-                    renderAdminBanners();
-                }
+                if (settingsSnap.exists()) { systemSettings = settingsSnap.data(); }
 
-                // 2. Kategorileri Çek
+                // Kategorileri Çek
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
@@ -1023,18 +978,19 @@
                 window.renderHomeTopCategorySlider();
                 window.renderMegaMenuGrid(); 
 
-                // 3. Ürünleri Çek
+                // Ürünleri Çek
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
                 const snap = await getDocs(q);
                 allProducts = [];
                 snap.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
 
-                // 4. Mağazaları Çek (Öne Çıkan Mağazalar için)
+                // Mağazaları Çek
                 const storesSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores'));
                 allStores = [];
                 storesSnap.forEach(doc => allStores.push({ id: doc.id, ...doc.data() }));
 
                 // Vitrin Bölümlerini Doldur
+                renderAdminBanners();
                 renderVitrinPopularProducts();
                 renderVitrinFavoriteProducts();
                 renderVitrinNewProducts();
