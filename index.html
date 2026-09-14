@@ -35,7 +35,7 @@
         /* Kategori Menüsü Özel Scrollbar Ayarları */
         .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
 
-        /* Mobil Alt Menü Padding */
+        /* Mobil Alt Menü Padding (Mobilde menünün arkasında içerik kalmaması için) */
         @media (max-width: 640px) {
             body { padding-bottom: 70px; }
         }
@@ -264,8 +264,8 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[110] sm:hidden flex justify-around items-center h-16 px-1 pb-safe">
+    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) z-index artırıldı -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden flex justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <a href="/" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
             <span class="text-[10px] font-bold">Ana Sayfa</span>
@@ -332,15 +332,12 @@
         };
 
         // --- AKILLI KATEGORİ RESİM EŞLEŞTİRİCİ ---
-        // Admin resim girmediyse, kategori adına göre Unsplash'tan mantıklı bir görsel URL'si üretir.
-        // Daha güvenilir ve belirgin arama terimleri kullanıldı.
         function getSmartCategoryImage(categoryName) {
             if (!categoryName) return 'https://placehold.co/150x150/f1f5f9/475569?text=Gorsel';
             
             const name = categoryName.toLowerCase();
-            let keyword = "shopping,products"; // Varsayılan
+            let keyword = "shopping,products"; 
 
-            // Kadın Giyim
             if (name.includes("elbise")) keyword = "dress,womens-fashion";
             else if (name.includes("tshirt") || name.includes("tişört")) keyword = "tshirt,clothing";
             else if (name.includes("gömlek")) keyword = "shirt,clothing";
@@ -353,8 +350,6 @@
             else if (name.includes("body")) keyword = "bodysuit,clothing";
             else if (name.includes("mont") || name.includes("kaban") || name.includes("trençkot")) keyword = "winter-coat,jacket";
             else if (name.includes("kazak") || name.includes("sweatshirt")) keyword = "sweater,hoodie";
-            
-            // Ayakkabı & Çanta
             else if (name.includes("sneaker")) keyword = "sneakers,shoes";
             else if (name.includes("topuklu")) keyword = "high-heels,shoes";
             else if (name.includes("çanta")) keyword = "handbag,purse";
@@ -363,29 +358,21 @@
             else if (name.includes("cüzdan") || name.includes("kartlık")) keyword = "wallet,leather";
             else if (name.includes("valiz") || name.includes("bavul")) keyword = "luggage,suitcase";
             else if (name.includes("bot") || name.includes("çizme")) keyword = "boots,shoes";
-            
-            // Aksesuar & Saat
             else if (name.includes("gözlük")) keyword = "sunglasses,eyewear";
             else if (name.includes("saat")) keyword = "wristwatch,watch";
             else if (name.includes("takı") || name.includes("kolye") || name.includes("küpe") || name.includes("bileklik") || name.includes("yüzük") || name.includes("altın")) keyword = "jewelry,necklace";
             else if (name.includes("şapka")) keyword = "hat,cap";
             else if (name.includes("kemer")) keyword = "leather-belt,belt";
             else if (name.includes("şal") || name.includes("fular") || name.includes("kravat")) keyword = "scarf,tie";
-            
-            // İç Giyim
             else if (name.includes("çorap")) keyword = "socks";
             else if (name.includes("pijama") || name.includes("gecelik")) keyword = "pajamas,sleepwear";
             else if (name.includes("külot") || name.includes("sütyen") || name.includes("iç giyim") || name.includes("boxer") || name.includes("atlet") || name.includes("fantezi")) keyword = "lingerie,underwear";
-            
-            // Kozmetik & Bakım
             else if (name.includes("cilt") || name.includes("krem") || name.includes("serum") || name.includes("maske") || name.includes("losyon")) keyword = "skincare,cream";
             else if (name.includes("makyaj") || name.includes("ruj") || name.includes("fondöten") || name.includes("maskara")) keyword = "makeup,cosmetics";
             else if (name.includes("parfüm") || name.includes("deodorant") || name.includes("sprey")) keyword = "perfume,fragrance";
             else if (name.includes("saç bakım") || name.includes("şampuan") || name.includes("saç boyası")) keyword = "haircare,shampoo";
             else if (name.includes("güneş ürünleri")) keyword = "sunscreen,suntan";
             else if (name.includes("epilasyon") || name.includes("tıraş") || name.includes("tartı")) keyword = "shaver,scale";
-            
-            // Elektronik
             else if (name.includes("buzdolabı")) keyword = "refrigerator,kitchen";
             else if (name.includes("çamaşır") || name.includes("bulaşık") || name.includes("kurutma")) keyword = "washing-machine,appliance";
             else if (name.includes("klima") || name.includes("kombi") || name.includes("ısıtıcı")) keyword = "air-conditioner,heater";
@@ -401,8 +388,6 @@
             else if (name.includes("playstation") || name.includes("xbox") || name.includes("nintendo") || name.includes("oyun") || name.includes("konsol")) keyword = "playstation,gaming";
             else if (name.includes("kamera") || name.includes("fotoğraf") || name.includes("lens")) keyword = "camera,photography";
             else if (name.includes("küçük ev aletleri") || name.includes("süpürge") || name.includes("ütü") || name.includes("kahve makinesi") || name.includes("blender") || name.includes("tost") || name.includes("airfryer")) keyword = "small-appliance,coffee-maker";
-            
-            // Ev & Yaşam
             else if (name.includes("tencere") || name.includes("tava") || name.includes("yemek takımı") || name.includes("çatal") || name.includes("bardak") || name.includes("mutfak")) keyword = "cookware,kitchenware";
             else if (name.includes("banyo") || name.includes("havlu") || name.includes("bornoz")) keyword = "towels,bathroom";
             else if (name.includes("bahçe") || name.includes("saksı") || name.includes("mangl") || name.includes("çiçek") || name.includes("bitki")) keyword = "garden,plants";
@@ -413,38 +398,27 @@
             else if (name.includes("mobilya") || name.includes("koltuk") || name.includes("yatak") || name.includes("dolap") || name.includes("masa")) keyword = "furniture,sofa";
             else if (name.includes("ev gereçleri") || name.includes("düzenleyici") || name.includes("çöp kovası") || name.includes("hurç") || name.includes("askı")) keyword = "organizer,home";
             else if (name.includes("yapı market") || name.includes("matkap") || name.includes("boya") || name.includes("hırdavat") || name.includes("jeneratör")) keyword = "tools,hardware";
-            
-            // Anne, Bebek, Oyuncak
             else if (name.includes("bebek arabası") || name.includes("oto koltuğu") || name.includes("ana kucağı") || name.includes("park yatak")) keyword = "stroller,baby";
             else if (name.includes("bebek bezi") || name.includes("ıslak mendil")) keyword = "diapers,baby";
             else if (name.includes("bebek maması") || name.includes("biberon") || name.includes("emzik") || name.includes("önlük")) keyword = "baby-bottle,pacifier";
             else if (name.includes("oyuncak") || name.includes("lego") || name.includes("puzzle") || name.includes("peluş") || name.includes("akülü") || name.includes("araba")) keyword = "toys,lego";
             else if (name.includes("çocuk") || name.includes("bebek") || name.includes("hastane çıkışı") || name.includes("tulum") || name.includes("zıbın")) keyword = "baby-clothes,kids";
-            
-            // Süpermarket
             else if (name.includes("deterjan") || name.includes("temizlik") || name.includes("kağıt")) keyword = "cleaning,detergent";
             else if (name.includes("çay") || name.includes("kahve") || name.includes("içecek")) keyword = "tea,coffee";
             else if (name.includes("kuruyemiş") || name.includes("atıştırmalık") || name.includes("çikolata")) keyword = "snacks,nuts";
             else if (name.includes("gıda") || name.includes("kahvaltılık") || name.includes("yağ")) keyword = "groceries,food";
             else if (name.includes("sağlık") || name.includes("vitamin") || name.includes("protein") || name.includes("ped")) keyword = "vitamins,supplements";
             else if (name.includes("kedi") || name.includes("köpek") || name.includes("petshop") || name.includes("mama") || name.includes("tasma") || name.includes("kuş") || name.includes("akvaryum")) keyword = "cat,dog,petfood";
-            
-            // Spor & Outdoor
             else if (name.includes("spor") || name.includes("koşu") || name.includes("fitness") || name.includes("pilates") || name.includes("yoga") || name.includes("krampon") || name.includes("tenis") || name.includes("voleybol") || name.includes("basketbol")) keyword = "fitness,gym,sports";
             else if (name.includes("kamp") || name.includes("çadır") || name.includes("outdoor") || name.includes("termos") || name.includes("balıkçılık") || name.includes("tırmanış")) keyword = "camping,tent";
             else if (name.includes("bisiklet") || name.includes("scooter") || name.includes("paten") || name.includes("kaykay")) keyword = "bicycle,scooter";
             else if (name.includes("protein tozu") || name.includes("amino asit") || name.includes("karbonhidrat") || name.includes("l-karnitin") || name.includes("kreatin") || name.includes("shaker")) keyword = "protein-powder,gym";
-
-            // Kitap & Kırtasiye & Hobi
             else if (name.includes("kitap") || name.includes("roman") || name.includes("eğitim") || name.includes("dergi")) keyword = "books,reading";
             else if (name.includes("kırtasiye") || name.includes("defter") || name.includes("kalem") || name.includes("ofis") || name.includes("etiket") || name.includes("dosyalama")) keyword = "stationery,notebook";
             else if (name.includes("hobi") || name.includes("müzik") || name.includes("gitar") || name.includes("drone") || name.includes("örgü") || name.includes("parti")) keyword = "guitar,hobby";
-            
-            // Otomobil & Motosiklet
             else if (name.includes("oto") || name.includes("lastik") || name.includes("araç") || name.includes("paspas") || name.includes("silecek") || name.includes("yağ")) keyword = "car,tire";
             else if (name.includes("motosiklet") || name.includes("kask")) keyword = "motorcycle,helmet";
 
-            // Unsplash Source API (Rastgele resim önleme parametresi eklendi)
             return `https://source.unsplash.com/150x150/?${keyword}`;
         }
 
@@ -497,7 +471,7 @@
             const tabContainer = document.getElementById('mainTabContainer');
             if(!tabContainer) return;
             
-            let html = `<button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${activeId === 'all' ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent'}">Sana Özel</button>`;
+            let html = `<button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${activeId === 'all' ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent'}">Kategoriler</button>`;
 
             mainCats.forEach(main => {
                 const isActive = main.id === activeId ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent';
@@ -507,7 +481,7 @@
             tabContainer.innerHTML = html;
         }
 
-        // --- EKRAN 1: TÜM KATEGORİLER GRİDİ (SANA ÖZEL GÖRÜNÜM) ---
+        // --- EKRAN 1: TÜM KATEGORİLER GRİDİ (ANA GÖRÜNÜM) ---
         window.renderMegaMenuGrid = () => {
             const container = document.getElementById('hamburgerMenuCategories');
             if(!container) return;
@@ -517,11 +491,11 @@
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             
             let html = `
-                <div class="w-full h-full p-4 overflow-y-auto category-scroll bg-slate-50">
+                <div class="w-full h-full p-4 overflow-y-auto category-scroll pb-24 bg-slate-50">
                     <div class="bg-gradient-to-r from-orange-100 to-orange-200 rounded-xl p-4 text-orange-900 flex items-center justify-between shadow-sm mb-4 cursor-pointer">
                         <div>
-                            <h3 class="text-sm font-bold">Sana Özel Kategoriler <i data-lucide="chevron-right" class="w-4 h-4 inline opacity-50"></i></h3>
-                            <span class="text-[10px] mt-0.5 block opacity-80">İlgini çekebilecek kategoriler ve fırsatlar</span>
+                            <h3 class="text-sm font-bold">Kategoriler <i data-lucide="chevron-right" class="w-4 h-4 inline opacity-50"></i></h3>
+                            <span class="text-[10px] mt-0.5 block opacity-80">İlgini çekebilecek tüm kategoriler</span>
                         </div>
                         <div class="w-12 h-12 flex items-center justify-center transform -rotate-12"><i data-lucide="tag" class="w-8 h-8 text-orange-500 fill-orange-500"></i></div>
                     </div>
@@ -555,7 +529,7 @@
             let html = `
                 <div class="flex w-full h-full">
                     <!-- Sol Dikey Grup Sekmeleri -->
-                    <div class="w-[28%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll" id="groupTabsContainer">
+                    <div class="w-[28%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll pb-24" id="groupTabsContainer">
             `;
 
             groups.forEach((grp, idx) => {
@@ -565,14 +539,14 @@
 
             html += `</div>
                     <!-- Sağ 3'lü Grid Kategori Alanı -->
-                    <div class="w-[72%] sm:w-[75%] p-3 sm:p-4 overflow-y-auto category-scroll bg-white" id="groupContentArea">
+                    <div class="w-[72%] sm:w-[75%] p-3 sm:p-4 overflow-y-auto category-scroll bg-white pb-24" id="groupContentArea">
             `;
 
             groups.forEach((grp, idx) => {
                 const isHidden = idx === 0 ? '' : 'hidden';
                 const subs = allCategories.filter(c => c.parentId === grp.id).sort((a, b) => (a.order || 0) - (b.order || 0));
                 
-                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4 pb-20">`;
+                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4 pb-28">`;
                 
                 html += `
                     <div class="grid grid-cols-3 gap-x-2 gap-y-4">
