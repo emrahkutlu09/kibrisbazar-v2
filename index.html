@@ -57,7 +57,7 @@
             
             <div class="flex items-center gap-3 shrink-0">
                 <!-- Mobil Hamburger Menü -->
-                <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition sm:block">
+                <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
                 <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
@@ -72,7 +72,7 @@
                 <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-4 top-1/2 -translate-y-1/2"></i>
             </div>
 
-            <!-- Sağ Butonlar (Masaüstü) - GÜNCELLENDİ -->
+            <!-- Sağ Butonlar (Masaüstü) -->
             <div class="hidden sm:flex items-center gap-2 shrink-0">
                 <a href="satici.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
                     <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
@@ -88,6 +88,18 @@
                     <span id="cartCountBadgeDesk" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center shadow-md hidden border-2 border-white">0</span>
                 </a>
             </div>
+
+            <!-- Sağ Butonlar (Mobil - Her zaman sağ üst köşede görünür) -->
+            <div class="flex sm:hidden items-center gap-4 shrink-0">
+                <a href="giris.html" class="text-slate-600 hover:text-orange-500 transition">
+                    <i data-lucide="user" class="w-6 h-6"></i>
+                </a>
+                <a href="sepet.html" class="text-slate-600 hover:text-orange-500 transition relative">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span id="cartCountBadgeMobHeader" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[9px] font-black h-4 w-4 rounded-full flex items-center justify-center shadow-md hidden border border-white">0</span>
+                </a>
+            </div>
+
         </div>
     </header>
 
@@ -326,7 +338,7 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) GÜNCELLENDİ (Ana sayfada gizli) -->
+    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) - GÜNCELLENDİ (Ana sayfada gizli) -->
     <div id="mobileBottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] hidden">
         <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
@@ -469,8 +481,11 @@
             cart.forEach(item => totalQty += item.quantity);
             const badgeDesk = document.getElementById('cartCountBadgeDesk');
             const badgeMob = document.getElementById('cartCountBadgeMob');
+            const badgeMobHeader = document.getElementById('cartCountBadgeMobHeader'); // YENİ MOBİL BAŞLIK SAYACI
+
             if(badgeDesk) { badgeDesk.innerText = totalQty; if(totalQty > 0) badgeDesk.classList.remove('hidden'); else badgeDesk.classList.add('hidden'); }
             if(badgeMob) { badgeMob.innerText = totalQty; if(totalQty > 0) badgeMob.classList.remove('hidden'); else badgeMob.classList.add('hidden'); }
+            if(badgeMobHeader) { badgeMobHeader.innerText = totalQty; if(totalQty > 0) badgeMobHeader.classList.remove('hidden'); else badgeMobHeader.classList.add('hidden'); }
         }
 
         window.toggleFavorite = (id) => {
