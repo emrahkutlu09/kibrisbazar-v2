@@ -20,9 +20,6 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        .drawer-overlay { transition: opacity 0.3s ease; }
-        .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        
         .toggle-checkbox:checked { right: 0; border-color: #f97316; }
         .toggle-checkbox:checked + .toggle-label { background-color: #f97316; }
         .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
@@ -167,6 +164,7 @@
                 <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl">
                     <!-- JS Dolduracak -->
                 </div>
+                <!-- Banner Noktaları (Indicators) -->
                 <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
             </div>
 
@@ -175,6 +173,7 @@
                 <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners">
                     <!-- JS Dolduracak -->
                 </div>
+                <!-- Küçük Banner Noktaları (Indicators) -->
                 <div id="smallBannerIndicators" class="flex justify-center gap-1.5 mt-3 hidden"></div>
             </div>
 
@@ -184,7 +183,9 @@
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="flame" class="w-5 h-5 text-orange-500 fill-orange-100"></i> Popüler Ürünler</h2>
                     <button class="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center">Tümünü Gör <i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts"></div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts">
+                    <!-- JS Dolduracak -->
+                </div>
             </div>
 
             <!-- 4. EN ÇOK FAVORİLENENLER SLIDER -->
@@ -192,7 +193,9 @@
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="heart" class="w-5 h-5 text-rose-500 fill-rose-100"></i> En Çok Favorilenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts"></div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts">
+                    <!-- JS Dolduracak -->
+                </div>
             </div>
 
             <!-- 5. ÖNE ÇIKAN MAĞAZALAR SLIDER -->
@@ -201,7 +204,9 @@
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="store" class="w-5 h-5 text-indigo-500"></i> Öne Çıkan Mağazalar</h2>
                     <button class="text-xs font-bold text-indigo-600 hover:text-indigo-700">Tümü <i data-lucide="chevron-right" class="w-4 h-4 inline"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores"></div>
+                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores">
+                    <div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Firebase Mağaza verileri yükleniyor...</div>
+                </div>
             </div>
 
             <!-- 6. YENİ EKLENENLER SLIDER -->
@@ -209,13 +214,15 @@
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-emerald-500 fill-emerald-100"></i> Yeni Eklenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts"></div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts">
+                    <!-- JS Dolduracak -->
+                </div>
             </div>
 
         </div>
     </div>
 
-    <!-- UYGULAMA ÜST BAR (Kategori Seçilince veya Arama Yapılınca Çıkar) -->
+    <!-- TREDYOL STİLİ UYGULAMA ÜST BAR (Kategori Seçilince Çıkar) -->
     <div id="categoryTopBar" class="hidden flex-col bg-white border-b border-slate-200 sticky top-14 sm:top-16 z-40 w-full shadow-sm">
         <div class="px-4 py-3 flex items-center justify-between relative">
             <button onclick="window.resetCategorySelection()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500 transition shrink-0">
@@ -386,11 +393,10 @@
     </footer>
 
     <script type="module">
-        import { db } from "./js/firebase-config.js";
+        import { db, auth } from "./js/firebase-config.js";
         import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        const auth = getAuth();
         const APP_ID = 'kibris-pazar';
         const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; // KENDİ ADMİN MAİLİNİZİ YAZIN
 
@@ -540,9 +546,11 @@
             
             document.getElementById('heroBannerSection').classList.remove('hidden');
             
-            // Ana sayfaya dönüldüğünde mobil alt menüyü GİZLE
-            document.getElementById('mobileBottomNav').classList.add('hidden');
-            document.getElementById('mobileBottomNav').classList.remove('flex');
+            const mobileNav = document.getElementById('mobileBottomNav');
+            if (mobileNav) {
+                mobileNav.classList.add('hidden');
+                mobileNav.classList.remove('flex');
+            }
             document.body.classList.remove('has-bottom-nav');
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -580,8 +588,11 @@
             document.getElementById('categoryTopBar').classList.add('flex');
             
             // Kategori tıklandığında alt menüyü GÖSTER
-            document.getElementById('mobileBottomNav').classList.remove('hidden');
-            document.getElementById('mobileBottomNav').classList.add('flex');
+            const mobileNav = document.getElementById('mobileBottomNav');
+            if (mobileNav) {
+                mobileNav.classList.remove('hidden');
+                mobileNav.classList.add('flex');
+            }
             document.body.classList.add('has-bottom-nav');
             
             document.getElementById('bcMainName').innerText = mainCatName;
@@ -1005,9 +1016,11 @@
                     document.getElementById('categoryTopBar').classList.add('hidden');
                     document.getElementById('mainProductsSection').classList.remove('hidden');
                     
-                    // Arama yapılıyorsa alt menüyü GÖSTER
-                    document.getElementById('mobileBottomNav').classList.remove('hidden');
-                    document.getElementById('mobileBottomNav').classList.add('flex');
+                    const mobileNav = document.getElementById('mobileBottomNav');
+                    if(mobileNav) {
+                        mobileNav.classList.remove('hidden');
+                        mobileNav.classList.add('flex');
+                    }
                     document.body.classList.add('has-bottom-nav');
 
                     const rt = document.getElementById('homeResultsTitle');
@@ -1016,9 +1029,11 @@
                     document.getElementById('mainProductsSection').classList.add('hidden');
                     document.getElementById('heroBannerSection').classList.remove('hidden');
                     
-                    // Arama silinip ana sayfaya dönüldüyse alt menüyü GİZLE
-                    document.getElementById('mobileBottomNav').classList.add('hidden');
-                    document.getElementById('mobileBottomNav').classList.remove('flex');
+                    const mobileNav = document.getElementById('mobileBottomNav');
+                    if(mobileNav) {
+                        mobileNav.classList.add('hidden');
+                        mobileNav.classList.remove('flex');
+                    }
                     document.body.classList.remove('has-bottom-nav');
                 }
                 window.applyFilters();
@@ -1063,7 +1078,7 @@
                 const savedCatFilter = localStorage.getItem('kibris_active_category');
                 if (savedCatFilter) {
                     const parsedData = JSON.parse(savedCatFilter);
-                    localStorage.removeItem('kibris_active_category'); // Temizle
+                    localStorage.removeItem('kibris_active_category');
                     window.selectCategory(parsedData.mainCatId, parsedData.subCatSlug, parsedData.subCatName, parsedData.mainCatName);
                 } else {
                     window.applyFilters();
@@ -1079,7 +1094,7 @@
 
         // --- AUTH GÖZLEMCİSİ (Kullanıcı Rolüne Göre Menü Güncelleme) ---
         const authControl = getAuth();
-        const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; // Admin email listesi
+        const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; // Kendi admin mailinizi buraya yazın
 
         onAuthStateChanged(authControl, async (user) => {
             const guestDesk = document.getElementById('authGuestDesktop');
@@ -1088,22 +1103,19 @@
             const loggedMob = document.getElementById('authLoggedMobile');
             
             if (user && !user.isAnonymous) {
-                // Giriş yapılmış
                 if(guestDesk) guestDesk.classList.add('hidden');
                 if(loggedDesk) loggedDesk.classList.remove('hidden');
                 if(guestMob) guestMob.classList.add('hidden');
                 if(loggedMob) loggedMob.classList.remove('hidden');
                 
-                if(document.getElementById('userEmailDisplay')) {
-                    document.getElementById('userEmailDisplay').innerText = user.email;
-                }
+                const emailDisplay = document.getElementById('userEmailDisplay');
+                if(emailDisplay) emailDisplay.innerText = user.email;
 
-                // 1. Admin Mi?
                 if (ADMIN_EMAILS.includes(user.email)) {
-                    document.getElementById('menuAdminLink').classList.remove('hidden');
+                    const adminLink = document.getElementById('menuAdminLink');
+                    if(adminLink) adminLink.classList.remove('hidden');
                 }
 
-                // 2. Satıcı Mı?
                 try {
                     const storesRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores');
                     const qEmail = query(storesRef, where("email", "==", user.email));
@@ -1113,14 +1125,13 @@
                     const snapUid = await getDocs(qUid);
 
                     if (!snapEmail.empty || !snapUid.empty) {
-                        document.getElementById('menuSellerLink').classList.remove('hidden');
+                        const sellerLink = document.getElementById('menuSellerLink');
+                        if(sellerLink) sellerLink.classList.remove('hidden');
                     }
                 } catch(e) {
                     console.error("Satıcı kontrolü hatası:", e);
                 }
-                
             } else {
-                // Giriş yapılmamış
                 if(guestDesk) guestDesk.classList.remove('hidden');
                 if(loggedDesk) loggedDesk.classList.add('hidden');
                 if(guestMob) guestMob.classList.remove('hidden');
