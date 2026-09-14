@@ -20,11 +20,9 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Çekmece & Tam Ekran Menü Animasyonları */
         .drawer-overlay { transition: opacity 0.3s ease; }
         .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Trendyol Tarzı Toggle Switch */
         .toggle-checkbox:checked { right: 0; border-color: #f97316; }
         .toggle-checkbox:checked + .toggle-label { background-color: #f97316; }
         .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
@@ -32,17 +30,17 @@
         
         .custom-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
 
+        .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
+
         /* Mobil Alt Menü Padding (Sadece alt menü açıksa padding uygula) */
         @media (max-width: 640px) {
             body.has-bottom-nav { padding-bottom: 70px; }
         }
 
-        /* Slider Animations */
         .slider-scroll { scroll-behavior: smooth; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
         .slider-scroll::-webkit-scrollbar { display: none; }
         .snap-start { scroll-snap-align: start; }
         
-        /* Banner Slider Scroll Bar (Gizli ama smooth) */
         #mainBannerSlider::-webkit-scrollbar, #dynamicSmallBanners::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -53,8 +51,8 @@
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
             
             <div class="flex items-center gap-3 shrink-0">
-                <!-- Hamburger Menü (Kategoriler Sayfasına Yönlendirir) -->
-                <a href="kategoriler.html" class="p-1 -ml-1 text-slate-600 hover:text-orange-500 rounded-xl transition inline-block">
+                <!-- Mobil Hamburger Menü (Kategoriler Sayfasına Yönlendirir) -->
+                <a href="kategoriler.html" class="p-1 -ml-1 text-slate-600 hover:text-orange-500 rounded-xl transition inline-block sm:block">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </a>
                 <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
@@ -76,13 +74,47 @@
                     <a href="satici.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
                         <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
                     </a>
-                    <a href="giris.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
-                        <i data-lucide="user" class="w-4 h-4"></i> Giriş Yap
-                    </a>
-                    <button class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-rose-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-rose-50 group">
-                        <i data-lucide="heart" class="w-4 h-4 group-hover:fill-rose-500"></i> Favorilerim
-                    </button>
-                    <a href="sepet.html" class="flex items-center gap-1.5 text-[13px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors px-3 py-2 rounded-xl relative group">
+                    
+                    <!-- GİRİŞ YAPMAMIŞ KULLANICI İÇİN (Masaüstü) -->
+                    <div id="authGuestDesktop" class="block">
+                        <a href="giris.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
+                            <i data-lucide="user" class="w-4 h-4"></i> Giriş Yap
+                        </a>
+                    </div>
+
+                    <!-- GİRİŞ YAPMIŞ KULLANICI İÇİN (Masaüstü - AÇILIR MENÜ) -->
+                    <div id="authLoggedDesktop" class="hidden relative group">
+                        <button class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
+                            <i data-lucide="user-check" class="w-4 h-4 text-emerald-500"></i> Hesabım <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </button>
+                        <!-- Dropdown İçeriği -->
+                        <div class="absolute right-0 top-full mt-1 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform origin-top-right z-50 flex flex-col overflow-hidden py-1">
+                            <div class="px-4 py-2 border-b border-slate-100">
+                                <span class="block text-[10px] text-slate-400">Hoş geldin,</span>
+                                <span class="block text-xs font-bold text-slate-800 truncate" id="userEmailDisplay">kullanici@mail.com</span>
+                            </div>
+                            <a href="siparisler.html" class="px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-orange-500 flex items-center gap-2 transition">
+                                <i data-lucide="package" class="w-4 h-4"></i> Siparişlerim
+                            </a>
+                            <a href="#" class="px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-orange-500 flex items-center gap-2 transition">
+                                <i data-lucide="heart" class="w-4 h-4"></i> Favorilerim
+                            </a>
+                            
+                            <!-- Yetki Kontrolü ile Görünecek Linkler -->
+                            <a href="satici.html" id="menuSellerLink" class="hidden px-4 py-2.5 text-sm font-bold text-indigo-600 bg-indigo-50/50 hover:bg-indigo-100 flex items-center gap-2 transition border-t border-slate-100">
+                                <i data-lucide="store" class="w-4 h-4"></i> Satıcı Paneli
+                            </a>
+                            <a href="admin.html" id="menuAdminLink" class="hidden px-4 py-2.5 text-sm font-bold text-rose-600 bg-rose-50/50 hover:bg-rose-100 flex items-center gap-2 transition border-t border-slate-100">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i> Sistem Yönetimi
+                            </a>
+                            
+                            <button onclick="window.logoutUser()" class="px-4 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-rose-500 flex items-center gap-2 transition border-t border-slate-100 w-full text-left">
+                                <i data-lucide="log-out" class="w-4 h-4"></i> Çıkış Yap
+                            </button>
+                        </div>
+                    </div>
+
+                    <a href="sepet.html" class="flex items-center gap-1.5 text-[13px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors px-3 py-2 rounded-xl relative ml-2 group">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i> Sepetim
                         <span id="cartCountBadgeDesk" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center shadow-md hidden border-2 border-white">0</span>
                     </a>
@@ -90,8 +122,11 @@
 
                 <!-- Mobil İkonları (Sadece Mobilde Görünür - Sağ Üst Köşe) -->
                 <div class="flex sm:hidden items-center gap-4">
-                    <a href="giris.html" class="text-slate-600 hover:text-orange-500 transition">
+                    <a href="giris.html" id="authGuestMobile" class="text-slate-600 hover:text-orange-500 transition">
                         <i data-lucide="user" class="w-6 h-6"></i>
+                    </a>
+                    <a href="siparisler.html" id="authLoggedMobile" class="text-emerald-500 hidden transition">
+                        <i data-lucide="user-check" class="w-6 h-6"></i>
                     </a>
                     <a href="sepet.html" class="text-slate-600 hover:text-orange-500 transition relative">
                         <i data-lucide="shopping-cart" class="w-6 h-6"></i>
@@ -132,7 +167,6 @@
                 <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl">
                     <!-- JS Dolduracak -->
                 </div>
-                <!-- Banner Noktaları (Indicators) -->
                 <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
             </div>
 
@@ -141,7 +175,6 @@
                 <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners">
                     <!-- JS Dolduracak -->
                 </div>
-                <!-- Küçük Banner Noktaları (Indicators) -->
                 <div id="smallBannerIndicators" class="flex justify-center gap-1.5 mt-3 hidden"></div>
             </div>
 
@@ -151,9 +184,7 @@
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="flame" class="w-5 h-5 text-orange-500 fill-orange-100"></i> Popüler Ürünler</h2>
                     <button class="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center">Tümünü Gör <i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts"></div>
             </div>
 
             <!-- 4. EN ÇOK FAVORİLENENLER SLIDER -->
@@ -161,9 +192,7 @@
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="heart" class="w-5 h-5 text-rose-500 fill-rose-100"></i> En Çok Favorilenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts"></div>
             </div>
 
             <!-- 5. ÖNE ÇIKAN MAĞAZALAR SLIDER -->
@@ -172,9 +201,7 @@
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="store" class="w-5 h-5 text-indigo-500"></i> Öne Çıkan Mağazalar</h2>
                     <button class="text-xs font-bold text-indigo-600 hover:text-indigo-700">Tümü <i data-lucide="chevron-right" class="w-4 h-4 inline"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores">
-                    <div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Firebase Mağaza verileri yükleniyor...</div>
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores"></div>
             </div>
 
             <!-- 6. YENİ EKLENENLER SLIDER -->
@@ -182,15 +209,13 @@
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-emerald-500 fill-emerald-100"></i> Yeni Eklenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts"></div>
             </div>
 
         </div>
     </div>
 
-    <!-- TREDYOL STİLİ UYGULAMA ÜST BAR (Kategori Seçilince Çıkar) -->
+    <!-- UYGULAMA ÜST BAR (Kategori Seçilince veya Arama Yapılınca Çıkar) -->
     <div id="categoryTopBar" class="hidden flex-col bg-white border-b border-slate-200 sticky top-14 sm:top-16 z-40 w-full shadow-sm">
         <div class="px-4 py-3 flex items-center justify-between relative">
             <button onclick="window.resetCategorySelection()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500 transition shrink-0">
@@ -322,7 +347,7 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) GÜNCELLENDİ (Ana sayfada gizli) -->
+    <!-- MOBİL ALT MENÜ (Ana sayfada gizli, Arama/Kategori aktifleşince görünür) -->
     <div id="mobileBottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] hidden">
         <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
@@ -363,8 +388,12 @@
     <script type="module">
         import { db } from "./js/firebase-config.js";
         import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+        const auth = getAuth();
         const APP_ID = 'kibris-pazar';
+        const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; // KENDİ ADMİN MAİLİNİZİ YAZIN
+
         let allProducts = [];
         let allCategories = [];
         let allStores = []; 
@@ -460,6 +489,12 @@
         }
 
         // --- Ortak ve Genel Sistemler ---
+        window.logoutUser = () => {
+            signOut(auth).then(() => {
+                window.location.reload();
+            });
+        };
+
         function updateCartBadge() {
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
@@ -513,6 +548,25 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
+        window.renderHomeTopCategorySlider = () => {
+            const container = document.getElementById('homeTopCategorySlider');
+            if(!container) return;
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
+            let html = '';
+            mainCats.forEach(main => {
+                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
+                html += `
+                    <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
+                        <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
+                            <img src="${img}" alt="${main.name}" loading="lazy" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-700 leading-tight text-center break-words w-full group-hover:text-orange-600 line-clamp-2">${main.name}</span>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        };
+
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             activeMainCategory = mainCatId; activeSubCategorySlug = subCatSlug; selectedFilters = {}; currentSort = 'newest';
             document.getElementById('searchInput').value = "";
@@ -544,8 +598,6 @@
             window.applyFilters();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-
-        window.resetCategorySelection = () => { window.resetToHome(); };
 
         // --- BANNER RENDER (Büyük Slider ve İkili Küçük Slider) ---
         function renderAdminBanners() {
@@ -724,25 +776,6 @@
 
             lucide.createIcons();
         }
-
-        window.renderHomeTopCategorySlider = () => {
-            const container = document.getElementById('homeTopCategorySlider');
-            if(!container) return;
-            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
-            let html = '';
-            mainCats.forEach(main => {
-                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
-                html += `
-                    <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
-                        <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
-                            <img src="${img}" alt="${main.name}" loading="lazy" onerror="this.src='https://placehold.co/150x150/f1f5f9/475569?text=${encodeURIComponent(main.name)}'" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-300">
-                        </div>
-                        <span class="text-[10px] font-bold text-slate-700 leading-tight text-center break-words w-full group-hover:text-orange-600 line-clamp-2">${main.name}</span>
-                    </button>
-                `;
-            });
-            container.innerHTML = html;
-        };
 
         window.createMiniProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
@@ -1025,7 +1058,16 @@
                 renderVitrinStores();
 
                 document.getElementById('loadingIndicator').classList.add('hidden');
-                window.applyFilters();
+
+                // Kategoriler sayfasından bir yönlendirme var mı kontrol et
+                const savedCatFilter = localStorage.getItem('kibris_active_category');
+                if (savedCatFilter) {
+                    const parsedData = JSON.parse(savedCatFilter);
+                    localStorage.removeItem('kibris_active_category'); // Temizle
+                    window.selectCategory(parsedData.mainCatId, parsedData.subCatSlug, parsedData.subCatName, parsedData.mainCatName);
+                } else {
+                    window.applyFilters();
+                }
 
             } catch (err) {
                 console.error("Yükleme hatası:", err);
@@ -1034,6 +1076,58 @@
         }
 
         document.addEventListener('DOMContentLoaded', initPage);
+
+        // --- AUTH GÖZLEMCİSİ (Kullanıcı Rolüne Göre Menü Güncelleme) ---
+        const authControl = getAuth();
+        const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; // Admin email listesi
+
+        onAuthStateChanged(authControl, async (user) => {
+            const guestDesk = document.getElementById('authGuestDesktop');
+            const loggedDesk = document.getElementById('authLoggedDesktop');
+            const guestMob = document.getElementById('authGuestMobile');
+            const loggedMob = document.getElementById('authLoggedMobile');
+            
+            if (user && !user.isAnonymous) {
+                // Giriş yapılmış
+                if(guestDesk) guestDesk.classList.add('hidden');
+                if(loggedDesk) loggedDesk.classList.remove('hidden');
+                if(guestMob) guestMob.classList.add('hidden');
+                if(loggedMob) loggedMob.classList.remove('hidden');
+                
+                if(document.getElementById('userEmailDisplay')) {
+                    document.getElementById('userEmailDisplay').innerText = user.email;
+                }
+
+                // 1. Admin Mi?
+                if (ADMIN_EMAILS.includes(user.email)) {
+                    document.getElementById('menuAdminLink').classList.remove('hidden');
+                }
+
+                // 2. Satıcı Mı?
+                try {
+                    const storesRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores');
+                    const qEmail = query(storesRef, where("email", "==", user.email));
+                    const snapEmail = await getDocs(qEmail);
+                    
+                    const qUid = query(storesRef, where("ownerId", "==", user.uid));
+                    const snapUid = await getDocs(qUid);
+
+                    if (!snapEmail.empty || !snapUid.empty) {
+                        document.getElementById('menuSellerLink').classList.remove('hidden');
+                    }
+                } catch(e) {
+                    console.error("Satıcı kontrolü hatası:", e);
+                }
+                
+            } else {
+                // Giriş yapılmamış
+                if(guestDesk) guestDesk.classList.remove('hidden');
+                if(loggedDesk) loggedDesk.classList.add('hidden');
+                if(guestMob) guestMob.classList.remove('hidden');
+                if(loggedMob) loggedMob.classList.add('hidden');
+            }
+        });
+
     </script>
 </body>
 </html>
