@@ -20,6 +20,9 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
+        .drawer-overlay { transition: opacity 0.3s ease; }
+        .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
         .toggle-checkbox:checked { right: 0; border-color: #f97316; }
         .toggle-checkbox:checked + .toggle-label { background-color: #f97316; }
         .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
@@ -164,7 +167,6 @@
                 <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl">
                     <!-- JS Dolduracak -->
                 </div>
-                <!-- Banner Noktaları (Indicators) -->
                 <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
             </div>
 
@@ -173,7 +175,6 @@
                 <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners">
                     <!-- JS Dolduracak -->
                 </div>
-                <!-- Küçük Banner Noktaları (Indicators) -->
                 <div id="smallBannerIndicators" class="flex justify-center gap-1.5 mt-3 hidden"></div>
             </div>
 
@@ -183,9 +184,7 @@
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="flame" class="w-5 h-5 text-orange-500 fill-orange-100"></i> Popüler Ürünler</h2>
                     <button class="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center">Tümünü Gör <i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts"></div>
             </div>
 
             <!-- 4. EN ÇOK FAVORİLENENLER SLIDER -->
@@ -193,9 +192,7 @@
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="heart" class="w-5 h-5 text-rose-500 fill-rose-100"></i> En Çok Favorilenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts"></div>
             </div>
 
             <!-- 5. ÖNE ÇIKAN MAĞAZALAR SLIDER -->
@@ -204,9 +201,7 @@
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="store" class="w-5 h-5 text-indigo-500"></i> Öne Çıkan Mağazalar</h2>
                     <button class="text-xs font-bold text-indigo-600 hover:text-indigo-700">Tümü <i data-lucide="chevron-right" class="w-4 h-4 inline"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores">
-                    <div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Firebase Mağaza verileri yükleniyor...</div>
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores"></div>
             </div>
 
             <!-- 6. YENİ EKLENENLER SLIDER -->
@@ -214,15 +209,13 @@
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-emerald-500 fill-emerald-100"></i> Yeni Eklenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts"></div>
             </div>
 
         </div>
     </div>
 
-    <!-- TREDYOL STİLİ UYGULAMA ÜST BAR (Kategori Seçilince Çıkar) -->
+    <!-- UYGULAMA ÜST BAR (Kategori Seçilince veya Arama Yapılınca Çıkar) -->
     <div id="categoryTopBar" class="hidden flex-col bg-white border-b border-slate-200 sticky top-14 sm:top-16 z-40 w-full shadow-sm">
         <div class="px-4 py-3 flex items-center justify-between relative">
             <button onclick="window.resetCategorySelection()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500 transition shrink-0">
@@ -1043,29 +1036,24 @@
             if (mobileSearchInput) mobileSearchInput.addEventListener('input', handleSearch);
 
             try {
-                // Ayarları Çek
                 const settingsSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'settings'));
                 if (settingsSnap.exists()) { systemSettings = settingsSnap.data(); }
 
-                // Kategorileri Çek
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
                 window.renderHomeTopCategorySlider();
 
-                // Ürünleri Çek
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
                 const snap = await getDocs(q);
                 allProducts = [];
                 snap.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
 
-                // Mağazaları Çek
                 const storesSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores'));
                 allStores = [];
                 storesSnap.forEach(doc => allStores.push({ id: doc.id, ...doc.data() }));
 
-                // Vitrin Bölümlerini Doldur
                 renderAdminBanners();
                 renderVitrinPopularProducts();
                 renderVitrinFavoriteProducts();
@@ -1074,7 +1062,6 @@
 
                 document.getElementById('loadingIndicator').classList.add('hidden');
 
-                // Kategoriler sayfasından bir yönlendirme var mı kontrol et
                 const savedCatFilter = localStorage.getItem('kibris_active_category');
                 if (savedCatFilter) {
                     const parsedData = JSON.parse(savedCatFilter);
