@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Kategori | Kıbrıs Bazar</title>
+    <title>Kıbrıs Bazar | Kategoriler</title>
     
     <link rel="icon" href="/favicon.png" type="image/png">
-    <meta name="theme-color" content="#f97316">
+    <meta name="theme-color" content="#ffffff">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -14,332 +14,257 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
+        
+        /* Mobil Alt Menü Padding */
+        body { padding-bottom: 70px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
+<body class="bg-white text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col h-screen overflow-hidden">
 
-    <!-- Navbar -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-            
-            <div class="flex items-center gap-3">
-                <a href="/" class="hidden sm:flex text-slate-400 hover:text-orange-500 transition">
-                    <i data-lucide="home" class="w-5 h-5"></i>
-                </a>
-                <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900 shrink-0">
-                    KIBRIS<span class="text-orange-500">BAZAR</span>
-                </a>
-            </div>
-
-            <!-- Arama Çubuğu -->
-            <div class="flex-1 max-w-xl mx-2 sm:mx-4 hidden sm:block">
-                <div class="relative w-full">
-                    <input type="text" id="searchInput" placeholder="Bu kategoride ara..." 
-                        class="w-full bg-slate-100 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm focus:outline-none focus:border-orange-500 focus:bg-white transition-all placeholder:text-slate-400">
-                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-2 shrink-0">
-                <a href="/sepet.html" class="flex items-center justify-center p-2 text-slate-600 hover:text-orange-500 transition-colors relative bg-white border border-slate-200 hover:border-orange-200 rounded-xl">
-                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                    <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-sm hidden">0</span>
-                </a>
-            </div>
+    <!-- Arama ve Geri Dönüş Çubuğu (Sabit Üst Alan) -->
+    <div class="p-3 sm:p-4 flex items-center gap-3 bg-white shrink-0 border-b border-slate-100 shadow-sm sticky top-0 z-50">
+        <a href="index.html" class="p-1.5 text-slate-600 hover:text-orange-500 transition">
+            <i data-lucide="arrow-left" class="w-6 h-6"></i>
+        </a>
+        <div class="flex-1 relative">
+            <input type="text" id="catSearchInput" placeholder="Kategorilerde ara..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition font-medium">
+            <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
         </div>
-    </header>
+    </div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full flex flex-col lg:flex-row gap-8">
-        
-        <!-- Sol Taraf: Filtreler (Desktop) -->
-        <aside class="w-full lg:w-64 shrink-0">
-            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm sticky top-24">
-                <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-100">
-                    <h3 class="text-sm font-black text-slate-800 flex items-center gap-2"><i data-lucide="filter" class="w-4 h-4 text-orange-500"></i> Filtreler</h3>
-                    <button onclick="window.clearFilters()" class="text-[10px] font-bold text-slate-400 hover:text-rose-500 transition">Temizle</button>
-                </div>
+    <!-- Ana Kategori Sekmeleri (Yatay Kaydırılabilir) -->
+    <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0" id="mainTabContainer">
+        <!-- JS ile Dolacak -->
+    </div>
 
-                <!-- Sıralama -->
-                <div class="mb-6">
-                    <label class="text-xs font-bold text-slate-500 block mb-2">Sıralama</label>
-                    <select id="sortSelect" onchange="window.applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-orange-500">
-                        <option value="newest">En Yeniler</option>
-                        <option value="priceAsc">Fiyat (Düşükten Yükseğe)</option>
-                        <option value="priceDesc">Fiyat (Yüksekten Düşüğe)</option>
-                    </select>
-                </div>
-
-                <!-- Fiyat Aralığı -->
-                <div>
-                    <label class="text-xs font-bold text-slate-500 block mb-2">Fiyat Aralığı (TL)</label>
-                    <div class="flex items-center gap-2 mb-3">
-                        <input type="number" id="minPrice" placeholder="En Az" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-500">
-                        <span class="text-slate-400">-</span>
-                        <input type="number" id="maxPrice" placeholder="En Çok" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-500">
-                    </div>
-                    <button onclick="window.applyFilters()" class="w-full bg-slate-900 hover:bg-orange-500 text-white text-xs font-bold py-2 rounded-lg transition">Filtreyi Uygula</button>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Sağ Taraf: Ürünler -->
-        <div class="flex-1">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-                <div>
-                    <nav class="flex items-center gap-2 text-[10px] font-bold text-slate-400 mb-2">
-                        <a href="/" class="hover:text-orange-500">Anasayfa</a>
-                        <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                        <span class="text-slate-600">Kategori</span>
-                    </nav>
-                    <h1 class="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-3">
-                        <span id="categoryTitleDisplay">Yükleniyor...</span>
-                        <span id="productCountBadge" class="text-xs font-bold bg-orange-100 text-orange-600 px-2 py-1 rounded-lg">0</span>
-                    </h1>
-                </div>
-            </div>
-
-            <!-- Yükleniyor -->
-            <div id="loadingIndicator" class="flex flex-col items-center justify-center py-20">
-                <i data-lucide="loader-2" class="w-8 h-8 text-orange-500 animate-spin mb-3"></i>
-                <p class="text-xs font-bold text-slate-500">Kategori Ürünleri Getiriliyor...</p>
-            </div>
-
-            <!-- Ürün Izgarası -->
-            <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 hidden"></div>
-
-            <!-- Sonuç Yok -->
-            <div id="noResults" class="hidden text-center py-24 bg-white rounded-3xl border border-slate-200 shadow-sm mt-4">
-                <div class="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
-                    <i data-lucide="package-x" class="w-7 h-7"></i>
-                </div>
-                <p class="text-sm font-bold text-slate-600 mb-1">Bu kategoride hiç ürün bulunamadı.</p>
-                <p class="text-xs text-slate-400">Filtreleri değiştirmeyi veya daha sonra tekrar bakmayı deneyin.</p>
-            </div>
+    <!-- İçerik Alanı (Gruplar ve Alt Kategoriler) -->
+    <div class="flex-1 overflow-hidden bg-white w-full max-w-[1400px] mx-auto relative" id="hamburgerMenuCategories">
+        <div class="flex flex-col items-center justify-center h-full">
+            <i data-lucide="loader-2" class="w-8 h-8 text-orange-500 animate-spin mb-3"></i>
+            <p class="text-xs font-bold text-slate-500">Kategoriler Yükleniyor...</p>
         </div>
-    </main>
+    </div>
 
-    <footer class="bg-white border-t border-slate-200 mt-auto py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
-            <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
-            <div class="flex items-center gap-2">
-                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> Güvenli Yerel Alışveriş
+    <!-- MOBİL ALT MENÜ (Kategoriler Aktif) -->
+    <div id="mobileBottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] flex sm:hidden justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <a href="index.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
+            <i data-lucide="home" class="w-5 h-5"></i>
+            <span class="text-[10px] font-medium">Ana Sayfa</span>
+        </a>
+        <!-- Kategoriler Butonu Aktif (Turuncu) -->
+        <a href="kategoriler.html" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
+            <i data-lucide="layout-grid" class="w-5 h-5 fill-current"></i>
+            <span class="text-[10px] font-bold">Kategoriler</span>
+        </a>
+        <a href="satici.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition relative -top-3">
+            <div class="w-12 h-12 bg-white rounded-full border border-slate-200 shadow-sm flex items-center justify-center relative">
+                <div class="absolute inset-1 bg-gradient-to-tr from-orange-500 to-rose-500 rounded-full flex items-center justify-center">
+                    <span class="text-white font-black text-[10px] leading-tight text-center">Bazar<br>Go</span>
+                </div>
             </div>
-        </div>
-    </footer>
+        </a>
+        <a href="#" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+            <span class="text-[10px] font-medium">Favorilerim</span>
+        </a>
+        <a href="sepet.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition relative">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            <span class="text-[10px] font-medium">Sepetim</span>
+            <span id="cartCountBadgeMob" class="absolute top-1 right-2 bg-orange-600 text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-md hidden border border-white">0</span>
+        </a>
+    </div>
 
-    <!-- DİKKAT: firebase-config.js import yolu "/" ile başlar -->
     <script type="module">
-        import { db } from "/js/firebase-config.js";
-        import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { db } from "./js/firebase-config.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const APP_ID = 'kibris-pazar';
-        let allCategoryProducts = [];
-        let filteredProducts = [];
-        let targetCategorySlug = '';
-        let originalCategoryName = 'Kategori';
-        let searchQuery = '';
+        let allCategories = [];
 
-        let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
-        let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
+        // --- AKILLI KATEGORİ RESİM EŞLEŞTİRİCİ ---
+        function getSmartCategoryImage(categoryName) {
+            if (!categoryName) return 'https://placehold.co/150x150/f1f5f9/475569?text=Gorsel';
+            const name = categoryName.toLowerCase();
+            let keyword = "shopping,products"; 
+            if (name.includes("elbise")) keyword = "dress,womens-fashion";
+            else if (name.includes("tshirt") || name.includes("tişört")) keyword = "tshirt,clothing";
+            else if (name.includes("gömlek")) keyword = "shirt,clothing";
+            else if (name.includes("pantolon")) keyword = "pants,trousers";
+            else if (name.includes("etek")) keyword = "skirt,womens-clothing";
+            else if (name.includes("ayakkabı") || name.includes("sneaker")) keyword = "shoes,sneakers";
+            else if (name.includes("çanta")) keyword = "bag,handbag";
+            else if (name.includes("saat") || name.includes("takı")) keyword = "watch,jewelry";
+            else if (name.includes("kozmetik") || name.includes("makyaj")) keyword = "makeup,cosmetics";
+            else if (name.includes("elektronik") || name.includes("telefon")) keyword = "electronics,smartphone";
+            else if (name.includes("bilgisayar") || name.includes("laptop")) keyword = "laptop,computer";
+            else if (name.includes("beyaz eşya") || name.includes("buzdolabı")) keyword = "appliance,refrigerator";
+            else if (name.includes("mobilya") || name.includes("koltuk")) keyword = "furniture,sofa";
+            else if (name.includes("mutfak")) keyword = "kitchen,cookware";
+            else if (name.includes("bebek") || name.includes("oyuncak")) keyword = "baby,toys";
+            else if (name.includes("spor") || name.includes("fitness")) keyword = "fitness,sports";
+            else if (name.includes("oto") || name.includes("araç")) keyword = "car,automotive";
+            else if (name.includes("süpermarket") || name.includes("gıda")) keyword = "groceries,food";
 
-        window.generateSlug = (text) => {
-            if (!text) return 'kibris-bazar';
-            return text.toString().toLowerCase()
-                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
-                .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
-                .replace(/\s+/g, '-')
-                .replace(/[^\w\-]+/g, '')
-                .replace(/\-\-+/g, '-')
-                .replace(/^-+|-+$/g, '');
-        };
-
-        function getCategorySlugFromUrl() {
-            const pathParts = window.location.pathname.split('/');
-            const catIndex = pathParts.indexOf('kategori');
-            if (catIndex !== -1 && pathParts[catIndex + 1]) {
-                return pathParts[catIndex + 1];
-            }
-            return null;
+            return `https://source.unsplash.com/150x150/?${keyword}`;
         }
 
+        // Ana Tabları Oluşturur
+        function renderMainTabs(activeId = 'all') {
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
+            const tabContainer = document.getElementById('mainTabContainer');
+            if(!tabContainer) return;
+            let html = `<button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${activeId === 'all' ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent'}">Tüm Kategoriler</button>`;
+            mainCats.forEach(main => {
+                const isActive = main.id === activeId ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent';
+                html += `<button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" id="mainTab-${main.id}" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${isActive}">${main.name}</button>`;
+            });
+            tabContainer.innerHTML = html;
+        }
+
+        // Ana Sayfa (Grid) Görünümü
+        window.renderMegaMenuGrid = () => {
+            const container = document.getElementById('hamburgerMenuCategories');
+            if(!container) return;
+            renderMainTabs('all');
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
+            let html = `
+                <div class="w-full h-full p-4 overflow-y-auto category-scroll pb-24 bg-slate-50">
+                    <div class="bg-gradient-to-r from-orange-100 to-orange-200 rounded-xl p-4 text-orange-900 flex items-center justify-between shadow-sm mb-4">
+                        <div><h3 class="text-sm font-bold">Ne Arıyorsunuz?</h3><span class="text-[10px] mt-0.5 block opacity-80">Binlerce ürün arasından seçiminizi yapın</span></div>
+                        <div class="w-12 h-12 flex items-center justify-center transform -rotate-12"><i data-lucide="layout-grid" class="w-8 h-8 text-orange-500"></i></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+            `;
+            mainCats.forEach(main => {
+                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
+                html += `
+                    <button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" class="flex flex-row items-center justify-between pl-3 pr-0 py-0 rounded-xl bg-slate-100/80 hover:bg-slate-200 border border-transparent transition group text-left h-20 overflow-hidden relative">
+                        <span class="text-xs font-bold text-slate-800 z-10 w-1/2 leading-tight">${main.name}</span>
+                        <img src="${img}" alt="${main.name}" loading="lazy" class="h-full w-auto max-w-[50%] object-cover absolute right-0">
+                    </button>
+                `;
+            });
+            html += `</div></div>`;
+            container.innerHTML = html;
+            lucide.createIcons();
+        };
+
+        // Kategori Detay (Sol Menü / Sağ İçerik) Görünümü
+        window.openMainCategoryDetails = (mainId, mainName) => {
+            const container = document.getElementById('hamburgerMenuCategories');
+            renderMainTabs(mainId);
+            const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
+            
+            let html = `<div class="flex w-full h-full pb-16"><div class="w-[30%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll pb-24 border-r border-slate-100" id="groupTabsContainer">`;
+            
+            groups.forEach((grp, idx) => {
+                const isActive = idx === 0 ? 'bg-white text-orange-600 font-bold border-l-4 border-orange-500' : 'text-slate-600 font-medium hover:bg-slate-100 border-l-4 border-transparent';
+                html += `<button onclick="window.switchGroupTab('${grp.id}', this)" class="group-tab-btn text-left px-3 py-4 text-[11px] transition ${isActive}">${grp.name}</button>`;
+            });
+            
+            html += `</div><div class="w-[70%] sm:w-[75%] p-3 sm:p-4 overflow-y-auto category-scroll bg-white pb-24" id="groupContentArea">`;
+            
+            groups.forEach((grp, idx) => {
+                const isHidden = idx === 0 ? '' : 'hidden';
+                const subs = allCategories.filter(c => c.parentId === grp.id).sort((a, b) => (a.order || 0) - (b.order || 0));
+                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4 pb-28"><div class="grid grid-cols-3 sm:grid-cols-4 gap-x-2 gap-y-4">
+                        <button onclick="window.selectCategory('${mainId}', '', 'Tüm ${grp.name}', '${mainName}')" class="flex flex-col items-center group text-center">
+                            <div class="w-[70px] h-[70px] sm:w-20 sm:h-20 rounded-2xl bg-orange-50 overflow-hidden mb-1 flex items-center justify-center border border-orange-100">
+                                <div class="grid grid-cols-2 gap-1 opacity-60">
+                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div>
+                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div>
+                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div>
+                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px] flex items-center justify-center text-white"><i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></div>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-medium text-slate-700 leading-tight w-full truncate">Tümünü Gör</span>
+                        </button>
+                `;
+                subs.forEach(sub => {
+                    const subImg = sub.image && sub.image.trim() !== '' ? sub.image : getSmartCategoryImage(sub.name);
+                    html += `
+                        <button onclick="window.selectCategory('${mainId}', '${sub.slug}', '${sub.name}', '${mainName}')" class="flex flex-col items-center group text-center">
+                            <div class="w-[70px] h-[70px] sm:w-20 sm:h-20 rounded-2xl bg-white border border-slate-100 overflow-hidden mb-1 p-1 shadow-sm transition">
+                                <img src="${subImg}" alt="${sub.name}" loading="lazy" class="w-full h-full object-contain">
+                            </div>
+                            <span class="text-[10px] font-medium text-slate-700 leading-tight w-full break-words line-clamp-2">${sub.name}</span>
+                        </button>
+                    `;
+                });
+                html += `</div></div>`;
+            });
+            html += `</div></div>`;
+            container.innerHTML = html;
+            lucide.createIcons();
+        };
+
+        // Grup (Sol Menü) Geçişi
+        window.switchGroupTab = (groupId, btnElement) => {
+            document.querySelectorAll('.group-pane').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.group-tab-btn').forEach(b => { 
+                b.classList.remove('bg-white', 'text-orange-600', 'font-bold', 'border-orange-500'); 
+                b.classList.add('text-slate-600', 'font-medium', 'hover:bg-slate-100', 'border-transparent'); 
+            });
+            
+            document.getElementById(`groupPane-${groupId}`).classList.remove('hidden');
+            btnElement.classList.remove('text-slate-600', 'font-medium', 'hover:bg-slate-100', 'border-transparent');
+            btnElement.classList.add('bg-white', 'text-orange-600', 'font-bold', 'border-orange-500');
+        };
+
+        // BİR KATEGORİ SEÇİLDİĞİNDE -> INDEX'E YÖNLENDİR (Akıllı Filtreleme Mantığı)
+        window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
+            // Seçimi LocalStorage'a kaydet ki index.html okuyabilsin
+            const filterData = {
+                mainCatId: mainCatId,
+                subCatSlug: subCatSlug,
+                subCatName: subCatName,
+                mainCatName: mainCatName
+            };
+            localStorage.setItem('kibris_active_category', JSON.stringify(filterData));
+            
+            // Kullanıcıyı Ana Sayfaya Gönder (Index.html orada bu datayı okuyup filtreyi açacak)
+            window.location.href = 'index.html';
+        };
+
+        // Sepet Sayısını Güncelle
         function updateCartBadge() {
+            let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
-            const badge = document.getElementById('cartCountBadge');
-            if(badge) {
-                badge.innerText = totalQty;
-                if(totalQty > 0) badge.classList.remove('hidden');
-                else badge.classList.add('hidden');
+            const badgeMob = document.getElementById('cartCountBadgeMob');
+            if(badgeMob) { 
+                badgeMob.innerText = totalQty; 
+                if(totalQty > 0) badgeMob.classList.remove('hidden'); 
+                else badgeMob.classList.add('hidden'); 
             }
         }
 
-        window.toggleFavorite = (id) => {
-            if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); } 
-            else { favorites.push(id); }
-            localStorage.setItem('user_favorites', JSON.stringify(favorites));
-            renderProducts();
-        };
-
-        window.quickAddToCart = (id) => {
-            const product = allCategoryProducts.find(p => p.id === id);
-            if(!product) return;
-            const exist = cart.find(i => i.cartItemId === id);
-            if(exist) exist.quantity++;
-            else cart.push({ cartItemId: id, product: product, variant: null, quantity: 1, dynamicPrice: product.price, dynamicImage: (product.images ? product.images[0] : '') });
-            
-            localStorage.setItem('cart_items_v2', JSON.stringify(cart));
+        async function initPage() {
             updateCartBadge();
-            alert("Ürün sepete eklendi!"); 
-        };
-
-        window.createProductCard = (p) => {
-            const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
-            const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
-            const isFav = favorites.includes(p.id);
             
-            const productLink = `/urun/${window.generateSlug(p.title)}-${p.id}`;
-            const storeLink = `/magaza/${window.generateSlug(p.storeName || 'magaza')}-${p.storeId}`;
-            
-            return `
-                <div class="bg-white rounded-2xl p-3 hover:shadow-xl hover:border-orange-200 border border-slate-200 transition-all group flex flex-col w-full h-full relative">
-                    <div class="relative w-full aspect-[4/5] mb-3 overflow-hidden rounded-xl bg-slate-100 shrink-0">
-                        <a href="${productLink}" class="block w-full h-full">
-                            <img src="${img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${p.title}"/>
-                        </a>
-                        ${discount > 0 ? `<div class="absolute top-2 left-0 bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-r shadow-md">-%${discount}</div>` : ''}
-                        
-                        <button onclick="window.toggleFavorite('${p.id}')" class="absolute top-2 right-2 p-2 rounded-full bg-white/90 shadow hover:scale-110 z-10 transition">
-                            <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : 'text-slate-400 hover:text-rose-500'}"></i>
-                        </button>
-                    </div>
-
-                    <div class="flex-1 flex flex-col">
-                        <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center justify-between gap-1">
-                            <a href="${storeLink}" class="truncate text-slate-400 hover:text-orange-500 transition-colors">${p.storeName || 'Mağaza'}</a>
-                        </div>
-                        
-                        <h3 class="text-xs font-bold text-slate-800 mb-1 line-clamp-2">
-                            <a href="${productLink}" class="hover:text-orange-500 transition-colors">${p.title}</a>
-                        </h3>
-                        
-                        <div class="pt-2 border-t border-slate-100 flex items-end justify-between mt-auto">
-                            <div>
-                                ${p.originalPrice > p.price ? `<span class="block text-[10px] text-slate-400 line-through mb-0.5">${p.originalPrice.toLocaleString('tr-TR')} TL</span>` : ''}
-                                <span class="text-sm font-black text-orange-600 block">${p.price.toLocaleString('tr-TR')} TL</span>
-                            </div>
-                            <button onclick="window.quickAddToCart('${p.id}')" class="w-8 h-8 rounded-full bg-orange-50 hover:bg-orange-500 text-orange-500 hover:text-white flex items-center justify-center transition shadow-sm shrink-0 z-10 pointer-events-auto">
-                                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-
-        window.applyFilters = () => {
-            let temp = [...allCategoryProducts];
-
-            // 1. Arama Çubuğu
-            if (searchQuery.trim() !== '') {
-                const q = searchQuery.toLowerCase().trim();
-                temp = temp.filter(p => p.title.toLowerCase().includes(q));
-            }
-
-            // 2. Fiyat Filtresi
-            const minP = document.getElementById('minPrice').value;
-            const maxP = document.getElementById('maxPrice').value;
-            
-            if (minP !== '') temp = temp.filter(p => p.price >= parseFloat(minP));
-            if (maxP !== '') temp = temp.filter(p => p.price <= parseFloat(maxP));
-
-            // 3. Sıralama
-            const sortVal = document.getElementById('sortSelect').value;
-            if (sortVal === 'priceAsc') temp.sort((a, b) => a.price - b.price);
-            else if (sortVal === 'priceDesc') temp.sort((a, b) => b.price - a.price);
-            else temp.sort((a, b) => b.createdAt - a.createdAt); // newest
-
-            filteredProducts = temp;
-            renderProducts();
-        };
-
-        window.clearFilters = () => {
-            document.getElementById('minPrice').value = '';
-            document.getElementById('maxPrice').value = '';
-            document.getElementById('sortSelect').value = 'newest';
-            document.getElementById('searchInput').value = '';
-            searchQuery = '';
-            window.applyFilters();
-        };
-
-        function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            const noRes = document.getElementById('noResults');
-            
-            document.getElementById('productCountBadge').innerText = filteredProducts.length;
-
-            if (filteredProducts.length === 0) {
-                grid.classList.add('hidden');
-                noRes.classList.remove('hidden');
-            } else {
-                noRes.classList.add('hidden');
-                grid.innerHTML = filteredProducts.map(p => window.createProductCard(p)).join('');
-                grid.classList.remove('hidden');
-                lucide.createIcons();
-            }
-        }
-
-        async function initCategoryPage() {
-            updateCartBadge();
-            lucide.createIcons();
-
-            targetCategorySlug = getCategorySlugFromUrl();
-            if (!targetCategorySlug) {
-                document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Kategori bulunamadı.</p>';
-                return;
-            }
-
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                searchQuery = e.target.value;
-                window.applyFilters();
-            });
-
             try {
-                // Şimdilik veritabanında 'categorySlug' alanı olmadığı için tüm aktif ürünleri çekip
-                // JavaScript ile slug uyanları (Bu kategoriye ait olanları) filtreliyoruz.
-                const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
-                const snap = await getDocs(q);
-
-                allCategoryProducts = [];
-                snap.forEach(doc => {
-                    const data = doc.data();
-                    if (data.category && window.generateSlug(data.category) === targetCategorySlug) {
-                        allCategoryProducts.push({ id: doc.id, ...data });
-                        if (originalCategoryName === 'Kategori') {
-                            originalCategoryName = data.category; // Gerçek adını yakala (Örn: "Cep Telefonu")
-                        }
-                    }
-                });
-
-                document.getElementById('loadingIndicator').classList.add('hidden');
+                // Firebase'den Tüm Kategorileri Çek
+                const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
+                allCategories = [];
+                catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
-                // Başlıkları Güncelle
-                const displayTitle = originalCategoryName !== 'Kategori' ? originalCategoryName : targetCategorySlug.replace(/-/g, ' ').toUpperCase();
-                document.getElementById('categoryTitleDisplay').innerText = displayTitle;
-                document.title = `${displayTitle} | Kıbrıs Bazar`;
-
-                window.applyFilters();
-
+                // İlk Açılışta Ana Kategori Grid'ini Çiz
+                window.renderMegaMenuGrid();
             } catch (error) {
-                console.error("Kategori ürünleri yüklenirken hata:", error);
-                document.getElementById('loadingIndicator').innerHTML = '<p class="text-rose-500 font-bold">Veriler yüklenirken bir hata oluştu.</p>';
+                console.error("Kategoriler yüklenirken hata:", error);
+                document.getElementById('hamburgerMenuCategories').innerHTML = '<div class="p-8 text-center text-rose-500 font-bold">Kategoriler yüklenemedi. Lütfen sayfayı yenileyin.</div>';
             }
+            
+            lucide.createIcons();
         }
 
-        document.addEventListener('DOMContentLoaded', initCategoryPage);
+        document.addEventListener('DOMContentLoaded', initPage);
     </script>
 </body>
 </html>
