@@ -35,7 +35,7 @@
         /* Kategori Menüsü Özel Scrollbar Ayarları */
         .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
 
-        /* Mobil Alt Menü Padding (Mobilde menünün arkasında içerik kalmaması için) */
+        /* Mobil Alt Menü Padding */
         @media (max-width: 640px) {
             body { padding-bottom: 70px; }
         }
@@ -48,7 +48,6 @@
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
             
             <div class="flex items-center gap-3 shrink-0">
-                <!-- Mobil Hamburger Menü -->
                 <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition sm:block">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
@@ -84,7 +83,6 @@
     <!-- TRENDYOL STİLİ TAM EKRAN KATEGORİ MODALI -->
     <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-white z-[200] hidden flex-col drawer-overlay opacity-0">
         
-        <!-- Modal Üst Arama ve Geri Tuşu -->
         <div class="p-3 sm:p-4 flex items-center gap-3 bg-white shrink-0 border-b border-slate-100 shadow-sm">
             <button onclick="window.toggleHamburgerMenu()" class="p-1.5 text-slate-600 hover:text-orange-500 transition">
                 <i data-lucide="arrow-left" class="w-6 h-6"></i>
@@ -96,18 +94,12 @@
             </div>
         </div>
 
-        <!-- Üst Ana Kategori Sekmeleri (Yatay Scroll) -->
-        <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0" id="mainTabContainer">
-            <!-- JS Dinamik Dolduracak -->
-        </div>
+        <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0" id="mainTabContainer"></div>
 
-        <!-- İçerik Alanı (Mega Grid veya Alt Kategoriler) -->
-        <div class="flex-1 overflow-hidden bg-white w-full max-w-[1400px] mx-auto" id="hamburgerMenuCategories">
-            <!-- JS Dinamik Dolduracak -->
-        </div>
+        <div class="flex-1 overflow-hidden bg-white w-full max-w-[1400px] mx-auto" id="hamburgerMenuCategories"></div>
     </div>
 
-    <!-- VİTRİN BANNER (Sadece Ana Sayfada) -->
+    <!-- VİTRİN BÖLÜMÜ (Sadece Ana Sayfada) -->
     <div id="heroBannerSection" class="w-full bg-slate-50">
         <!-- Arama Çubuğu (Mobil) -->
         <div class="sm:hidden p-3 bg-white border-b border-slate-200">
@@ -118,15 +110,22 @@
             </div>
         </div>
 
+        <!-- ANA SAYFA ÜST KATEGORİ SLIDERI -->
+        <div class="bg-white border-b border-slate-200 pt-4 pb-3">
+            <div class="max-w-[1400px] mx-auto px-2 sm:px-6 lg:px-8">
+                <div class="flex items-start gap-4 overflow-x-auto no-scrollbar" id="homeTopCategorySlider">
+                    <!-- JS Dinamik Dolduracak -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Büyük Banner -->
         <div class="max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl flex flex-col justify-center min-h-[250px] sm:min-h-[300px]">
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl flex flex-col justify-center min-h-[200px] sm:min-h-[300px]">
                 <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
                 <div class="relative z-10 max-w-xl">
                     <span class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-4 inline-block shadow-md">Sezon Fırsatı</span>
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-4 tracking-tight">Kıbrıs'ın En Büyük<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-400">Pazar Yerine</span> Hoş Geldiniz!</h1>
-                    <button onclick="window.toggleHamburgerMenu()" class="bg-white text-slate-900 hover:bg-orange-50 font-black py-3 sm:py-3.5 px-6 sm:px-8 rounded-full transition shadow-xl hover:scale-105 transform inline-flex items-center gap-2 mt-2">
-                        Kategorileri Keşfet <i data-lucide="menu" class="w-4 h-4"></i>
-                    </button>
                 </div>
             </div>
         </div>
@@ -141,9 +140,9 @@
             <div class="flex-1 text-center flex flex-col items-center justify-center">
                 <div class="text-[10px] sm:text-xs text-slate-500 flex items-center gap-1 justify-center mb-0.5">
                     <span>Kıbrıs Bazar</span> <i data-lucide="chevron-right" class="w-3 h-3 opacity-50"></i> 
-                    <span id="bcMainName">Giyim</span> <i data-lucide="chevron-right" class="w-3 h-3 opacity-50"></i>
+                    <span id="bcMainName">Kategori</span> <i id="bcChevronRight" data-lucide="chevron-right" class="w-3 h-3 opacity-50 hidden"></i>
                 </div>
-                <h1 id="catTitleText" class="text-base sm:text-lg font-black text-slate-800 leading-tight">Elbise</h1>
+                <h1 id="catTitleText" class="text-base sm:text-lg font-black text-slate-800 leading-tight">Tüm Ürünler</h1>
                 <span id="catProductCount" class="text-[10px] text-slate-400 font-medium">0 Ürün</span>
             </div>
             <div class="w-10 shrink-0"></div> 
@@ -465,7 +464,30 @@
             }
         };
 
-        // --- ÜST SEKME (MAIN TABS) OLUŞTURUCU ---
+        // --- ANA SAYFA YUVARLAK KATEGORİ SLIDER'I OLUŞTURMA ---
+        function renderHomeTopCategorySlider() {
+            const container = document.getElementById('homeTopCategorySlider');
+            if(!container) return;
+
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
+            let html = '';
+
+            mainCats.forEach(main => {
+                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
+                
+                html += `
+                    <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
+                        <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
+                            <img src="${img}" alt="${main.name}" loading="lazy" onerror="this.src='https://placehold.co/150x150/f1f5f9/475569?text=${encodeURIComponent(main.name)}'" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-700 leading-tight text-center break-words w-full group-hover:text-orange-600 line-clamp-2">${main.name}</span>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- ÜST SEKME (MAIN TABS) OLUŞTURUCU (MODAL İÇİ) ---
         function renderMainTabs(activeId = 'all') {
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             const tabContainer = document.getElementById('mainTabContainer');
@@ -527,7 +549,7 @@
             const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
 
             let html = `
-                <div class="flex w-full h-full">
+                <div class="flex w-full h-full pb-16">
                     <!-- Sol Dikey Grup Sekmeleri -->
                     <div class="w-[28%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll pb-24" id="groupTabsContainer">
             `;
@@ -592,6 +614,7 @@
             btnElement.classList.add('bg-white', 'text-orange-600', 'font-bold');
         };
 
+        // --- KATEGORİ SEÇİMİ VE ÜRÜNLERİ GETİRME ---
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             activeMainCategory = mainCatId;
             activeSubCategorySlug = subCatSlug;
@@ -603,7 +626,11 @@
             if(mobSearch) mobSearch.value = "";
             searchQuery = "";
             
-            window.toggleHamburgerMenu();
+            // Eğer Modal açıksa kapat
+            const drawer = document.getElementById('hamburgerMenuDrawer');
+            if(!drawer.classList.contains('hidden')) {
+                window.toggleHamburgerMenu();
+            }
 
             document.getElementById('heroBannerSection').classList.add('hidden');
             document.getElementById('homeResultsTitle').classList.add('hidden');
@@ -611,11 +638,19 @@
             document.getElementById('categoryTopBar').classList.add('flex');
             
             document.getElementById('bcMainName').innerText = mainCatName;
-            document.getElementById('catTitleText').innerText = subCatName;
+            
+            const bcChevron = document.getElementById('bcChevronRight');
+            const catTitle = document.getElementById('catTitleText');
             
             if (subCatSlug !== '') {
+                // Spesifik alt kategoriye tıklandı (Örn: Elbise)
+                bcChevron.classList.remove('hidden');
+                catTitle.innerText = subCatName;
                 buildFilterModalRows(subCatSlug);
             } else {
+                // Ana kategoriye tıklandı (Örn: Kadın -> "Tümünü Gör")
+                bcChevron.classList.add('hidden');
+                catTitle.innerText = subCatName; // "Tüm Kadın" vs.
                 document.getElementById('modalDynamicFilterRows').innerHTML = '';
                 document.getElementById('quickFilterPills').innerHTML = '';
             }
@@ -884,6 +919,7 @@
             if (activeSubCategorySlug && activeSubCategorySlug !== '') {
                 filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
             } else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) {
+                // Ana Kategoriye ait tüm alt kategorilerin sluglarını topla ve ona göre ürünleri filtrele
                 const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug);
                 filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug));
             }
@@ -921,6 +957,7 @@
             if (activeSubCategorySlug && activeSubCategorySlug !== '') {
                 filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
             } else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) {
+                // "Tümünü Gör" veya ana sayfa sliderındaki tıklamalar için
                 const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug);
                 filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug));
             }
@@ -1038,6 +1075,8 @@
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
+                // Ana sayfa kategori sliderını ve Mega menüyü (Tüm kategoriler gridi) hazırla
+                window.renderHomeTopCategorySlider();
                 window.renderMegaMenuGrid(); 
 
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
