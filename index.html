@@ -35,9 +35,9 @@
         /* Kategori Menüsü Özel Scrollbar Ayarları */
         .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
 
-        /* Mobil Alt Menü Padding */
+        /* Mobil Alt Menü Padding (Sadece alt menü açıksa padding uygula) */
         @media (max-width: 640px) {
-            body { padding-bottom: 70px; }
+            body.has-bottom-nav { padding-bottom: 70px; }
         }
 
         /* Slider Animations */
@@ -72,18 +72,20 @@
                 <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-4 top-1/2 -translate-y-1/2"></i>
             </div>
 
-            <!-- Sağ Butonlar (Masaüstü) -->
-            <div class="hidden sm:flex items-center gap-3 shrink-0">
-                <a href="satici.html" class="flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-orange-500 transition-colors px-3 py-2 rounded-xl hover:bg-orange-50">
+            <!-- Sağ Butonlar (Masaüstü) - GÜNCELLENDİ -->
+            <div class="hidden sm:flex items-center gap-2 shrink-0">
+                <a href="satici.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
                     <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
                 </a>
-                <button class="p-2 text-slate-600 hover:text-rose-500 transition-colors bg-white rounded-xl group relative">
-                    <i data-lucide="heart" class="w-5 h-5 group-hover:fill-rose-500"></i>
+                <a href="giris.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
+                    <i data-lucide="user" class="w-4 h-4"></i> Giriş Yap
+                </a>
+                <button class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-rose-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-rose-50 group">
+                    <i data-lucide="heart" class="w-4 h-4 group-hover:fill-rose-500"></i> Favorilerim
                 </button>
-                <a href="sepet.html" class="flex items-center justify-center p-2 px-3 py-2 text-slate-700 hover:text-orange-600 transition-colors rounded-xl relative">
-                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                    <span class="ml-2 font-bold text-sm">Sepetim</span>
-                    <span id="cartCountBadgeDesk" class="absolute -top-1 -right-1 bg-orange-600 text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center shadow-md hidden border-2 border-white">0</span>
+                <a href="sepet.html" class="flex items-center gap-1.5 text-[13px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors px-3 py-2 rounded-xl relative group">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Sepetim
+                    <span id="cartCountBadgeDesk" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center shadow-md hidden border-2 border-white">0</span>
                 </a>
             </div>
         </div>
@@ -168,7 +170,7 @@
                 </div>
             </div>
 
-            <!-- 5. ÖNE ÇIKAN MAĞAZALAR SLIDER (Sadece mağaza vitrini gibi) -->
+            <!-- 5. ÖNE ÇIKAN MAĞAZALAR SLIDER -->
             <div class="flex flex-col gap-3 bg-white p-4 sm:p-6 rounded-3xl border border-slate-100 shadow-sm mt-2">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="store" class="w-5 h-5 text-indigo-500"></i> Öne Çıkan Mağazalar</h2>
@@ -324,8 +326,8 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) z-index artırıldı -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden flex justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) GÜNCELLENDİ (Ana sayfada gizli) -->
+    <div id="mobileBottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] hidden">
         <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
             <span class="text-[10px] font-bold">Ana Sayfa</span>
@@ -503,6 +505,12 @@
             document.getElementById('categoryTopBar').classList.remove('flex');
             
             document.getElementById('heroBannerSection').classList.remove('hidden');
+            
+            // Ana sayfaya dönüldüğünde mobil alt menüyü GİZLE
+            document.getElementById('mobileBottomNav').classList.add('hidden');
+            document.getElementById('mobileBottomNav').classList.remove('flex');
+            document.body.classList.remove('has-bottom-nav');
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
@@ -639,6 +647,11 @@
             document.getElementById('categoryTopBar').classList.remove('hidden');
             document.getElementById('categoryTopBar').classList.add('flex');
             
+            // Kategori tıklandığında alt menüyü GÖSTER
+            document.getElementById('mobileBottomNav').classList.remove('hidden');
+            document.getElementById('mobileBottomNav').classList.add('flex');
+            document.body.classList.add('has-bottom-nav');
+            
             document.getElementById('bcMainName').innerText = mainCatName;
             const bcChevron = document.getElementById('bcChevronRight');
             const catTitle = document.getElementById('catTitleText');
@@ -657,7 +670,7 @@
         window.resetCategorySelection = () => { window.resetToHome(); };
 
         // --- BANNER RENDER (Büyük Slider ve İkili Küçük Slider) ---
-      function renderAdminBanners() {
+        function renderAdminBanners() {
             // ==========================================
             // 1) BÜYÜK BANNER KISMI
             // ==========================================
@@ -690,7 +703,6 @@
                 `;
             };
 
-            // Büyük Banner Verilerini Topla (Array veya Object)
             let mainBannersData = [];
             if (systemSettings.mainBanners && Array.isArray(systemSettings.mainBanners) && systemSettings.mainBanners.length > 0) {
                 mainBannersData = systemSettings.mainBanners;
@@ -763,7 +775,6 @@
 
             const bgColors = ['bg-blue-100', 'bg-emerald-100', 'bg-purple-100', 'bg-rose-100', 'bg-amber-100'];
             
-            // Küçük Banner Verilerini Topla (Kapsamlı Kontrol)
             let smallBannersData = [];
             
             if (systemSettings.sideBanners && Array.isArray(systemSettings.sideBanners) && systemSettings.sideBanners.length > 0) {
@@ -771,7 +782,6 @@
             } else if (systemSettings.smallBanners && Array.isArray(systemSettings.smallBanners) && systemSettings.smallBanners.length > 0) {
                 smallBannersData = systemSettings.smallBanners;
             } else {
-                // Eski sistem 1 ve 2. banner olarak ayrı ayrı kaydedildiyse
                 if (systemSettings.sideBanner1 && (systemSettings.sideBanner1.title || systemSettings.sideBanner1.image || systemSettings.sideBanner1.subtitle)) {
                     smallBannersData.push(systemSettings.sideBanner1);
                 }
@@ -780,13 +790,11 @@
                 }
             }
 
-            // Hiç banner yoksa Varsayılan (Fallback) Göster
             if (smallBannersData.length === 0) {
                 smallBannersData.push({title: "Elektronik Fırsatları", subtitle: "En yeni teknolojiler", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800", icon: "laptop"});
                 smallBannersData.push({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"});
             }
 
-            // Çekilen Datayı Ekrana Bastır
             smallBannersData.forEach((b, idx) => {
                 smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount);
                 smallSlideCount++;
@@ -801,7 +809,6 @@
                 }
             }
 
-            // OTOMATİK KAYDIRMA (Küçük Bannerlar)
             if (smallSlideCount > 1) {
                 smallBannersContainer.addEventListener('scroll', () => {
                     const childElement = smallBannersContainer.children[0];
@@ -834,11 +841,12 @@
                     }
                     
                     smallBannersContainer.scrollTo({ left: nextIndex * slideWidth, behavior: 'smooth' });
-                }, 4000); // Küçük bannerlar 4 saniyede bir döner
+                }, 4000);
             }
 
             lucide.createIcons();
         }
+
         window.createMiniProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
             const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
@@ -1066,11 +1074,22 @@
                     document.getElementById('heroBannerSection').classList.add('hidden');
                     document.getElementById('categoryTopBar').classList.add('hidden');
                     document.getElementById('mainProductsSection').classList.remove('hidden');
+                    
+                    // Arama yapılıyorsa alt menüyü GÖSTER
+                    document.getElementById('mobileBottomNav').classList.remove('hidden');
+                    document.getElementById('mobileBottomNav').classList.add('flex');
+                    document.body.classList.add('has-bottom-nav');
+
                     const rt = document.getElementById('homeResultsTitle');
                     if(rt) rt.innerHTML = `<h2 class="text-lg font-black text-slate-800">Arama Sonuçları</h2>`;
                 } else if (!activeSubCategorySlug) {
                     document.getElementById('mainProductsSection').classList.add('hidden');
                     document.getElementById('heroBannerSection').classList.remove('hidden');
+                    
+                    // Arama silinip ana sayfaya dönüldüyse alt menüyü GİZLE
+                    document.getElementById('mobileBottomNav').classList.add('hidden');
+                    document.getElementById('mobileBottomNav').classList.remove('flex');
+                    document.body.classList.remove('has-bottom-nav');
                 }
                 window.applyFilters();
             };
