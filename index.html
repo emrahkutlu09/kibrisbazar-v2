@@ -132,15 +132,19 @@
             <!-- 1. YATAY KAYDIRMALI BÜYÜK BANNER SLIDERI -->
             <div class="w-full relative">
                 <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl">
-                    <!-- JS Dolduracak (Admin verisi yoksa fallback tasarımı çizecek) -->
+                    <!-- JS Dolduracak -->
                 </div>
                 <!-- Banner Noktaları (Indicators) -->
                 <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
             </div>
 
             <!-- 2. İKİ ADET KÜÇÜK BANNER (Yatay Kaydırmalı Slider) -->
-            <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners">
-                <!-- JS Dolduracak. Eğer boşsa aşağıdaki Fallback'ler görünecek -->
+            <div class="w-full relative">
+                <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners">
+                    <!-- JS Dolduracak -->
+                </div>
+                <!-- Küçük Banner Noktaları (Indicators) -->
+                <div id="smallBannerIndicators" class="flex justify-center gap-1.5 mt-3 hidden"></div>
             </div>
 
             <!-- 3. POPÜLER ÜRÜNLER SLIDER -->
@@ -666,7 +670,6 @@
                 let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
                 if(b.linkType === 'category' && b.linkValue) targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; 
 
-                // Nokta (Indicator) oluştur
                 indicatorsHtml += `<button class="w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-orange-500 w-4' : 'bg-slate-300'}" id="indicator-${index}"></button>`;
 
                 return `
@@ -685,19 +688,17 @@
                 `;
             };
 
-            // DİNAMİK BÜYÜK BANNER YÜKLEMESİ (Çoklu eklendiyse hepsini döndür)
+            // DİNAMİK BÜYÜK BANNER YÜKLEMESİ
             if (systemSettings.mainBanners && Array.isArray(systemSettings.mainBanners) && systemSettings.mainBanners.length > 0) {
                 systemSettings.mainBanners.forEach((b) => {
                     mainSliderHtml += createMainSlide(b, mainSlideCount); 
                     mainSlideCount++;
                 });
             } else if (systemSettings.mainBanner && systemSettings.mainBanner.image) {
-                // Eski sistem tekli banner varsa (Fallback)
                 mainSliderHtml += createMainSlide(systemSettings.mainBanner, mainSlideCount); 
                 mainSlideCount++;
             }
 
-            // Fallback (Hiç banner eklenmemişse varsayılan banner göster)
             if (mainSlideCount === 0) {
                 const fallbackBanner = {
                     tag: "Özel Teklif",
@@ -713,7 +714,7 @@
             mainSliderContainer.innerHTML = mainSliderHtml;
             indicatorsContainer.innerHTML = indicatorsHtml;
 
-            // OTOMATİK KAYDIRMA (Eğer 1'den fazla banner varsa çalışır)
+            // OTOMATİK KAYDIRMA (Büyük Banner)
             if (mainSlideCount > 1) {
                 mainSliderContainer.addEventListener('scroll', () => {
                     const slideWidth = mainSliderContainer.clientWidth;
@@ -727,7 +728,6 @@
                     }
                 });
                 
-                // Varsa eski timer'ı temizle (Çift hızlanmayı önlemek için)
                 if(window.mainSliderInterval) clearInterval(window.mainSliderInterval);
                 
                 let currentMainSlide = 0;
@@ -739,11 +739,16 @@
 
             // -- KÜÇÜK BANNERLAR (İkili Slider) KISMI --
             const smallBannersContainer = document.getElementById('dynamicSmallBanners');
+            const smallIndicatorsContainer = document.getElementById('smallBannerIndicators');
             let smallHtml = '';
+            let smallIndicatorsHtml = '';
+            let smallSlideCount = 0;
             
-            const createSmallSlide = (b, colorClass) => {
+            const createSmallSlide = (b, colorClass, index) => {
                 let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
                 if(b.linkType === 'category' && b.linkValue) targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; 
+
+                smallIndicatorsHtml += `<button class="w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-orange-500 w-4' : 'bg-slate-300'}" id="small-indicator-${index}"></button>`;
 
                 return `
                     <div class="w-[85%] md:w-[calc(50%-0.5rem)] shrink-0 snap-start ${colorClass} rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition group" ${targetAction}>
@@ -759,32 +764,78 @@
 
             const bgColors = ['bg-blue-100', 'bg-emerald-100', 'bg-purple-100', 'bg-rose-100', 'bg-amber-100'];
 
-            // Çoklu küçük yan banner kontrolü
             if (systemSettings.sideBanners && Array.isArray(systemSettings.sideBanners) && systemSettings.sideBanners.length > 0) {
                 systemSettings.sideBanners.forEach((b, idx) => {
-                    smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length]);
+                    smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount);
+                    smallSlideCount++;
                 });
             } else {
-                // Eski sistem (Sadece Yan 1 ve Yan 2 varsa)
                 const b1 = systemSettings.sideBanner1;
                 const b2 = systemSettings.sideBanner2;
 
                 if (b1 && b1.image) {
-                    smallHtml += createSmallSlide(b1, 'bg-blue-100');
+                    smallHtml += createSmallSlide(b1, 'bg-blue-100', smallSlideCount);
+                    smallSlideCount++;
                 } else {
-                    // Fallback 1
-                    smallHtml += createSmallSlide({title: "Elektronik Fırsatları", subtitle: "En yeni teknolojiler", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800", icon: "laptop"}, 'bg-blue-100');
+                    smallHtml += createSmallSlide({title: "Elektronik Fırsatları", subtitle: "En yeni teknolojiler", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800", icon: "laptop"}, 'bg-blue-100', smallSlideCount);
+                    smallSlideCount++;
                 }
 
                 if (b2 && b2.image) {
-                    smallHtml += createSmallSlide(b2, 'bg-emerald-100');
+                    smallHtml += createSmallSlide(b2, 'bg-emerald-100', smallSlideCount);
+                    smallSlideCount++;
                 } else {
-                    // Fallback 2
-                    smallHtml += createSmallSlide({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"}, 'bg-emerald-100');
+                    smallHtml += createSmallSlide({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"}, 'bg-emerald-100', smallSlideCount);
+                    smallSlideCount++;
                 }
             }
 
             smallBannersContainer.innerHTML = smallHtml;
+            
+            if (smallIndicatorsContainer) {
+                smallIndicatorsContainer.innerHTML = smallIndicatorsHtml;
+                if(smallSlideCount > 1) { 
+                    smallIndicatorsContainer.classList.remove('hidden');
+                }
+            }
+
+            // OTOMATİK KAYDIRMA (Küçük Bannerlar)
+            if (smallSlideCount > 1) {
+                smallBannersContainer.addEventListener('scroll', () => {
+                    const childElement = smallBannersContainer.children[0];
+                    if(!childElement) return;
+                    const slideWidth = childElement.clientWidth + 16; // eleman genişliği + gap(16px)
+                    const activeIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth);
+                    
+                    for (let i = 0; i < smallSlideCount; i++) {
+                        const ind = document.getElementById(`small-indicator-${i}`);
+                        if(ind) {
+                            if (i === activeIndex) { ind.classList.remove('bg-slate-300', 'w-2'); ind.classList.add('bg-orange-500', 'w-4'); } 
+                            else { ind.classList.add('bg-slate-300', 'w-2'); ind.classList.remove('bg-orange-500', 'w-4'); }
+                        }
+                    }
+                });
+                
+                if(window.smallSliderInterval) clearInterval(window.smallSliderInterval);
+                
+                window.smallSliderInterval = setInterval(() => {
+                    const childElement = smallBannersContainer.children[0];
+                    if(!childElement) return;
+                    const slideWidth = childElement.clientWidth + 16;
+                    
+                    let nextIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth) + 1;
+                    
+                    // En sona geldiğinde başa sarsın
+                    if (smallBannersContainer.scrollLeft + smallBannersContainer.clientWidth >= smallBannersContainer.scrollWidth - 10) {
+                        nextIndex = 0;
+                    } else if(nextIndex >= smallSlideCount) {
+                        nextIndex = 0;
+                    }
+                    
+                    smallBannersContainer.scrollTo({ left: nextIndex * slideWidth, behavior: 'smooth' });
+                }, 4000); 
+            }
+
             lucide.createIcons();
         }
 
