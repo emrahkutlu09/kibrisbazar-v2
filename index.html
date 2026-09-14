@@ -46,7 +46,7 @@
         .snap-start { scroll-snap-align: start; }
         
         /* Banner Slider Scroll Bar (Gizli ama smooth) */
-        #mainBannerSlider::-webkit-scrollbar { display: none; }
+        #mainBannerSlider::-webkit-scrollbar, #dynamicSmallBanners::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen overflow-x-hidden">
@@ -136,6 +136,11 @@
                 </div>
                 <!-- Banner Noktaları (Indicators) -->
                 <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
+            </div>
+
+            <!-- 2. İKİ ADET KÜÇÜK BANNER (Yatay Kaydırmalı Slider) -->
+            <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners">
+                <!-- JS Dolduracak. Eğer boşsa aşağıdaki Fallback'ler görünecek -->
             </div>
 
             <!-- 3. POPÜLER ÜRÜNLER SLIDER -->
@@ -315,7 +320,7 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) -->
+    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) z-index artırıldı -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden flex justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
@@ -379,6 +384,7 @@
             return text.toString().toLowerCase().replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
         };
 
+        // --- AKILLI KATEGORİ RESİM EŞLEŞTİRİCİ ---
         function getSmartCategoryImage(categoryName) {
             if (!categoryName) return 'https://placehold.co/150x150/f1f5f9/475569?text=Gorsel';
             const name = categoryName.toLowerCase();
@@ -435,6 +441,7 @@
             else if (name.includes("perde") || name.includes("halı") || name.includes("kilim") || name.includes("paspas") || name.includes("dekorasyon") || name.includes("ayna") || name.includes("tablo") || name.includes("saat") || name.includes("mum")) keyword = "homedecor,rug";
             else if (name.includes("aydınlatma") || name.includes("avize") || name.includes("lamba") || name.includes("ampul")) keyword = "lighting,lamp";
             else if (name.includes("mobilya") || name.includes("koltuk") || name.includes("yatak") || name.includes("dolap") || name.includes("masa")) keyword = "furniture,sofa";
+            else if (name.includes("ev gereçleri") || name.includes("düzenleyici") || name.includes("çöp kovası") || name.includes("hurç") || name.includes("askı")) keyword = "organizer,home";
             else if (name.includes("yapı market") || name.includes("matkap") || name.includes("boya") || name.includes("hırdavat") || name.includes("jeneratör")) keyword = "tools,hardware";
             else if (name.includes("bebek arabası") || name.includes("oto koltuğu") || name.includes("ana kucağı") || name.includes("park yatak") || name.includes("bebek bezi") || name.includes("ıslak mendil") || name.includes("bebek maması") || name.includes("biberon") || name.includes("emzik") || name.includes("çocuk") || name.includes("bebek") || name.includes("hastane çıkışı") || name.includes("tulum") || name.includes("zıbın")) keyword = "baby,stroller,baby-clothes";
             else if (name.includes("oyuncak") || name.includes("lego") || name.includes("puzzle") || name.includes("peluş") || name.includes("akülü") || name.includes("araba")) keyword = "toys,lego";
@@ -450,6 +457,7 @@
             return `https://source.unsplash.com/150x150/?${keyword}`;
         }
 
+        // --- Ortak ve Genel Sistemler ---
         function updateCartBadge() {
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
@@ -644,16 +652,17 @@
 
         window.resetCategorySelection = () => { window.resetToHome(); };
 
-        // --- BANNER RENDER (FALLBACK DESTEKLİ) ---
+        // --- BANNER RENDER (Büyük Slider ve İkili Küçük Slider) ---
         function renderAdminBanners() {
-            const sliderContainer = document.getElementById('mainBannerSlider');
+            // -- BÜYÜK BANNER KISMI --
+            const mainSliderContainer = document.getElementById('mainBannerSlider');
             const indicatorsContainer = document.getElementById('bannerIndicators');
             
-            let sliderHtml = '';
+            let mainSliderHtml = '';
             let indicatorsHtml = '';
-            let slideCount = 0;
+            let mainSlideCount = 0;
 
-            const createSlide = (b, index) => {
+            const createMainSlide = (b, index) => {
                 let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
                 if(b.linkType === 'category' && b.linkValue) targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; 
 
@@ -675,19 +684,13 @@
                 `;
             };
 
-            // Eğer adminden girilmiş veri varsa
+            // Adminden Büyük Banner verisi çek
             if (systemSettings.mainBanner && systemSettings.mainBanner.image) {
-                sliderHtml += createSlide(systemSettings.mainBanner, slideCount); slideCount++;
-            }
-            if (systemSettings.sideBanner1 && systemSettings.sideBanner1.image) {
-                sliderHtml += createSlide(systemSettings.sideBanner1, slideCount); slideCount++;
-            }
-            if (systemSettings.sideBanner2 && systemSettings.sideBanner2.image) {
-                sliderHtml += createSlide(systemSettings.sideBanner2, slideCount); slideCount++;
+                mainSliderHtml += createMainSlide(systemSettings.mainBanner, mainSlideCount); mainSlideCount++;
             }
 
-            // FALLBACK (Eğer adminden hiç resim gelmediyse, varsayılan test bannerını göster)
-            if (slideCount === 0) {
+            // Fallback (Büyük banner yoksa)
+            if (mainSlideCount === 0) {
                 const fallbackBanner = {
                     tag: "Özel Teklif",
                     title: "Kıbrıs Bazar'a<br>Hoş Geldiniz",
@@ -695,20 +698,18 @@
                     btnText: "Alışverişe Başla",
                     image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000"
                 };
-                sliderHtml += createSlide(fallbackBanner, slideCount); slideCount++;
+                mainSliderHtml += createMainSlide(fallbackBanner, mainSlideCount); mainSlideCount++;
             }
 
-            sliderContainer.innerHTML = sliderHtml;
+            mainSliderContainer.innerHTML = mainSliderHtml;
             indicatorsContainer.innerHTML = indicatorsHtml;
-            lucide.createIcons();
 
-            if (slideCount > 1) {
-                sliderContainer.addEventListener('scroll', () => {
-                    const slideWidth = sliderContainer.clientWidth;
-                    const scrollPosition = sliderContainer.scrollLeft;
-                    const activeIndex = Math.round(scrollPosition / slideWidth);
-
-                    for (let i = 0; i < slideCount; i++) {
+            // Otomatik Kaydırma Büyük Banner
+            if (mainSlideCount > 1) {
+                mainSliderContainer.addEventListener('scroll', () => {
+                    const slideWidth = mainSliderContainer.clientWidth;
+                    const activeIndex = Math.round(mainSliderContainer.scrollLeft / slideWidth);
+                    for (let i = 0; i < mainSlideCount; i++) {
                         const ind = document.getElementById(`indicator-${i}`);
                         if(ind) {
                             if (i === activeIndex) { ind.classList.remove('bg-slate-300', 'w-2'); ind.classList.add('bg-orange-500', 'w-4'); } 
@@ -716,14 +717,52 @@
                         }
                     }
                 });
-
-                let currentSlide = 0;
+                let currentMainSlide = 0;
                 setInterval(() => {
-                    currentSlide = (currentSlide + 1) % slideCount;
-                    const slideWidth = sliderContainer.clientWidth;
-                    sliderContainer.scrollTo({ left: currentSlide * slideWidth, behavior: 'smooth' });
+                    currentMainSlide = (currentMainSlide + 1) % mainSlideCount;
+                    mainSliderContainer.scrollTo({ left: currentMainSlide * mainSliderContainer.clientWidth, behavior: 'smooth' });
                 }, 5000);
             }
+
+            // -- KÜÇÜK BANNERLAR (İkili Slider) KISMI --
+            const smallBannersContainer = document.getElementById('dynamicSmallBanners');
+            let smallHtml = '';
+            
+            const createSmallSlide = (b, colorClass) => {
+                let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
+                if(b.linkType === 'category' && b.linkValue) targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; 
+
+                return `
+                    <div class="w-[85%] md:w-[calc(50%-0.5rem)] shrink-0 snap-start ${colorClass} rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition group" ${targetAction}>
+                        ${b.image ? `<img src="${b.image}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">` : ''}
+                        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/70 to-transparent"></div>
+                        <div class="relative z-10 w-2/3">
+                            ${b.title ? `<h3 class="text-lg font-black text-white mb-1 flex items-center gap-1.5"><i data-lucide="${b.icon || 'star'}" class="w-4 h-4"></i> ${b.title}</h3>` : ''}
+                            ${b.subtitle ? `<p class="text-xs text-slate-300 font-medium mb-3">${b.subtitle}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            };
+
+            const b1 = systemSettings.sideBanner1;
+            const b2 = systemSettings.sideBanner2;
+
+            if (b1 && b1.image) {
+                smallHtml += createSmallSlide(b1, 'bg-blue-100');
+            } else {
+                // Fallback 1
+                smallHtml += createSmallSlide({title: "Elektronik Fırsatları", subtitle: "En yeni teknolojiler", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800", icon: "laptop"}, 'bg-blue-100');
+            }
+
+            if (b2 && b2.image) {
+                smallHtml += createSmallSlide(b2, 'bg-emerald-100');
+            } else {
+                // Fallback 2
+                smallHtml += createSmallSlide({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"}, 'bg-emerald-100');
+            }
+
+            smallBannersContainer.innerHTML = smallHtml;
+            lucide.createIcons();
         }
 
         window.createMiniProductCard = (p) => {
