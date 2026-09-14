@@ -20,25 +20,24 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Çekmece & Tam Ekran Menü Animasyonları */
         .drawer-overlay { transition: opacity 0.3s ease; }
         .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Trendyol Tarzı Toggle Switch */
         .toggle-checkbox:checked { right: 0; border-color: #f97316; }
         .toggle-checkbox:checked + .toggle-label { background-color: #f97316; }
         .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
         .toggle-label { background-color: #e2e8f0; transition: all 0.3s; }
         
         .custom-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
-
-        /* Kategori Menüsü Özel Scrollbar Ayarları */
         .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
 
-        /* Mobil Alt Menü Padding (Mobilde menünün arkasında içerik kalmaması için) */
         @media (max-width: 640px) {
             body { padding-bottom: 70px; }
         }
+
+        /* Slider Animations */
+        .slider-scroll { scroll-behavior: smooth; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+        .slider-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen overflow-x-hidden">
@@ -46,9 +45,7 @@
     <!-- Üst Menü / Navbar (Sabit) -->
     <header id="mainHeader" class="sticky top-0 z-[100] bg-white border-b border-slate-200">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
-            
             <div class="flex items-center gap-3 shrink-0">
-                <!-- Mobil Hamburger Menü -->
                 <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition sm:block">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
@@ -83,7 +80,6 @@
 
     <!-- TRENDYOL STİLİ TAM EKRAN KATEGORİ MODALI -->
     <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-white z-[200] hidden flex-col drawer-overlay opacity-0">
-        
         <div class="p-3 sm:p-4 flex items-center gap-3 bg-white shrink-0 border-b border-slate-100 shadow-sm">
             <button onclick="window.toggleHamburgerMenu()" class="p-1.5 text-slate-600 hover:text-orange-500 transition">
                 <i data-lucide="arrow-left" class="w-6 h-6"></i>
@@ -94,16 +90,15 @@
                 <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"><i data-lucide="camera" class="w-5 h-5"></i></button>
             </div>
         </div>
-
         <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0" id="mainTabContainer"></div>
-
         <div class="flex-1 overflow-hidden bg-white w-full max-w-[1400px] mx-auto" id="hamburgerMenuCategories"></div>
     </div>
 
-    <!-- VİTRİN BÖLÜMÜ (Sadece Ana Sayfada) -->
-    <div id="heroBannerSection" class="w-full bg-slate-50">
+    <!-- ANA SAYFA VİTRİN BÖLÜMÜ (SADECE ANA SAYFADA GÖRÜNÜR) -->
+    <div id="heroBannerSection" class="w-full bg-slate-50 flex flex-col gap-4 pb-8">
+        
         <!-- Arama Çubuğu (Mobil) -->
-        <div class="sm:hidden p-3 bg-white border-b border-slate-200">
+        <div class="sm:hidden p-3 bg-white border-b border-slate-200 sticky top-14 z-50">
             <div class="relative w-full">
                 <input type="text" id="mobileSearchInput" placeholder="Marka, ürün veya kategori ara..." 
                     class="w-full bg-slate-100 border border-slate-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition-all font-medium">
@@ -111,24 +106,92 @@
             </div>
         </div>
 
-        <!-- ANA SAYFA ÜST KATEGORİ SLIDERI -->
-        <div class="bg-white border-b border-slate-200 pt-4 pb-3">
+        <!-- YATAY KATEGORİ SLIDER'I -->
+        <div class="bg-white border-b border-slate-200 py-3 shadow-sm relative z-40">
             <div class="max-w-[1400px] mx-auto px-2 sm:px-6 lg:px-8">
-                <div class="flex items-start gap-4 overflow-x-auto no-scrollbar" id="homeTopCategorySlider">
+                <div class="flex items-start gap-3 overflow-x-auto no-scrollbar" id="homeTopCategorySlider">
                     <!-- JS Dinamik Dolduracak -->
                 </div>
             </div>
         </div>
 
-        <!-- Büyük Banner -->
-        <div class="max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xl flex flex-col justify-center min-h-[200px] sm:min-h-[300px]">
-                <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
-                <div class="relative z-10 max-w-xl">
-                    <span class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-4 inline-block shadow-md">Sezon Fırsatı</span>
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-4 tracking-tight">Kıbrıs'ın En Büyük<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-400">Pazar Yerine</span> Hoş Geldiniz!</h1>
+        <!-- VİTRİN İÇERİKLERİ (Maks Genişlik) -->
+        <div class="max-w-[1400px] mx-auto w-full px-3 sm:px-6 lg:px-8 flex flex-col gap-8 mt-2">
+            
+            <!-- 1. BÜYÜK DİNAMİK BANNER (Admin Panelinden Gelecek) -->
+            <div id="dynamicMainBanner" class="w-full bg-slate-200 rounded-3xl overflow-hidden relative shadow-lg min-h-[160px] sm:min-h-[300px] flex items-center group cursor-pointer">
+                <!-- Varsayılan Yükleniyor veya Fallback -->
+                <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-orange-400 to-rose-500 text-white p-8">
+                    <div class="max-w-xl relative z-10">
+                        <span class="bg-white text-orange-600 text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-3 inline-block shadow-sm">Hoş Geldiniz</span>
+                        <h2 class="text-2xl sm:text-4xl md:text-5xl font-black leading-tight mb-2">Kıbrıs Bazar'da<br>Alışverişe Başla!</h2>
+                        <button class="mt-2 bg-slate-900 text-white text-xs font-bold py-2.5 px-6 rounded-full shadow-lg hover:scale-105 transition-transform">Fırsatları İncele</button>
+                    </div>
                 </div>
             </div>
+
+            <!-- 2. İKİ ADET KÜÇÜK BANNER (Admin Panelinden Gelecek) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="dynamicSmallBanners">
+                <!-- Fallback Banner 1 -->
+                <div class="w-full bg-blue-100 rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition">
+                    <div class="relative z-10 w-2/3">
+                        <h3 class="text-lg font-black text-blue-900 mb-1">Elektronik Fırsatları</h3>
+                        <p class="text-xs text-blue-700 font-medium mb-3">En yeni teknolojiler uygun fiyata</p>
+                        <span class="text-[10px] font-bold text-white bg-blue-600 px-3 py-1.5 rounded-lg">Keşfet</span>
+                    </div>
+                </div>
+                <!-- Fallback Banner 2 -->
+                <div class="w-full bg-emerald-100 rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition">
+                    <div class="relative z-10 w-2/3">
+                        <h3 class="text-lg font-black text-emerald-900 mb-1">Ev & Mobilya</h3>
+                        <p class="text-xs text-emerald-700 font-medium mb-3">Evinizi baştan yaratın</p>
+                        <span class="text-[10px] font-bold text-white bg-emerald-600 px-3 py-1.5 rounded-lg">İncele</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. POPÜLER ÜRÜNLER SLIDER -->
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between px-1">
+                    <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="flame" class="w-5 h-5 text-orange-500 fill-orange-100"></i> Popüler Ürünler</h2>
+                    <button class="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center">Tümünü Gör <i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts">
+                    <!-- JS Dolduracak -->
+                </div>
+            </div>
+
+            <!-- 4. EN ÇOK FAVORİLENENLER SLIDER -->
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between px-1">
+                    <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="heart" class="w-5 h-5 text-rose-500 fill-rose-100"></i> En Çok Favorilenenler</h2>
+                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts">
+                    <!-- JS Dolduracak -->
+                </div>
+            </div>
+
+            <!-- 5. ÖNE ÇIKAN MAĞAZALAR SLIDER (Sadece mağaza vitrini gibi) -->
+            <div class="flex flex-col gap-3 bg-white p-4 sm:p-6 rounded-3xl border border-slate-100 shadow-sm mt-2">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="store" class="w-5 h-5 text-indigo-500"></i> Öne Çıkan Mağazalar</h2>
+                    <button class="text-xs font-bold text-indigo-600 hover:text-indigo-700">Tümü <i data-lucide="chevron-right" class="w-4 h-4 inline"></i></button>
+                </div>
+                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores">
+                    <div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Firebase Mağaza verileri yükleniyor...</div>
+                </div>
+            </div>
+
+            <!-- 6. YENİ EKLENENLER SLIDER -->
+            <div class="flex flex-col gap-3 mt-2">
+                <div class="flex items-center justify-between px-1">
+                    <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-emerald-500 fill-emerald-100"></i> Yeni Eklenenler</h2>
+                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts">
+                    <!-- JS Dolduracak -->
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -162,8 +225,8 @@
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-2.5 bg-slate-50 border-t border-slate-100" id="quickFilterPills"></div>
     </div>
 
-    <!-- ANA İÇERİK: ÜRÜN IZGARASI -->
-    <main class="w-full flex-1 max-w-[1400px] mx-auto p-3 sm:p-4 lg:p-6 bg-slate-50 min-h-[50vh]">
+    <!-- MEVCUT KATEGORİ & ARAMA ÜRÜN IZGARASI -->
+    <main class="w-full flex-1 max-w-[1400px] mx-auto p-3 sm:p-4 lg:p-6 bg-slate-50 min-h-[50vh] hidden" id="mainProductsSection">
         <div id="homeResultsTitle" class="mb-4 flex items-center gap-2">
             <h2 class="text-lg font-black text-slate-800">Sizin İçin Seçtiklerimiz</h2>
             <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">0 İlan</span>
@@ -264,9 +327,9 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) -->
+    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) z-index artırıldı -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden flex justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <a href="/" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
+        <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
             <span class="text-[10px] font-bold">Ana Sayfa</span>
         </a>
@@ -304,11 +367,14 @@
 
     <script type="module">
         import { db } from "./js/firebase-config.js";
-        import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const APP_ID = 'kibris-pazar';
         let allProducts = [];
         let allCategories = [];
+        let allStores = []; // Vitrin mağazaları için
+        let systemSettings = {}; // Admin bannerları için
+
         let activeMainCategory = null; 
         let activeSubCategorySlug = null; 
         let searchQuery = '';
@@ -320,24 +386,16 @@
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
 
+        // --- Yardımcı Fonksiyonlar (Slug, İmaj vs) ---
         window.generateSlug = (text) => {
             if (!text) return 'kibris-bazar';
-            return text.toString().toLowerCase()
-                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
-                .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
-                .replace(/\s+/g, '-')
-                .replace(/[^\w\-]+/g, '')
-                .replace(/\-\-+/g, '-')
-                .replace(/^-+|-+$/g, '');
+            return text.toString().toLowerCase().replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
         };
 
-        // --- AKILLI KATEGORİ RESİM EŞLEŞTİRİCİ ---
         function getSmartCategoryImage(categoryName) {
             if (!categoryName) return 'https://placehold.co/150x150/f1f5f9/475569?text=Gorsel';
-            
             const name = categoryName.toLowerCase();
             let keyword = "shopping,products"; 
-
             if (name.includes("elbise")) keyword = "dress,womens-fashion";
             else if (name.includes("tshirt") || name.includes("tişört")) keyword = "tshirt,clothing";
             else if (name.includes("gömlek")) keyword = "shirt,clothing";
@@ -347,14 +405,11 @@
             else if (name.includes("bluz")) keyword = "blouse,clothing";
             else if (name.includes("ceket") || name.includes("blazer")) keyword = "jacket,blazer";
             else if (name.includes("tesettür")) keyword = "hijab,modest-fashion";
-            else if (name.includes("body")) keyword = "bodysuit,clothing";
             else if (name.includes("mont") || name.includes("kaban") || name.includes("trençkot")) keyword = "winter-coat,jacket";
-            else if (name.includes("kazak") || name.includes("sweatshirt")) keyword = "sweater,hoodie";
             else if (name.includes("sneaker")) keyword = "sneakers,shoes";
             else if (name.includes("topuklu")) keyword = "high-heels,shoes";
             else if (name.includes("çanta")) keyword = "handbag,purse";
-            else if (name.includes("terlik") || name.includes("sandalet")) keyword = "sandals,slippers";
-            else if (name.includes("babet") || name.includes("loafer") || name.includes("casual")) keyword = "loafers,shoes";
+            else if (name.includes("terlik") || name.includes("sandalet") || name.includes("babet") || name.includes("loafer") || name.includes("casual")) keyword = "sandals,loafers,shoes";
             else if (name.includes("cüzdan") || name.includes("kartlık")) keyword = "wallet,leather";
             else if (name.includes("valiz") || name.includes("bavul")) keyword = "luggage,suitcase";
             else if (name.includes("bot") || name.includes("çizme")) keyword = "boots,shoes";
@@ -363,7 +418,6 @@
             else if (name.includes("takı") || name.includes("kolye") || name.includes("küpe") || name.includes("bileklik") || name.includes("yüzük") || name.includes("altın")) keyword = "jewelry,necklace";
             else if (name.includes("şapka")) keyword = "hat,cap";
             else if (name.includes("kemer")) keyword = "leather-belt,belt";
-            else if (name.includes("şal") || name.includes("fular") || name.includes("kravat")) keyword = "scarf,tie";
             else if (name.includes("çorap")) keyword = "socks";
             else if (name.includes("pijama") || name.includes("gecelik")) keyword = "pajamas,sleepwear";
             else if (name.includes("külot") || name.includes("sütyen") || name.includes("iç giyim") || name.includes("boxer") || name.includes("atlet") || name.includes("fantezi")) keyword = "lingerie,underwear";
@@ -387,96 +441,96 @@
             else if (name.includes("hoparlör") || name.includes("ses") || name.includes("soundbar")) keyword = "speaker,audio";
             else if (name.includes("playstation") || name.includes("xbox") || name.includes("nintendo") || name.includes("oyun") || name.includes("konsol")) keyword = "playstation,gaming";
             else if (name.includes("kamera") || name.includes("fotoğraf") || name.includes("lens")) keyword = "camera,photography";
-            else if (name.includes("küçük ev aletleri") || name.includes("süpürge") || name.includes("ütü") || name.includes("kahve makinesi") || name.includes("blender") || name.includes("tost") || name.includes("airfryer")) keyword = "small-appliance,coffee-maker";
-            else if (name.includes("tencere") || name.includes("tava") || name.includes("yemek takımı") || name.includes("çatal") || name.includes("bardak") || name.includes("mutfak")) keyword = "cookware,kitchenware";
+            else if (name.includes("tencere") || name.includes("tava") || name.includes("yemek takımı") || name.includes("çatal") || name.includes("bardak") || name.includes("mutfak") || name.includes("küçük ev aletleri") || name.includes("blender") || name.includes("kahve makinesi")) keyword = "cookware,kitchenware,appliance";
             else if (name.includes("banyo") || name.includes("havlu") || name.includes("bornoz")) keyword = "towels,bathroom";
             else if (name.includes("bahçe") || name.includes("saksı") || name.includes("mangl") || name.includes("çiçek") || name.includes("bitki")) keyword = "garden,plants";
             else if (name.includes("nevresim") || name.includes("yatak örtüsü") || name.includes("pike") || name.includes("yorgan") || name.includes("battaniye")) keyword = "bedding,bedroom";
-            else if (name.includes("perde") || name.includes("halı") || name.includes("kilim") || name.includes("paspas")) keyword = "rug,curtains";
-            else if (name.includes("dekorasyon") || name.includes("ayna") || name.includes("tablo") || name.includes("saat") || name.includes("mum")) keyword = "homedecor";
+            else if (name.includes("perde") || name.includes("halı") || name.includes("kilim") || name.includes("paspas") || name.includes("dekorasyon") || name.includes("ayna") || name.includes("tablo") || name.includes("saat") || name.includes("mum")) keyword = "homedecor,rug";
             else if (name.includes("aydınlatma") || name.includes("avize") || name.includes("lamba") || name.includes("ampul")) keyword = "lighting,lamp";
             else if (name.includes("mobilya") || name.includes("koltuk") || name.includes("yatak") || name.includes("dolap") || name.includes("masa")) keyword = "furniture,sofa";
-            else if (name.includes("ev gereçleri") || name.includes("düzenleyici") || name.includes("çöp kovası") || name.includes("hurç") || name.includes("askı")) keyword = "organizer,home";
             else if (name.includes("yapı market") || name.includes("matkap") || name.includes("boya") || name.includes("hırdavat") || name.includes("jeneratör")) keyword = "tools,hardware";
-            else if (name.includes("bebek arabası") || name.includes("oto koltuğu") || name.includes("ana kucağı") || name.includes("park yatak")) keyword = "stroller,baby";
-            else if (name.includes("bebek bezi") || name.includes("ıslak mendil")) keyword = "diapers,baby";
-            else if (name.includes("bebek maması") || name.includes("biberon") || name.includes("emzik") || name.includes("önlük")) keyword = "baby-bottle,pacifier";
+            else if (name.includes("bebek arabası") || name.includes("oto koltuğu") || name.includes("ana kucağı") || name.includes("park yatak") || name.includes("bebek bezi") || name.includes("ıslak mendil") || name.includes("bebek maması") || name.includes("biberon") || name.includes("emzik") || name.includes("çocuk") || name.includes("bebek") || name.includes("hastane çıkışı") || name.includes("tulum") || name.includes("zıbın")) keyword = "baby,stroller,baby-clothes";
             else if (name.includes("oyuncak") || name.includes("lego") || name.includes("puzzle") || name.includes("peluş") || name.includes("akülü") || name.includes("araba")) keyword = "toys,lego";
-            else if (name.includes("çocuk") || name.includes("bebek") || name.includes("hastane çıkışı") || name.includes("tulum") || name.includes("zıbın")) keyword = "baby-clothes,kids";
-            else if (name.includes("deterjan") || name.includes("temizlik") || name.includes("kağıt")) keyword = "cleaning,detergent";
-            else if (name.includes("çay") || name.includes("kahve") || name.includes("içecek")) keyword = "tea,coffee";
-            else if (name.includes("kuruyemiş") || name.includes("atıştırmalık") || name.includes("çikolata")) keyword = "snacks,nuts";
-            else if (name.includes("gıda") || name.includes("kahvaltılık") || name.includes("yağ")) keyword = "groceries,food";
-            else if (name.includes("sağlık") || name.includes("vitamin") || name.includes("protein") || name.includes("ped")) keyword = "vitamins,supplements";
+            else if (name.includes("deterjan") || name.includes("temizlik") || name.includes("kağıt") || name.includes("çay") || name.includes("kahve") || name.includes("içecek") || name.includes("kuruyemiş") || name.includes("atıştırmalık") || name.includes("çikolata") || name.includes("gıda") || name.includes("kahvaltılık") || name.includes("yağ")) keyword = "groceries,food,cleaning";
             else if (name.includes("kedi") || name.includes("köpek") || name.includes("petshop") || name.includes("mama") || name.includes("tasma") || name.includes("kuş") || name.includes("akvaryum")) keyword = "cat,dog,petfood";
-            else if (name.includes("spor") || name.includes("koşu") || name.includes("fitness") || name.includes("pilates") || name.includes("yoga") || name.includes("krampon") || name.includes("tenis") || name.includes("voleybol") || name.includes("basketbol")) keyword = "fitness,gym,sports";
+            else if (name.includes("spor") || name.includes("koşu") || name.includes("fitness") || name.includes("pilates") || name.includes("yoga") || name.includes("krampon") || name.includes("tenis") || name.includes("voleybol") || name.includes("basketbol") || name.includes("protein tozu") || name.includes("amino asit") || name.includes("kreatin")) keyword = "fitness,gym,sports,protein";
             else if (name.includes("kamp") || name.includes("çadır") || name.includes("outdoor") || name.includes("termos") || name.includes("balıkçılık") || name.includes("tırmanış")) keyword = "camping,tent";
             else if (name.includes("bisiklet") || name.includes("scooter") || name.includes("paten") || name.includes("kaykay")) keyword = "bicycle,scooter";
-            else if (name.includes("protein tozu") || name.includes("amino asit") || name.includes("karbonhidrat") || name.includes("l-karnitin") || name.includes("kreatin") || name.includes("shaker")) keyword = "protein-powder,gym";
-            else if (name.includes("kitap") || name.includes("roman") || name.includes("eğitim") || name.includes("dergi")) keyword = "books,reading";
-            else if (name.includes("kırtasiye") || name.includes("defter") || name.includes("kalem") || name.includes("ofis") || name.includes("etiket") || name.includes("dosyalama")) keyword = "stationery,notebook";
+            else if (name.includes("kitap") || name.includes("roman") || name.includes("eğitim") || name.includes("dergi") || name.includes("kırtasiye") || name.includes("defter") || name.includes("kalem") || name.includes("ofis") || name.includes("etiket") || name.includes("dosyalama")) keyword = "books,reading,stationery";
             else if (name.includes("hobi") || name.includes("müzik") || name.includes("gitar") || name.includes("drone") || name.includes("örgü") || name.includes("parti")) keyword = "guitar,hobby";
-            else if (name.includes("oto") || name.includes("lastik") || name.includes("araç") || name.includes("paspas") || name.includes("silecek") || name.includes("yağ")) keyword = "car,tire";
-            else if (name.includes("motosiklet") || name.includes("kask")) keyword = "motorcycle,helmet";
+            else if (name.includes("oto") || name.includes("lastik") || name.includes("araç") || name.includes("paspas") || name.includes("silecek") || name.includes("motosiklet") || name.includes("kask")) keyword = "car,tire,motorcycle";
 
             return `https://source.unsplash.com/150x150/?${keyword}`;
         }
 
+        // --- Ortak ve Genel Sistemler ---
         function updateCartBadge() {
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
             const badgeDesk = document.getElementById('cartCountBadgeDesk');
             const badgeMob = document.getElementById('cartCountBadgeMob');
-            if(badgeDesk) {
-                badgeDesk.innerText = totalQty;
-                if(totalQty > 0) badgeDesk.classList.remove('hidden');
-                else badgeDesk.classList.add('hidden');
-            }
-            if(badgeMob) {
-                badgeMob.innerText = totalQty;
-                if(totalQty > 0) badgeMob.classList.remove('hidden');
-                else badgeMob.classList.add('hidden');
-            }
+            if(badgeDesk) { badgeDesk.innerText = totalQty; if(totalQty > 0) badgeDesk.classList.remove('hidden'); else badgeDesk.classList.add('hidden'); }
+            if(badgeMob) { badgeMob.innerText = totalQty; if(totalQty > 0) badgeMob.classList.remove('hidden'); else badgeMob.classList.add('hidden'); }
         }
 
         window.toggleFavorite = (id) => {
             if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); } 
             else { favorites.push(id); }
             localStorage.setItem('user_favorites', JSON.stringify(favorites));
-            window.applyFilters();
+            
+            // Eğer kategori sonuçları veya arama modundaysak mevcut listeyi güncelle
+            if (!document.getElementById('heroBannerSection').classList.contains('hidden')) {
+                // Ana sayfa modundayız, sadece o kartların ikonlarını güncelle
+                document.querySelectorAll(`button[onclick="window.toggleFavorite('${id}')"] i`).forEach(icon => {
+                    if (favorites.includes(id)) {
+                        icon.classList.remove('text-slate-400');
+                        icon.classList.add('fill-rose-500', 'text-rose-500');
+                    } else {
+                        icon.classList.remove('fill-rose-500', 'text-rose-500');
+                        icon.classList.add('text-slate-400');
+                    }
+                });
+                renderVitrinFavoriteProducts(); // Favoriler sliderını anlık tazele
+            } else {
+                window.applyFilters();
+            }
         };
 
+        window.resetToHome = () => {
+            activeMainCategory = null; activeSubCategorySlug = null; searchQuery = ""; selectedFilters = {};
+            document.getElementById('searchInput').value = "";
+            const mobSearch = document.getElementById('mobileSearchInput');
+            if(mobSearch) mobSearch.value = "";
+            
+            document.getElementById('mainProductsSection').classList.add('hidden');
+            document.getElementById('categoryTopBar').classList.add('hidden');
+            document.getElementById('categoryTopBar').classList.remove('flex');
+            
+            document.getElementById('heroBannerSection').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // --- TAM EKRAN KATEGORİ MENÜSÜ & SLIDER ---
         window.toggleHamburgerMenu = () => {
             const drawer = document.getElementById('hamburgerMenuDrawer');
             if(drawer) {
                 if(drawer.classList.contains('hidden')) {
-                    drawer.classList.remove('hidden');
-                    drawer.classList.add('flex');
-                    setTimeout(() => { 
-                        drawer.classList.remove('opacity-0');
-                    }, 10);
+                    drawer.classList.remove('hidden'); drawer.classList.add('flex');
+                    setTimeout(() => { drawer.classList.remove('opacity-0'); }, 10);
                 } else {
                     drawer.classList.add('opacity-0');
-                    setTimeout(() => { 
-                        drawer.classList.add('hidden'); 
-                        drawer.classList.remove('flex');
-                    }, 300);
+                    setTimeout(() => { drawer.classList.add('hidden'); drawer.classList.remove('flex'); }, 300);
                 }
             }
         };
 
-        // --- ANA SAYFA YUVARLAK KATEGORİ SLIDER'I OLUŞTURMA (HATA DÜZELTİLDİ) ---
         window.renderHomeTopCategorySlider = () => {
             const container = document.getElementById('homeTopCategorySlider');
             if(!container) return;
-
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             let html = '';
-
             mainCats.forEach(main => {
                 const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
-                
-                // Ana Kategoriye tıklanınca o kategori içindeki tüm ürünlerin listelenmesini sağlar
                 html += `
                     <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
                         <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
@@ -489,47 +543,33 @@
             container.innerHTML = html;
         };
 
-        // --- ÜST SEKME (MAIN TABS) OLUŞTURUCU (MODAL İÇİ) ---
         function renderMainTabs(activeId = 'all') {
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             const tabContainer = document.getElementById('mainTabContainer');
             if(!tabContainer) return;
-            
             let html = `<button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${activeId === 'all' ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent'}">Kategoriler</button>`;
-
             mainCats.forEach(main => {
                 const isActive = main.id === activeId ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent';
                 html += `<button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" id="mainTab-${main.id}" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${isActive}">${main.name}</button>`;
             });
-
             tabContainer.innerHTML = html;
         }
 
-        // --- EKRAN 1: TÜM KATEGORİLER GRİDİ (ANA GÖRÜNÜM) ---
         window.renderMegaMenuGrid = () => {
             const container = document.getElementById('hamburgerMenuCategories');
             if(!container) return;
-            
             renderMainTabs('all');
-
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
-            
             let html = `
                 <div class="w-full h-full p-4 overflow-y-auto category-scroll pb-24 bg-slate-50">
                     <div class="bg-gradient-to-r from-orange-100 to-orange-200 rounded-xl p-4 text-orange-900 flex items-center justify-between shadow-sm mb-4 cursor-pointer">
-                        <div>
-                            <h3 class="text-sm font-bold">Kategoriler <i data-lucide="chevron-right" class="w-4 h-4 inline opacity-50"></i></h3>
-                            <span class="text-[10px] mt-0.5 block opacity-80">İlgini çekebilecek tüm kategoriler</span>
-                        </div>
+                        <div><h3 class="text-sm font-bold">Kategoriler <i data-lucide="chevron-right" class="w-4 h-4 inline opacity-50"></i></h3><span class="text-[10px] mt-0.5 block opacity-80">İlgini çekebilecek tüm kategoriler</span></div>
                         <div class="w-12 h-12 flex items-center justify-center transform -rotate-12"><i data-lucide="tag" class="w-8 h-8 text-orange-500 fill-orange-500"></i></div>
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-3">
             `;
-
             mainCats.forEach(main => {
                 const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
-                
                 html += `
                     <button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" class="flex flex-row items-center justify-between pl-3 pr-0 py-0 rounded-xl bg-slate-100/80 hover:bg-slate-200 border border-transparent transition group text-left h-20 overflow-hidden relative">
                         <span class="text-xs font-bold text-slate-800 z-10 w-1/2 leading-tight">${main.name}</span>
@@ -537,54 +577,32 @@
                     </button>
                 `;
             });
-
             html += `</div></div>`;
             container.innerHTML = html;
             lucide.createIcons();
         };
 
-        // --- EKRAN 2: ANA KATEGORİ DETAYI (SOL DİKEY GRUPLAR + SAĞ 3'LÜ GRİD) ---
         window.openMainCategoryDetails = (mainId, mainName) => {
             const container = document.getElementById('hamburgerMenuCategories');
             renderMainTabs(mainId);
-
             const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
-
-            let html = `
-                <div class="flex w-full h-full pb-16">
-                    <!-- Sol Dikey Grup Sekmeleri -->
-                    <div class="w-[28%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll" id="groupTabsContainer">
-            `;
-
+            let html = `<div class="flex w-full h-full pb-16"><div class="w-[28%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll pb-24" id="groupTabsContainer">`;
             groups.forEach((grp, idx) => {
                 const isActive = idx === 0 ? 'bg-white text-orange-600 font-bold' : 'text-slate-600 font-medium hover:bg-slate-100';
                 html += `<button onclick="window.switchGroupTab('${grp.id}', this)" class="group-tab-btn text-left px-3 py-4 text-[11px] transition ${isActive}">${grp.name}</button>`;
             });
-
-            html += `</div>
-                    <!-- Sağ 3'lü Grid Kategori Alanı -->
-                    <div class="w-[72%] sm:w-[75%] p-3 sm:p-4 overflow-y-auto category-scroll bg-white" id="groupContentArea">
-            `;
-
+            html += `</div><div class="w-[72%] sm:w-[75%] p-3 sm:p-4 overflow-y-auto category-scroll bg-white pb-24" id="groupContentArea">`;
             groups.forEach((grp, idx) => {
                 const isHidden = idx === 0 ? '' : 'hidden';
                 const subs = allCategories.filter(c => c.parentId === grp.id).sort((a, b) => (a.order || 0) - (b.order || 0));
-                
-                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4 pb-28">`;
-                
-                html += `
-                    <div class="grid grid-cols-3 gap-x-2 gap-y-4">
+                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4 pb-28"><div class="grid grid-cols-3 gap-x-2 gap-y-4">
                         <button onclick="window.selectCategory('${mainId}', '', 'Tüm ${grp.name}', '${mainName}')" class="flex flex-col items-center group text-center">
                             <div class="w-[70px] h-[70px] sm:w-20 sm:h-20 rounded-2xl bg-orange-50 overflow-hidden mb-1 flex items-center justify-center border border-orange-100">
-                                <div class="grid grid-cols-2 gap-1 opacity-60">
-                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div>
-                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px] flex items-center justify-center text-white"><i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></div>
-                                </div>
+                                <div class="grid grid-cols-2 gap-1 opacity-60"><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px] flex items-center justify-center text-white"><i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></div></div>
                             </div>
                             <span class="text-[10px] font-medium text-slate-700 leading-tight w-full truncate">Tümünü Gör</span>
                         </button>
                 `;
-
                 subs.forEach(sub => {
                     const subImg = sub.image && sub.image.trim() !== '' ? sub.image : getSmartCategoryImage(sub.name);
                     html += `
@@ -598,7 +616,6 @@
                 });
                 html += `</div></div>`;
             });
-
             html += `</div></div>`;
             container.innerHTML = html;
             lucide.createIcons();
@@ -606,78 +623,209 @@
 
         window.switchGroupTab = (groupId, btnElement) => {
             document.querySelectorAll('.group-pane').forEach(p => p.classList.add('hidden'));
-            document.querySelectorAll('.group-tab-btn').forEach(b => {
-                b.classList.remove('bg-white', 'text-orange-600', 'font-bold');
-                b.classList.add('text-slate-600', 'font-medium', 'hover:bg-slate-100');
-            });
-
+            document.querySelectorAll('.group-tab-btn').forEach(b => { b.classList.remove('bg-white', 'text-orange-600', 'font-bold'); b.classList.add('text-slate-600', 'font-medium', 'hover:bg-slate-100'); });
             document.getElementById(`groupPane-${groupId}`).classList.remove('hidden');
             btnElement.classList.remove('text-slate-600', 'font-medium', 'hover:bg-slate-100');
             btnElement.classList.add('bg-white', 'text-orange-600', 'font-bold');
         };
 
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
-            activeMainCategory = mainCatId;
-            activeSubCategorySlug = subCatSlug;
-            selectedFilters = {}; 
-            currentSort = 'newest';
-            
+            activeMainCategory = mainCatId; activeSubCategorySlug = subCatSlug; selectedFilters = {}; currentSort = 'newest';
             document.getElementById('searchInput').value = "";
-            const mobSearch = document.getElementById('mobileSearchInput');
-            if(mobSearch) mobSearch.value = "";
+            const mobSearch = document.getElementById('mobileSearchInput'); if(mobSearch) mobSearch.value = "";
             searchQuery = "";
             
-            // Modal açıksa kapat
             const drawer = document.getElementById('hamburgerMenuDrawer');
-            if(!drawer.classList.contains('hidden')) {
-                window.toggleHamburgerMenu();
-            }
+            if(!drawer.classList.contains('hidden')) { window.toggleHamburgerMenu(); }
 
+            // Ana Sayfa Vitrini Gizle, Mevcut Ürün Listesi Yapısını Göster
             document.getElementById('heroBannerSection').classList.add('hidden');
-            document.getElementById('homeResultsTitle').classList.add('hidden');
+            document.getElementById('mainProductsSection').classList.remove('hidden');
+            
             document.getElementById('categoryTopBar').classList.remove('hidden');
             document.getElementById('categoryTopBar').classList.add('flex');
             
             document.getElementById('bcMainName').innerText = mainCatName;
-            
             const bcChevron = document.getElementById('bcChevronRight');
             const catTitle = document.getElementById('catTitleText');
             
             if (subCatSlug !== '') {
-                // Spesifik alt kategori seçildi
-                bcChevron.classList.remove('hidden');
-                catTitle.innerText = subCatName;
+                bcChevron.classList.remove('hidden'); catTitle.innerText = subCatName;
                 buildFilterModalRows(subCatSlug);
             } else {
-                // Ana Kategori "Tümünü Gör" seçildi
-                bcChevron.classList.add('hidden');
-                catTitle.innerText = subCatName;
-                document.getElementById('modalDynamicFilterRows').innerHTML = '';
-                document.getElementById('quickFilterPills').innerHTML = '';
+                bcChevron.classList.add('hidden'); catTitle.innerText = subCatName;
+                document.getElementById('modalDynamicFilterRows').innerHTML = ''; document.getElementById('quickFilterPills').innerHTML = '';
             }
-            
             window.applyFilters();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.resetCategorySelection = () => {
-            activeMainCategory = null;
-            activeSubCategorySlug = null;
-            
-            document.getElementById('modalFilterFreeDelivery').checked = false;
-            document.getElementById('modalFilterCOD').checked = false;
-            document.getElementById('modalFilterPriceMin').value = "";
-            document.getElementById('modalFilterPriceMax').value = "";
-            selectedFilters = {};
-            
-            document.getElementById('heroBannerSection').classList.remove('hidden');
-            document.getElementById('homeResultsTitle').classList.remove('hidden');
-            document.getElementById('categoryTopBar').classList.add('hidden');
-            document.getElementById('categoryTopBar').classList.remove('flex');
-            
-            window.applyFilters();
+        window.resetCategorySelection = () => { window.resetToHome(); };
+
+        // --- ANA SAYFA YENİ VİTRİN BÖLÜMLERİ ---
+
+        function renderAdminBanners() {
+            const mainBannerContainer = document.getElementById('dynamicMainBanner');
+            const smallBannersContainer = document.getElementById('dynamicSmallBanners');
+
+            // Büyük Banner İşleme
+            if (systemSettings.mainBanner && systemSettings.mainBanner.image) {
+                const b = systemSettings.mainBanner;
+                let targetAction = `onclick="window.location.href='${b.linkValue}'"`;
+                if(b.linkType === 'category') targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; // Slug mantığına göre uyarlanabilir
+                
+                mainBannerContainer.innerHTML = `
+                    <div class="absolute inset-0 w-full h-full">
+                        <img src="${b.image}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-transparent"></div>
+                    </div>
+                    <div class="relative z-10 p-8 sm:p-12 w-full max-w-2xl text-left" ${targetAction}>
+                        ${b.tag ? `<span class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-3 inline-block shadow-sm">${b.tag}</span>` : ''}
+                        <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-2">${b.title || ''}</h2>
+                        ${b.subtitle ? `<p class="text-sm text-slate-300 mb-4 font-medium max-w-md">${b.subtitle}</p>` : ''}
+                        ${b.btnText ? `<button class="bg-white text-slate-900 font-bold py-2.5 px-6 rounded-full shadow-lg hover:scale-105 transition-transform text-xs inline-flex items-center gap-2">${b.btnText} <i data-lucide="chevron-right" class="w-4 h-4"></i></button>` : ''}
+                    </div>
+                `;
+            }
+
+            // Küçük Bannerları İşleme
+            let smallHtml = '';
+            const b1 = systemSettings.sideBanner1;
+            const b2 = systemSettings.sideBanner2;
+
+            if (b1 && b1.image) {
+                smallHtml += `
+                    <div class="w-full rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition group">
+                        <img src="${b1.image}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/70 to-transparent"></div>
+                        <div class="relative z-10 w-2/3">
+                            <h3 class="text-lg font-black text-white mb-1 flex items-center gap-1.5"><i data-lucide="${b1.icon || 'star'}" class="w-4 h-4"></i> ${b1.title || ''}</h3>
+                            <p class="text-xs text-slate-300 font-medium mb-3">${b1.subtitle || ''}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            if (b2 && b2.image) {
+                smallHtml += `
+                    <div class="w-full rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition group">
+                        <img src="${b2.image}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/70 to-transparent"></div>
+                        <div class="relative z-10 w-2/3">
+                            <h3 class="text-lg font-black text-white mb-1 flex items-center gap-1.5"><i data-lucide="${b2.icon || 'star'}" class="w-4 h-4"></i> ${b2.title || ''}</h3>
+                            <p class="text-xs text-slate-300 font-medium mb-3">${b2.subtitle || ''}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            if(smallHtml !== '') smallBannersContainer.innerHTML = smallHtml;
+            lucide.createIcons();
+        }
+
+        // --- VİTRİN ÜRÜN KARTI (Mini versiyon, slider için) ---
+        window.createMiniProductCard = (p) => {
+            const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
+            const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
+            const isFav = favorites.includes(p.id);
+            const productUrl = `/urun/${window.generateSlug(p.title)}-${p.id}`;
+
+            let tagsHtml = '';
+            if (discount > 0) tagsHtml += `<div class="bg-rose-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-r shadow-md mb-1 w-max">-%${discount}</div>`;
+            if (p.freeDelivery) tagsHtml += `<div class="bg-[#0ea5e9] text-white text-[8px] font-black px-1.5 py-0.5 rounded-r shadow-md flex items-center gap-1 uppercase tracking-wider mb-1 w-max"><i data-lucide="truck" class="w-2.5 h-2.5"></i> Kargo Bedava</div>`;
+
+            return `
+                <div class="w-[140px] sm:w-[180px] shrink-0 bg-white rounded-2xl p-2 hover:shadow-xl border border-slate-100 transition-all group flex flex-col relative">
+                    <div class="relative w-full aspect-[3/4] mb-2 overflow-hidden rounded-xl bg-slate-100">
+                        <a href="${productUrl}" class="block w-full h-full">
+                            <img src="${img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${p.title}"/>
+                        </a>
+                        <div class="absolute top-1 left-0 flex flex-col pointer-events-none">${tagsHtml}</div>
+                        <button onclick="window.toggleFavorite('${p.id}')" class="absolute top-1 right-1 p-1.5 rounded-full bg-white/90 shadow hover:scale-110 z-10 transition">
+                            <i data-lucide="heart" class="w-3.5 h-3.5 ${isFav ? 'fill-rose-500 text-rose-500' : 'text-slate-400 hover:text-rose-500'}"></i>
+                        </button>
+                    </div>
+                    <div class="flex-1 flex flex-col px-1">
+                        <h3 class="text-[11px] font-bold text-slate-800 mb-1 line-clamp-2 leading-tight">
+                            <a href="${productUrl}" class="hover:text-orange-500 transition-colors">${p.title}</a>
+                        </h3>
+                        <div class="mt-auto">
+                            ${p.originalPrice > p.price ? `<span class="block text-[9px] text-slate-400 line-through mb-0.5">${p.originalPrice.toLocaleString('tr-TR')} TL</span>` : '<span class="block h-[13px]"></span>'}
+                            <span class="text-xs font-black text-orange-600 block">${p.price.toLocaleString('tr-TR')} TL</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         };
 
+        // --- VİTRİN SLIDER DOLDURUCULARI ---
+        function renderVitrinPopularProducts() {
+            const container = document.getElementById('vitrinPopularProducts');
+            if(!container) return;
+            // Popüler: Şimdilik karışık/rastgele 8 ürün alıyoruz (Gerçek senaryoda görüntülenme sayısına göre Firebase sorgusu yapılabilir)
+            const shuffled = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 8);
+            container.innerHTML = shuffled.map(p => window.createMiniProductCard(p)).join('');
+            lucide.createIcons();
+        }
+
+        function renderVitrinFavoriteProducts() {
+            const container = document.getElementById('vitrinFavoriteProducts');
+            if(!container) return;
+            // Favoriler: LocalStorage'daki ID'lerle eşleşenleri getir
+            let favProducts = allProducts.filter(p => favorites.includes(p.id));
+            // Eğer favori yoksa, placeholder niyetine başka bir liste göster (boş durmasın diye)
+            if(favProducts.length === 0) favProducts = [...allProducts].reverse().slice(0, 6);
+            
+            container.innerHTML = favProducts.map(p => window.createMiniProductCard(p)).join('');
+            lucide.createIcons();
+        }
+
+        function renderVitrinNewProducts() {
+            const container = document.getElementById('vitrinNewProducts');
+            if(!container) return;
+            // Yeni Eklenenler: createdAt'a göre en yeniler (Zaten allProducts tüm aktifleri getiriyor, biz tarihe göre sıralayıp ilk 10'u alırız)
+            const newProducts = [...allProducts].sort((a,b) => b.createdAt - a.createdAt).slice(0, 10);
+            container.innerHTML = newProducts.map(p => window.createMiniProductCard(p)).join('');
+            lucide.createIcons();
+        }
+
+        function renderVitrinStores() {
+            const container = document.getElementById('vitrinStores');
+            if(!container) return;
+            
+            // Eğer hiç mağaza yoksa
+            if(allStores.length === 0) {
+                container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Öne çıkan mağaza bulunamadı.</div>`;
+                return;
+            }
+
+            // Öne çıkanları/premium olanları öne al, aktif olanlardan max 8 tane göster
+            const storesToShow = allStores.filter(s => s.status === 'active').sort((a,b) => (b.isPremium ? 1 : 0) - (a.isPremium ? 1 : 0)).slice(0, 8);
+
+            let html = '';
+            storesToShow.forEach(s => {
+                const storeUrl = `/magaza/${window.generateSlug(s.name)}-${s.id}`;
+                const followerCount = s.followers ? s.followers.length : 0;
+                // Eğer mağazanın logosu varsa onu, yoksa isminin baş harfini göster
+                const logoHtml = s.logo ? `<img src="${s.logo}" class="w-full h-full object-cover">` : `<span class="text-xl font-black text-indigo-500">${s.name.charAt(0)}</span>`;
+                
+                html += `
+                    <a href="${storeUrl}" class="flex flex-col items-center gap-2 p-4 bg-slate-50 border border-slate-100 rounded-2xl min-w-[120px] hover:border-indigo-200 hover:shadow-md hover:bg-white transition group">
+                        <div class="w-14 h-14 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden group-hover:scale-105 transition shadow-sm relative">
+                            ${s.isPremium ? `<div class="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full border border-white flex items-center justify-center z-10"><i data-lucide="star" class="w-2.5 h-2.5 text-white fill-white"></i></div>` : ''}
+                            ${logoHtml}
+                        </div>
+                        <div class="text-center w-full">
+                            <h3 class="text-xs font-black text-slate-800 truncate w-full group-hover:text-indigo-600 transition">${s.name}</h3>
+                            <span class="text-[9px] text-slate-500 font-medium">${followerCount} Takipçi</span>
+                        </div>
+                    </a>
+                `;
+            });
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+
+        // --- MEVCUT ÜRÜN KARTI (Ana Kategori Listesi İçin Korundu) ---
         window.createProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
             const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
@@ -719,329 +867,91 @@
             `;
         };
 
-        window.openSortModal = () => {
-            document.querySelectorAll('.sort-check').forEach(el => el.classList.add('hidden'));
-            document.getElementById('check-' + currentSort).classList.remove('hidden');
-            const modal = document.getElementById('sortModal');
-            const content = document.getElementById('sortModalContent');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10);
-        };
-        window.closeSortModal = () => {
-            const modal = document.getElementById('sortModal');
-            const content = document.getElementById('sortModalContent');
-            modal.classList.add('opacity-0'); content.classList.add('translate-y-full');
-            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
-        };
-        window.setSort = (sortType) => {
-            currentSort = sortType;
-            window.closeSortModal();
-            window.applyFilters();
-        };
-
-        window.openFilterModal = () => {
-            const modal = document.getElementById('filterModal');
-            const content = document.getElementById('filterModalContent');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10);
-            window.updateFilterPreviewCount(); 
-        };
-
-        window.closeFilterModal = () => {
-            const modal = document.getElementById('filterModal');
-            const content = document.getElementById('filterModalContent');
-            modal.classList.add('opacity-0'); content.classList.add('translate-y-full');
-            setTimeout(() => { 
-                modal.classList.add('hidden'); modal.classList.remove('flex'); 
-                window.closeFilterDetail(); 
-            }, 300);
-        };
-
-        window.applyAndCloseFilters = () => {
-            window.applyFilters();
-            window.closeFilterModal();
-        };
+        // --- FİLTRELEME VE SIRALAMA MANTIKLARI KORUNDU ---
+        window.openSortModal = () => { document.querySelectorAll('.sort-check').forEach(el => el.classList.add('hidden')); document.getElementById('check-' + currentSort).classList.remove('hidden'); const modal = document.getElementById('sortModal'); const content = document.getElementById('sortModalContent'); modal.classList.remove('hidden'); modal.classList.add('flex'); setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10); };
+        window.closeSortModal = () => { const modal = document.getElementById('sortModal'); const content = document.getElementById('sortModalContent'); modal.classList.add('opacity-0'); content.classList.add('translate-y-full'); setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); };
+        window.setSort = (sortType) => { currentSort = sortType; window.closeSortModal(); window.applyFilters(); };
+        window.openFilterModal = () => { const modal = document.getElementById('filterModal'); const content = document.getElementById('filterModalContent'); modal.classList.remove('hidden'); modal.classList.add('flex'); setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); }, 10); window.updateFilterPreviewCount(); };
+        window.closeFilterModal = () => { const modal = document.getElementById('filterModal'); const content = document.getElementById('filterModalContent'); modal.classList.add('opacity-0'); content.classList.add('translate-y-full'); setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); window.closeFilterDetail(); }, 300); };
+        window.applyAndCloseFilters = () => { window.applyFilters(); window.closeFilterModal(); };
 
         function buildFilterModalRows(subCatSlug) {
             const catData = allCategories.find(c => c.slug === subCatSlug);
             const rowsContainer = document.getElementById('modalDynamicFilterRows');
             const quickFiltersContainer = document.getElementById('quickFilterPills');
-            
-            rowsContainer.innerHTML = '';
-            quickFiltersContainer.innerHTML = '';
-            dynamicOptionsData = {};
-
+            rowsContainer.innerHTML = ''; quickFiltersContainer.innerHTML = ''; dynamicOptionsData = {};
             if(!catData || !catData.attributes) return;
-
             const categoryProducts = allProducts.filter(p => p.categorySlug === subCatSlug);
-
-            let rowsHtml = '';
-            let quickHtml = '';
-
+            let rowsHtml = ''; let quickHtml = '';
             catData.attributes.forEach(attr => {
                 const availableOptions = new Set();
-                categoryProducts.forEach(p => {
-                    if (p.dynamicAttributes) {
-                        const pAttr = p.dynamicAttributes.find(a => a.group === attr.name);
-                        if (pAttr && pAttr.name.trim() !== '') availableOptions.add(pAttr.name);
-                    }
-                });
-
+                categoryProducts.forEach(p => { if (p.dynamicAttributes) { const pAttr = p.dynamicAttributes.find(a => a.group === attr.name); if (pAttr && pAttr.name.trim() !== '') availableOptions.add(pAttr.name); } });
                 const activeOptions = attr.options.filter(opt => availableOptions.has(opt));
                 if (activeOptions.length === 0) return;
-
                 dynamicOptionsData[attr.name] = activeOptions;
-
-                rowsHtml += `
-                    <button onclick="window.openFilterDetail('${attr.name}')" class="w-full flex items-center justify-between p-4 border-b border-slate-100 bg-white hover:bg-slate-50 transition">
-                        <span class="text-sm font-medium text-slate-700">${attr.name}</span>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-orange-500"></i>
-                    </button>
-                `;
-
-                quickHtml += `
-                    <button onclick="window.openFilterDetail('${attr.name}', true)" class="px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-[11px] font-bold text-slate-700 flex items-center gap-1.5 whitespace-nowrap hover:border-orange-500 transition shadow-sm">
-                        ${attr.name} <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
-                    </button>
-                `;
+                rowsHtml += `<button onclick="window.openFilterDetail('${attr.name}')" class="w-full flex items-center justify-between p-4 border-b border-slate-100 bg-white hover:bg-slate-50 transition"><span class="text-sm font-medium text-slate-700">${attr.name}</span><i data-lucide="chevron-right" class="w-4 h-4 text-orange-500"></i></button>`;
+                quickHtml += `<button onclick="window.openFilterDetail('${attr.name}', true)" class="px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-[11px] font-bold text-slate-700 flex items-center gap-1.5 whitespace-nowrap hover:border-orange-500 transition shadow-sm">${attr.name} <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i></button>`;
             });
-
-            rowsContainer.innerHTML = rowsHtml;
-            quickFiltersContainer.innerHTML = quickHtml;
-            window.renderSelectedFilterPills();
-            lucide.createIcons();
+            rowsContainer.innerHTML = rowsHtml; quickFiltersContainer.innerHTML = quickHtml; window.renderSelectedFilterPills(); lucide.createIcons();
         }
 
         window.renderSelectedFilterPills = () => {
             const container = document.getElementById('selectedFiltersContainer');
             const list = document.getElementById('selectedFiltersList');
-            let html = '';
-            let hasFilters = false;
-
-            if (document.getElementById('modalFilterFreeDelivery')?.checked) {
-                html += `<button onclick="document.getElementById('modalFilterFreeDelivery').checked=false; window.handleFilterChange();" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">Kargo Bedava <i data-lucide="x" class="w-3 h-3"></i></button>`;
-                hasFilters = true;
-            }
-            if (document.getElementById('modalFilterCOD')?.checked) {
-                html += `<button onclick="document.getElementById('modalFilterCOD').checked=false; window.handleFilterChange();" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">Kapıda Ödeme <i data-lucide="x" class="w-3 h-3"></i></button>`;
-                hasFilters = true;
-            }
-
-            for (const attrName in selectedFilters) {
-                selectedFilters[attrName].forEach(val => {
-                    html += `<button onclick="window.toggleDynamicFilter('${attrName}', '${val}', false)" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">${val} <i data-lucide="x" class="w-3 h-3"></i></button>`;
-                    hasFilters = true;
-                });
-            }
-
-            list.innerHTML = html;
-            if (hasFilters) container.classList.remove('hidden');
-            else container.classList.add('hidden');
-            lucide.createIcons();
+            let html = ''; let hasFilters = false;
+            if (document.getElementById('modalFilterFreeDelivery')?.checked) { html += `<button onclick="document.getElementById('modalFilterFreeDelivery').checked=false; window.handleFilterChange();" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">Kargo Bedava <i data-lucide="x" class="w-3 h-3"></i></button>`; hasFilters = true; }
+            if (document.getElementById('modalFilterCOD')?.checked) { html += `<button onclick="document.getElementById('modalFilterCOD').checked=false; window.handleFilterChange();" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">Kapıda Ödeme <i data-lucide="x" class="w-3 h-3"></i></button>`; hasFilters = true; }
+            for (const attrName in selectedFilters) { selectedFilters[attrName].forEach(val => { html += `<button onclick="window.toggleDynamicFilter('${attrName}', '${val}', false)" class="flex items-center gap-1 px-3 py-1.5 bg-white border border-orange-400 text-orange-500 hover:bg-orange-50 rounded-full text-[11px] font-bold transition shadow-sm">${val} <i data-lucide="x" class="w-3 h-3"></i></button>`; hasFilters = true; }); }
+            list.innerHTML = html; if (hasFilters) container.classList.remove('hidden'); else container.classList.add('hidden'); lucide.createIcons();
         };
 
         window.openFilterDetail = (attrName, fromQuickFilter = false) => {
-            const options = dynamicOptionsData[attrName];
-            if(!options) return;
-
-            document.getElementById('filterDetailTitle').innerText = attrName;
-            
-            let html = '';
-            options.forEach(opt => {
-                const isChecked = selectedFilters[attrName] && selectedFilters[attrName].includes(opt) ? 'checked' : '';
-                html += `
-                    <label class="flex justify-between items-center p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 group">
-                        <span class="text-sm font-medium text-slate-700">${opt}</span>
-                        <input type="checkbox" onchange="window.toggleDynamicFilter('${attrName}', '${opt}', this.checked)" class="custom-checkbox" ${isChecked}>
-                    </label>
-                `;
-            });
-            document.getElementById('filterDetailOptions').innerHTML = html;
-
-            document.getElementById('filterMainHeader').classList.add('hidden');
-            document.getElementById('filterDetailHeader').classList.remove('hidden');
-            document.getElementById('filterDetailHeader').classList.add('flex');
-
-            document.getElementById('filterMainView').classList.add('-translate-x-full');
-            document.getElementById('filterDetailView').classList.remove('translate-x-full');
-            document.getElementById('filterDetailView').classList.add('translate-x-0');
-
-            if(fromQuickFilter) window.openFilterModal();
+            const options = dynamicOptionsData[attrName]; if(!options) return; document.getElementById('filterDetailTitle').innerText = attrName;
+            let html = ''; options.forEach(opt => { const isChecked = selectedFilters[attrName] && selectedFilters[attrName].includes(opt) ? 'checked' : ''; html += `<label class="flex justify-between items-center p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 group"><span class="text-sm font-medium text-slate-700">${opt}</span><input type="checkbox" onchange="window.toggleDynamicFilter('${attrName}', '${opt}', this.checked)" class="custom-checkbox" ${isChecked}></label>`; });
+            document.getElementById('filterDetailOptions').innerHTML = html; document.getElementById('filterMainHeader').classList.add('hidden'); document.getElementById('filterDetailHeader').classList.remove('hidden'); document.getElementById('filterDetailHeader').classList.add('flex'); document.getElementById('filterMainView').classList.add('-translate-x-full'); document.getElementById('filterDetailView').classList.remove('translate-x-full'); document.getElementById('filterDetailView').classList.add('translate-x-0'); if(fromQuickFilter) window.openFilterModal();
         };
 
-        window.closeFilterDetail = () => {
-            document.getElementById('filterDetailHeader').classList.add('hidden');
-            document.getElementById('filterDetailHeader').classList.remove('flex');
-            document.getElementById('filterMainHeader').classList.remove('hidden');
-
-            document.getElementById('filterDetailView').classList.remove('translate-x-0');
-            document.getElementById('filterDetailView').classList.add('translate-x-full');
-            document.getElementById('filterMainView').classList.remove('-translate-x-full');
-        };
-
-        window.toggleDynamicFilter = (attrName, attrValue, isChecked) => {
-            if(!selectedFilters[attrName]) selectedFilters[attrName] = [];
-            if(isChecked) {
-                if(!selectedFilters[attrName].includes(attrValue)) selectedFilters[attrName].push(attrValue);
-            } else {
-                selectedFilters[attrName] = selectedFilters[attrName].filter(v => v !== attrValue);
-                if(selectedFilters[attrName].length === 0) delete selectedFilters[attrName];
-            }
-            window.handleFilterChange();
-            
-            const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]');
-            cbxList.forEach(cb => {
-                if(cb.previousElementSibling && cb.previousElementSibling.innerText === attrValue && !isChecked) {
-                    cb.checked = false;
-                }
-            });
-        };
-
-        window.handleFilterChange = () => {
-            window.renderSelectedFilterPills();
-            window.updateFilterPreviewCount();
-        };
-
-        window.clearAllFilters = () => {
-            selectedFilters = {};
-            document.getElementById('modalFilterFreeDelivery').checked = false;
-            document.getElementById('modalFilterCOD').checked = false;
-            document.getElementById('modalFilterPriceMin').value = "";
-            document.getElementById('modalFilterPriceMax').value = "";
-            
-            window.handleFilterChange();
-            
-            const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]');
-            cbxList.forEach(cb => cb.checked = false);
-        };
+        window.closeFilterDetail = () => { document.getElementById('filterDetailHeader').classList.add('hidden'); document.getElementById('filterDetailHeader').classList.remove('flex'); document.getElementById('filterMainHeader').classList.remove('hidden'); document.getElementById('filterDetailView').classList.remove('translate-x-0'); document.getElementById('filterDetailView').classList.add('translate-x-full'); document.getElementById('filterMainView').classList.remove('-translate-x-full'); };
+        window.toggleDynamicFilter = (attrName, attrValue, isChecked) => { if(!selectedFilters[attrName]) selectedFilters[attrName] = []; if(isChecked) { if(!selectedFilters[attrName].includes(attrValue)) selectedFilters[attrName].push(attrValue); } else { selectedFilters[attrName] = selectedFilters[attrName].filter(v => v !== attrValue); if(selectedFilters[attrName].length === 0) delete selectedFilters[attrName]; } window.handleFilterChange(); const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]'); cbxList.forEach(cb => { if(cb.previousElementSibling && cb.previousElementSibling.innerText === attrValue && !isChecked) { cb.checked = false; } }); };
+        window.handleFilterChange = () => { window.renderSelectedFilterPills(); window.updateFilterPreviewCount(); };
+        window.clearAllFilters = () => { selectedFilters = {}; document.getElementById('modalFilterFreeDelivery').checked = false; document.getElementById('modalFilterCOD').checked = false; document.getElementById('modalFilterPriceMin').value = ""; document.getElementById('modalFilterPriceMax').value = ""; window.handleFilterChange(); const cbxList = document.querySelectorAll('#filterDetailOptions input[type="checkbox"]'); cbxList.forEach(cb => cb.checked = false); };
 
         window.updateFilterPreviewCount = () => {
             let filtered = allProducts;
-            if (activeSubCategorySlug && activeSubCategorySlug !== '') {
-                filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
-            } else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) {
-                const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug);
-                filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug));
-            }
-
+            if (activeSubCategorySlug && activeSubCategorySlug !== '') { filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug); } 
+            else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) { const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug); filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug)); }
             if(document.getElementById('modalFilterFreeDelivery')?.checked) filtered = filtered.filter(p => p.freeDelivery === true);
             if(document.getElementById('modalFilterCOD')?.checked) filtered = filtered.filter(p => p.cashOnDelivery === true);
-
-            const minP = document.getElementById('modalFilterPriceMin')?.value;
-            const maxP = document.getElementById('modalFilterPriceMax')?.value;
-            if(minP) filtered = filtered.filter(p => p.price >= parseFloat(minP));
-            if(maxP) filtered = filtered.filter(p => p.price <= parseFloat(maxP));
-
-            if (Object.keys(selectedFilters).length > 0) {
-                filtered = filtered.filter(p => {
-                    if (!p.dynamicAttributes || p.dynamicAttributes.length === 0) return false;
-                    for (const attrName in selectedFilters) {
-                        const wantedValues = selectedFilters[attrName];
-                        if (wantedValues.length === 0) continue;
-                        const productAttr = p.dynamicAttributes.find(a => a.group === attrName);
-                        if (!productAttr || !wantedValues.includes(productAttr.name)) return false; 
-                    }
-                    return true;
-                });
-            }
-
+            const minP = document.getElementById('modalFilterPriceMin')?.value; const maxP = document.getElementById('modalFilterPriceMax')?.value;
+            if(minP) filtered = filtered.filter(p => p.price >= parseFloat(minP)); if(maxP) filtered = filtered.filter(p => p.price <= parseFloat(maxP));
+            if (Object.keys(selectedFilters).length > 0) { filtered = filtered.filter(p => { if (!p.dynamicAttributes || p.dynamicAttributes.length === 0) return false; for (const attrName in selectedFilters) { const wantedValues = selectedFilters[attrName]; if (wantedValues.length === 0) continue; const productAttr = p.dynamicAttributes.find(a => a.group === attrName); if (!productAttr || !wantedValues.includes(productAttr.name)) return false; } return true; }); }
             document.getElementById('btnApplyFilters').innerText = `Tüm Sonuçları Listele (${filtered.length})`;
         };
 
         window.applyFilters = () => {
-            const grid = document.getElementById('productsGrid');
-            const noResults = document.getElementById('noResults');
-
+            const grid = document.getElementById('productsGrid'); const noResults = document.getElementById('noResults');
             let filtered = allProducts;
-
-            if (activeSubCategorySlug && activeSubCategorySlug !== '') {
-                filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
-            } else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) {
-                const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug);
-                filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug));
-            }
-
-            if (searchQuery.trim() !== '') {
-                const q = searchQuery.toLowerCase().trim();
-                filtered = filtered.filter(p => 
-                    (p.title && p.title.toLowerCase().includes(q)) || 
-                    (p.storeName && p.storeName.toLowerCase().includes(q)) ||
-                    (p.category && p.category.toLowerCase().includes(q))
-                );
-            }
-
-            if(document.getElementById('modalFilterFreeDelivery')?.checked) {
-                filtered = filtered.filter(p => p.freeDelivery === true);
-            }
-            if(document.getElementById('modalFilterCOD')?.checked) {
-                filtered = filtered.filter(p => p.cashOnDelivery === true);
-            }
-
-            const minPrice = document.getElementById('modalFilterPriceMin')?.value;
-            const maxPrice = document.getElementById('modalFilterPriceMax')?.value;
-            if(minPrice) filtered = filtered.filter(p => p.price >= parseFloat(minPrice));
-            if(maxPrice) filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
-
+            if (activeSubCategorySlug && activeSubCategorySlug !== '') { filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug); } 
+            else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) { const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug); filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug)); }
+            if (searchQuery.trim() !== '') { const q = searchQuery.toLowerCase().trim(); filtered = filtered.filter(p => (p.title && p.title.toLowerCase().includes(q)) || (p.storeName && p.storeName.toLowerCase().includes(q)) || (p.category && p.category.toLowerCase().includes(q)) ); }
+            if(document.getElementById('modalFilterFreeDelivery')?.checked) { filtered = filtered.filter(p => p.freeDelivery === true); }
+            if(document.getElementById('modalFilterCOD')?.checked) { filtered = filtered.filter(p => p.cashOnDelivery === true); }
+            const minPrice = document.getElementById('modalFilterPriceMin')?.value; const maxPrice = document.getElementById('modalFilterPriceMax')?.value;
+            if(minPrice) filtered = filtered.filter(p => p.price >= parseFloat(minPrice)); if(maxPrice) filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
             let activeFilterCount = 0;
-            if (Object.keys(selectedFilters).length > 0) {
-                filtered = filtered.filter(p => {
-                    if (!p.dynamicAttributes || p.dynamicAttributes.length === 0) return false;
-                    for (const attrName in selectedFilters) {
-                        const wantedValues = selectedFilters[attrName];
-                        if (wantedValues.length === 0) continue;
-                        
-                        activeFilterCount++;
-                        const productAttr = p.dynamicAttributes.find(a => a.group === attrName);
-                        if (!productAttr || !wantedValues.includes(productAttr.name)) {
-                            return false; 
-                        }
-                    }
-                    return true;
-                });
-            }
-
-            const filterBadge = document.getElementById('filterActiveBadge');
-            let totalActiveFilters = (document.getElementById('modalFilterFreeDelivery')?.checked ? 1 : 0) + (document.getElementById('modalFilterCOD')?.checked ? 1 : 0) + activeFilterCount;
-            
-            if(filterBadge) {
-                if(totalActiveFilters > 0) { filterBadge.innerText = `(${totalActiveFilters})`; filterBadge.classList.remove('hidden'); }
-                else { filterBadge.classList.add('hidden'); }
-            }
-
-            if(currentSort === 'price_asc') {
-                filtered.sort((a,b) => a.price - b.price);
-            } else if (currentSort === 'price_desc') {
-                filtered.sort((a,b) => b.price - a.price);
-            } else {
-                filtered.sort((a,b) => b.createdAt - a.createdAt);
-            }
-
-            const catCount = document.getElementById('catProductCount');
-            if(catCount) catCount.innerText = `${filtered.length} Ürün`;
-            
-            const homeBadge = document.getElementById('homeCountBadge');
-            if(homeBadge) homeBadge.innerText = `${filtered.length} İlan`;
-            
+            if (Object.keys(selectedFilters).length > 0) { filtered = filtered.filter(p => { if (!p.dynamicAttributes || p.dynamicAttributes.length === 0) return false; for (const attrName in selectedFilters) { const wantedValues = selectedFilters[attrName]; if (wantedValues.length === 0) continue; activeFilterCount++; const productAttr = p.dynamicAttributes.find(a => a.group === attrName); if (!productAttr || !wantedValues.includes(productAttr.name)) { return false; } } return true; }); }
+            const filterBadge = document.getElementById('filterActiveBadge'); let totalActiveFilters = (document.getElementById('modalFilterFreeDelivery')?.checked ? 1 : 0) + (document.getElementById('modalFilterCOD')?.checked ? 1 : 0) + activeFilterCount;
+            if(filterBadge) { if(totalActiveFilters > 0) { filterBadge.innerText = `(${totalActiveFilters})`; filterBadge.classList.remove('hidden'); } else { filterBadge.classList.add('hidden'); } }
+            if(currentSort === 'price_asc') { filtered.sort((a,b) => a.price - b.price); } else if (currentSort === 'price_desc') { filtered.sort((a,b) => b.price - a.price); } else { filtered.sort((a,b) => b.createdAt - a.createdAt); }
+            const catCount = document.getElementById('catProductCount'); if(catCount) catCount.innerText = `${filtered.length} Ürün`;
+            const homeBadge = document.getElementById('homeCountBadge'); if(homeBadge) homeBadge.innerText = `${filtered.length} İlan`;
             const homeResultsTitle = document.getElementById('homeResultsTitle');
-            if(homeResultsTitle) {
-                if (searchQuery) {
-                    homeResultsTitle.innerHTML = `<h2 class="text-lg font-black text-slate-800">Arama Sonuçları</h2> <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">${filtered.length} İlan</span>`;
-                } else {
-                    homeResultsTitle.innerHTML = `<h2 class="text-lg font-black text-slate-800">Sizin İçin Seçtiklerimiz</h2> <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">${filtered.length} İlan</span>`;
-                }
-            }
-
-            if (filtered.length === 0) {
-                grid.classList.add('hidden');
-                noResults.classList.remove('hidden');
-            } else {
-                noResults.classList.add('hidden');
-                grid.innerHTML = filtered.map(p => window.createProductCard(p)).join('');
-                grid.classList.remove('hidden');
-                lucide.createIcons();
-            }
+            if(homeResultsTitle) { if (searchQuery) { homeResultsTitle.innerHTML = `<h2 class="text-lg font-black text-slate-800">Arama Sonuçları</h2> <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">${filtered.length} İlan</span>`; } else { homeResultsTitle.innerHTML = `<h2 class="text-lg font-black text-slate-800">Sizin İçin Seçtiklerimiz</h2> <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">${filtered.length} İlan</span>`; } }
+            if (filtered.length === 0) { grid.classList.add('hidden'); noResults.classList.remove('hidden'); } 
+            else { noResults.classList.add('hidden'); grid.innerHTML = filtered.map(p => window.createProductCard(p)).join(''); grid.classList.remove('hidden'); lucide.createIcons(); }
         };
 
+        // --- INITIALIZE & FIREBASE DATA FETCH ---
         async function initPage() {
             updateCartBadge();
             lucide.createIcons();
@@ -1054,14 +964,12 @@
                 if(searchQuery.length > 0) {
                     document.getElementById('heroBannerSection').classList.add('hidden');
                     document.getElementById('categoryTopBar').classList.add('hidden');
-                    document.getElementById('homeResultsTitle').classList.remove('hidden');
+                    document.getElementById('mainProductsSection').classList.remove('hidden');
                     const rt = document.getElementById('homeResultsTitle');
                     if(rt) rt.innerHTML = `<h2 class="text-lg font-black text-slate-800">Arama Sonuçları</h2>`;
                 } else if (!activeSubCategorySlug) {
+                    document.getElementById('mainProductsSection').classList.add('hidden');
                     document.getElementById('heroBannerSection').classList.remove('hidden');
-                    document.getElementById('homeResultsTitle').classList.remove('hidden');
-                    const rt = document.getElementById('homeResultsTitle');
-                    if(rt) rt.innerHTML = `<h2 class="text-lg font-black text-slate-800">Sizin İçin Seçtiklerimiz</h2> <span class="text-xs font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-lg" id="homeCountBadge">0 İlan</span>`;
                 }
                 window.applyFilters();
             };
@@ -1070,18 +978,37 @@
             if (mobileSearchInput) mobileSearchInput.addEventListener('input', handleSearch);
 
             try {
+                // 1. Ayarları ve Bannerları Çek (Admin Panel)
+                const settingsSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'settings'));
+                if (settingsSnap.exists()) {
+                    systemSettings = settingsSnap.data();
+                    renderAdminBanners();
+                }
+
+                // 2. Kategorileri Çek
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
-                // Sayfa ilk yüklendiğinde Mega menüyü ve ana sayfa slider'ını hazırla
                 window.renderHomeTopCategorySlider();
                 window.renderMegaMenuGrid(); 
 
+                // 3. Ürünleri Çek
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
                 const snap = await getDocs(q);
                 allProducts = [];
                 snap.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
+
+                // 4. Mağazaları Çek (Öne Çıkan Mağazalar için)
+                const storesSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores'));
+                allStores = [];
+                storesSnap.forEach(doc => allStores.push({ id: doc.id, ...doc.data() }));
+
+                // Vitrin Bölümlerini Doldur
+                renderVitrinPopularProducts();
+                renderVitrinFavoriteProducts();
+                renderVitrinNewProducts();
+                renderVitrinStores();
 
                 document.getElementById('loadingIndicator').classList.add('hidden');
                 window.applyFilters();
