@@ -32,9 +32,6 @@
         
         .custom-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
 
-        /* Kategori Menüsü Özel Scrollbar Ayarları */
-        .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
-
         /* Mobil Alt Menü Padding (Sadece alt menü açıksa padding uygula) */
         @media (max-width: 640px) {
             body.has-bottom-nav { padding-bottom: 70px; }
@@ -53,13 +50,13 @@
 
     <!-- Üst Menü / Navbar (Sabit) -->
     <header id="mainHeader" class="sticky top-0 z-[100] bg-white border-b border-slate-200">
-        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
             
             <div class="flex items-center gap-3 shrink-0">
-                <!-- Mobil Hamburger Menü -->
-                <button onclick="window.toggleHamburgerMenu()" class="p-1 -ml-1 text-slate-600 hover:text-orange-500 rounded-xl transition">
+                <!-- Hamburger Menü (Kategoriler Sayfasına Yönlendirir) -->
+                <a href="kategoriler.html" class="p-1 -ml-1 text-slate-600 hover:text-orange-500 rounded-xl transition inline-block">
                     <i data-lucide="menu" class="w-6 h-6"></i>
-                </button>
+                </a>
                 <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
                     KIBRIS<span class="text-orange-500">BAZAR</span>
                 </a>
@@ -105,22 +102,6 @@
 
         </div>
     </header>
-
-    <!-- TRENDYOL STİLİ TAM EKRAN KATEGORİ MODALI -->
-    <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-white z-[200] hidden flex-col drawer-overlay opacity-0">
-        <div class="p-3 sm:p-4 flex items-center gap-3 bg-white shrink-0 border-b border-slate-100 shadow-sm">
-            <button onclick="window.toggleHamburgerMenu()" class="p-1.5 text-slate-600 hover:text-orange-500 transition">
-                <i data-lucide="arrow-left" class="w-6 h-6"></i>
-            </button>
-            <div class="flex-1 relative">
-                <input type="text" placeholder="Marka, ürün veya kategori ara" class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition font-medium">
-                <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
-                <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"><i data-lucide="camera" class="w-5 h-5"></i></button>
-            </div>
-        </div>
-        <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0" id="mainTabContainer"></div>
-        <div class="flex-1 overflow-hidden bg-white w-full max-w-[1400px] mx-auto" id="hamburgerMenuCategories"></div>
-    </div>
 
     <!-- ANA SAYFA VİTRİN BÖLÜMÜ (SADECE ANA SAYFADA GÖRÜNÜR) -->
     <div id="heroBannerSection" class="w-full bg-slate-50 flex flex-col gap-4 pb-8">
@@ -347,10 +328,10 @@
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
             <span class="text-[10px] font-bold">Ana Sayfa</span>
         </a>
-        <button onclick="window.toggleHamburgerMenu()" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
+        <a href="kategoriler.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
             <i data-lucide="layout-grid" class="w-5 h-5"></i>
             <span class="text-[10px] font-medium">Kategoriler</span>
-        </button>
+        </a>
         <a href="satici.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition relative -top-3">
             <div class="w-12 h-12 bg-white rounded-full border border-slate-200 shadow-sm flex items-center justify-center relative">
                 <div class="absolute inset-1 bg-gradient-to-tr from-orange-500 to-rose-500 rounded-full flex items-center justify-center">
@@ -484,7 +465,7 @@
             cart.forEach(item => totalQty += item.quantity);
             const badgeDesk = document.getElementById('cartCountBadgeDesk');
             const badgeMob = document.getElementById('cartCountBadgeMob');
-            const badgeMobHeader = document.getElementById('cartCountBadgeMobHeader'); // YENİ MOBİL BAŞLIK SAYACI
+            const badgeMobHeader = document.getElementById('cartCountBadgeMobHeader'); 
 
             if(badgeDesk) { badgeDesk.innerText = totalQty; if(totalQty > 0) badgeDesk.classList.remove('hidden'); else badgeDesk.classList.add('hidden'); }
             if(badgeMob) { badgeMob.innerText = totalQty; if(totalQty > 0) badgeMob.classList.remove('hidden'); else badgeMob.classList.add('hidden'); }
@@ -532,133 +513,12 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.toggleHamburgerMenu = () => {
-            const drawer = document.getElementById('hamburgerMenuDrawer');
-            if(drawer) {
-                if(drawer.classList.contains('hidden')) {
-                    drawer.classList.remove('hidden'); drawer.classList.add('flex');
-                    setTimeout(() => { drawer.classList.remove('opacity-0'); }, 10);
-                } else {
-                    drawer.classList.add('opacity-0');
-                    setTimeout(() => { drawer.classList.add('hidden'); drawer.classList.remove('flex'); }, 300);
-                }
-            }
-        };
-
-        window.renderHomeTopCategorySlider = () => {
-            const container = document.getElementById('homeTopCategorySlider');
-            if(!container) return;
-            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
-            let html = '';
-            mainCats.forEach(main => {
-                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
-                html += `
-                    <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
-                        <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
-                            <img src="${img}" alt="${main.name}" loading="lazy" onerror="this.src='https://placehold.co/150x150/f1f5f9/475569?text=${encodeURIComponent(main.name)}'" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-300">
-                        </div>
-                        <span class="text-[10px] font-bold text-slate-700 leading-tight text-center break-words w-full group-hover:text-orange-600 line-clamp-2">${main.name}</span>
-                    </button>
-                `;
-            });
-            container.innerHTML = html;
-        };
-
-        function renderMainTabs(activeId = 'all') {
-            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
-            const tabContainer = document.getElementById('mainTabContainer');
-            if(!tabContainer) return;
-            let html = `<button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${activeId === 'all' ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent'}">Kategoriler</button>`;
-            mainCats.forEach(main => {
-                const isActive = main.id === activeId ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent';
-                html += `<button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" id="mainTab-${main.id}" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${isActive}">${main.name}</button>`;
-            });
-            tabContainer.innerHTML = html;
-        }
-
-        window.renderMegaMenuGrid = () => {
-            const container = document.getElementById('hamburgerMenuCategories');
-            if(!container) return;
-            renderMainTabs('all');
-            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
-            let html = `
-                <div class="w-full h-full p-4 overflow-y-auto category-scroll pb-24 bg-slate-50">
-                    <div class="bg-gradient-to-r from-orange-100 to-orange-200 rounded-xl p-4 text-orange-900 flex items-center justify-between shadow-sm mb-4 cursor-pointer">
-                        <div><h3 class="text-sm font-bold">Kategoriler <i data-lucide="chevron-right" class="w-4 h-4 inline opacity-50"></i></h3><span class="text-[10px] mt-0.5 block opacity-80">İlgini çekebilecek tüm kategoriler</span></div>
-                        <div class="w-12 h-12 flex items-center justify-center transform -rotate-12"><i data-lucide="tag" class="w-8 h-8 text-orange-500 fill-orange-500"></i></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-            `;
-            mainCats.forEach(main => {
-                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
-                html += `
-                    <button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" class="flex flex-row items-center justify-between pl-3 pr-0 py-0 rounded-xl bg-slate-100/80 hover:bg-slate-200 border border-transparent transition group text-left h-20 overflow-hidden relative">
-                        <span class="text-xs font-bold text-slate-800 z-10 w-1/2 leading-tight">${main.name}</span>
-                        <img src="${img}" alt="${main.name}" loading="lazy" onerror="this.src='https://placehold.co/150x150/f1f5f9/475569?text=${encodeURIComponent(main.name)}'" class="h-full w-auto max-w-[50%] object-cover absolute right-0">
-                    </button>
-                `;
-            });
-            html += `</div></div>`;
-            container.innerHTML = html;
-            lucide.createIcons();
-        };
-
-        window.openMainCategoryDetails = (mainId, mainName) => {
-            const container = document.getElementById('hamburgerMenuCategories');
-            renderMainTabs(mainId);
-            const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
-            let html = `<div class="flex w-full h-full pb-16"><div class="w-[28%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll pb-24" id="groupTabsContainer">`;
-            groups.forEach((grp, idx) => {
-                const isActive = idx === 0 ? 'bg-white text-orange-600 font-bold' : 'text-slate-600 font-medium hover:bg-slate-100';
-                html += `<button onclick="window.switchGroupTab('${grp.id}', this)" class="group-tab-btn text-left px-3 py-4 text-[11px] transition ${isActive}">${grp.name}</button>`;
-            });
-            html += `</div><div class="w-[72%] sm:w-[75%] p-3 sm:p-4 overflow-y-auto category-scroll bg-white pb-24" id="groupContentArea">`;
-            groups.forEach((grp, idx) => {
-                const isHidden = idx === 0 ? '' : 'hidden';
-                const subs = allCategories.filter(c => c.parentId === grp.id).sort((a, b) => (a.order || 0) - (b.order || 0));
-                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4 pb-28"><div class="grid grid-cols-3 gap-x-2 gap-y-4">
-                        <button onclick="window.selectCategory('${mainId}', '', 'Tüm ${grp.name}', '${mainName}')" class="flex flex-col items-center group text-center">
-                            <div class="w-[70px] h-[70px] sm:w-20 sm:h-20 rounded-2xl bg-orange-50 overflow-hidden mb-1 flex items-center justify-center border border-orange-100">
-                                <div class="grid grid-cols-2 gap-1 opacity-60"><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px] flex items-center justify-center text-white"><i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></div></div>
-                            </div>
-                            <span class="text-[10px] font-medium text-slate-700 leading-tight w-full truncate">Tümünü Gör</span>
-                        </button>
-                `;
-                subs.forEach(sub => {
-                    const subImg = sub.image && sub.image.trim() !== '' ? sub.image : getSmartCategoryImage(sub.name);
-                    html += `
-                        <button onclick="window.selectCategory('${mainId}', '${sub.slug}', '${sub.name}', '${mainName}')" class="flex flex-col items-center group text-center">
-                            <div class="w-[70px] h-[70px] sm:w-20 sm:h-20 rounded-2xl bg-white border border-slate-100 overflow-hidden mb-1 p-1 shadow-sm transition">
-                                <img src="${subImg}" alt="${sub.name}" loading="lazy" onerror="this.src='https://placehold.co/150x150/f1f5f9/475569?text=${encodeURIComponent(sub.name)}'" class="w-full h-full object-contain">
-                            </div>
-                            <span class="text-[10px] font-medium text-slate-700 leading-tight w-full break-words line-clamp-2">${sub.name}</span>
-                        </button>
-                    `;
-                });
-                html += `</div></div>`;
-            });
-            html += `</div></div>`;
-            container.innerHTML = html;
-            lucide.createIcons();
-        };
-
-        window.switchGroupTab = (groupId, btnElement) => {
-            document.querySelectorAll('.group-pane').forEach(p => p.classList.add('hidden'));
-            document.querySelectorAll('.group-tab-btn').forEach(b => { b.classList.remove('bg-white', 'text-orange-600', 'font-bold'); b.classList.add('text-slate-600', 'font-medium', 'hover:bg-slate-100'); });
-            document.getElementById(`groupPane-${groupId}`).classList.remove('hidden');
-            btnElement.classList.remove('text-slate-600', 'font-medium', 'hover:bg-slate-100');
-            btnElement.classList.add('bg-white', 'text-orange-600', 'font-bold');
-        };
-
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             activeMainCategory = mainCatId; activeSubCategorySlug = subCatSlug; selectedFilters = {}; currentSort = 'newest';
             document.getElementById('searchInput').value = "";
             const mobSearch = document.getElementById('mobileSearchInput'); if(mobSearch) mobSearch.value = "";
             searchQuery = "";
             
-            const drawer = document.getElementById('hamburgerMenuDrawer');
-            if(!drawer.classList.contains('hidden')) { window.toggleHamburgerMenu(); }
-
             document.getElementById('heroBannerSection').classList.add('hidden');
             document.getElementById('mainProductsSection').classList.remove('hidden');
             
@@ -864,6 +724,25 @@
 
             lucide.createIcons();
         }
+
+        window.renderHomeTopCategorySlider = () => {
+            const container = document.getElementById('homeTopCategorySlider');
+            if(!container) return;
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
+            let html = '';
+            mainCats.forEach(main => {
+                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
+                html += `
+                    <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
+                        <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
+                            <img src="${img}" alt="${main.name}" loading="lazy" onerror="this.src='https://placehold.co/150x150/f1f5f9/475569?text=${encodeURIComponent(main.name)}'" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-700 leading-tight text-center break-words w-full group-hover:text-orange-600 line-clamp-2">${main.name}</span>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        };
 
         window.createMiniProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
@@ -1126,7 +1005,6 @@
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
                 window.renderHomeTopCategorySlider();
-                window.renderMegaMenuGrid(); 
 
                 // Ürünleri Çek
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
