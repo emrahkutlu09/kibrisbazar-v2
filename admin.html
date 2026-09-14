@@ -257,9 +257,9 @@
                         </div>
                     </div>
 
-                    <!-- Ana Vitrin Banner Ayarları -->
+                    <!-- Ana Vitrin Banner Ayarları (Büyük Banner) -->
                     <div class="bg-slate-800/50 border border-slate-700/50 rounded-3xl p-6 sm:p-8">
-                        <h3 class="text-lg font-black text-white flex items-center gap-2 mb-6"><i data-lucide="image" class="w-5 h-5 text-rose-500"></i> Ana Vitrin Banner Ayarları</h3>
+                        <h3 class="text-lg font-black text-white flex items-center gap-2 mb-6"><i data-lucide="image" class="w-5 h-5 text-rose-500"></i> Büyük Banner (1. Kaydırma Kartı)</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-xs font-bold text-slate-400 mb-2">Üst Etiket (Tag)</label>
@@ -270,7 +270,7 @@
                                 <input type="text" id="setMainBannerBtn" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-rose-500 outline-none" placeholder="Örn: Alışverişe Başla">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-xs font-bold text-slate-400 mb-2">Başlık (Daha büyük vurgu için HTML kullanılabilir)</label>
+                                <label class="block text-xs font-bold text-slate-400 mb-2">Başlık (Ana Metin)</label>
                                 <textarea id="setMainBannerTitle" rows="2" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-rose-500 outline-none" placeholder="Örn: Seçili Ürünlerde İndirim"></textarea>
                             </div>
                             <div class="md:col-span-2">
@@ -299,7 +299,6 @@
                                     </div>
                                     <input type="file" id="setMainBannerImageInput" accept="image/*" onchange="window.previewAdminImage(this, 'setMainBannerImagePreview', 'setMainBannerImageFallback')" class="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:font-bold file:bg-rose-500/10 file:text-rose-400 hover:file:bg-rose-500/20 cursor-pointer">
                                 </div>
-                                <p class="text-[10px] text-slate-500 mt-2">Görsel seçilmezse animasyonlu gradyan kullanılır. (Yatay format önerilir)</p>
                             </div>
                         </div>
                     </div>
@@ -308,7 +307,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Yan Banner 1 -->
                         <div class="bg-slate-800/50 border border-slate-700/50 rounded-3xl p-6">
-                            <h3 class="text-md font-black text-white flex items-center gap-2 mb-4"><i data-lucide="layout-grid" class="w-4 h-4 text-orange-400"></i> Üst Yan Banner</h3>
+                            <h3 class="text-md font-black text-white flex items-center gap-2 mb-4"><i data-lucide="layout-grid" class="w-4 h-4 text-orange-400"></i> Yan Banner (2. Kaydırma Kartı)</h3>
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-400 mb-1">Başlık</label>
@@ -320,7 +319,7 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 mb-1">İkon (Lucide)</label>
+                                        <label class="block text-xs font-bold text-slate-400 mb-1">İkon (Opsiyonel)</label>
                                         <input type="text" id="setSide1Icon" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-rose-500 outline-none" placeholder="Örn: laptop">
                                     </div>
                                     <div>
@@ -334,7 +333,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 mb-1">Hedef Değeri (Kategori adı vb.)</label>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">Hedef Değeri</label>
                                     <input type="text" id="setSide1LinkValue" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-rose-500 outline-none">
                                 </div>
                                 <div>
@@ -352,7 +351,7 @@
 
                         <!-- Yan Banner 2 -->
                         <div class="bg-slate-800/50 border border-slate-700/50 rounded-3xl p-6">
-                            <h3 class="text-md font-black text-white flex items-center gap-2 mb-4"><i data-lucide="layout-grid" class="w-4 h-4 text-emerald-400"></i> Alt Yan Banner</h3>
+                            <h3 class="text-md font-black text-white flex items-center gap-2 mb-4"><i data-lucide="layout-grid" class="w-4 h-4 text-emerald-400"></i> Yan Banner (3. Kaydırma Kartı)</h3>
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-400 mb-1">Başlık</label>
@@ -364,7 +363,7 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 mb-1">İkon (Lucide)</label>
+                                        <label class="block text-xs font-bold text-slate-400 mb-1">İkon (Opsiyonel)</label>
                                         <input type="text" id="setSide2Icon" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-rose-500 outline-none" placeholder="Örn: home">
                                     </div>
                                     <div>
@@ -610,8 +609,6 @@
             });
         }
 
-        // --- KATEGORİ YÖNETİMİ VE DİNAMİK FİLTRELER ---
-
         window.addAttributeRow = (name = '', options = '') => {
             const id = Date.now() + Math.random().toString(36).substr(2, 5);
             const container = document.getElementById('attributesList');
@@ -679,7 +676,6 @@
                     tree.push(cat);
                 }
             });
-            // Önce sıra numarasına (order), sonra isme göre sırala
             return tree.sort((a, b) => {
                 const orderA = a.order !== undefined ? a.order : 0;
                 const orderB = b.order !== undefined ? b.order : 0;
@@ -812,23 +808,16 @@
                 window.showMessage("Bu kategoriyi silemezsiniz. Önce altındaki alt kategorileri silmeniz veya taşımanız gerekiyor.", "error");
                 return;
             }
-
             window.customConfirm("Bu kategoriyi kalıcı olarak silmek istediğinize emin misiniz?", async () => {
                 try {
                     await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'categories', id));
                     window.showMessage("Kategori başarıyla silindi.");
-                } catch (err) {
-                    window.showMessage("Silme işlemi başarısız.", "error");
-                }
+                } catch (err) { window.showMessage("Silme işlemi başarısız.", "error"); }
             });
         };
 
         window.deleteAllCategories = async () => {
-            if(dbCategories.length === 0) {
-                window.showMessage("Sistemde silinecek kategori bulunmuyor.", "error");
-                return;
-            }
-
+            if(dbCategories.length === 0) { window.showMessage("Sistemde silinecek kategori bulunmuyor.", "error"); return; }
             window.customConfirm(`<b>DİKKAT:</b> Sistemdeki tüm kategorileri kalıcı olarak silmek üzeresiniz.<br><br>Bu işlem geri alınamaz. Emin misiniz?`, async () => {
                 const btn = document.getElementById('btnDeleteAllCategories');
                 if(btn) { btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Siliniyor...`; btn.disabled = true; }
@@ -843,16 +832,11 @@
                     dbCategories.forEach(cat => {
                         currentBatch.delete(doc(db, 'artifacts', APP_ID, 'public', 'data', 'categories', cat.id));
                         opCount++;
-                        if(opCount === 490) { 
-                            batches.push(currentBatch.commit()); 
-                            currentBatch = writeBatch(db); 
-                            opCount = 0; 
-                        }
+                        if(opCount === 490) { batches.push(currentBatch.commit()); currentBatch = writeBatch(db); opCount = 0; }
                     });
 
                     if(opCount > 0) batches.push(currentBatch.commit());
                     await Promise.all(batches);
-                    
                     window.showMessage("Sistemdeki tüm kategoriler başarıyla silindi.");
                 } catch (error) {
                     console.error("Toplu Silme Hatası:", error);
@@ -865,962 +849,12 @@
             });
         };
 
-        // --- TRENDYOL STANDARTLARINDA 64 RESİMLİ KATEGORİ OTOMASYONU (Sıralama Destekli) ---
         window.loadDefaultRichCategories = async () => {
-            window.customConfirm("DİKKAT: Bu işlem veritabanınıza 64 resimli Trendyol kategorisini otomatik olarak yükleyecektir. Onaylıyor musunuz?", async () => {
-                const btn = document.getElementById('btnLoadDefaults');
-                if(btn) { btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Yükleniyor...`; btn.disabled = true; }
-                document.getElementById('fullScreenLoader').classList.remove('hidden');
-                document.getElementById('loaderText').innerText = "64 Resimli Trendyol Kategorisi Yükleniyor...";
-
-                const trendyolTree = [
-                    { 
-                        name: "Kadın", icon: "user", isMegaMenu: true, order: 1,
-                        groups: [
-                            { 
-                                name: "Giyim", order: 1,
-                                sub: [
-                                    { name: "Elbise", image: "", order: 1, attrs: [{name: "Beden", options: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Kırmızı", "Mavi", "Yeşil"]}, {name: "Boy", options: ["Mini", "Midi", "Maxi"]}] },
-                                    { name: "Tshirt", image: "", order: 2, attrs: [{name: "Beden", options: ["XS", "S", "M", "L", "XL", "XXL"]}, {name: "Renk", options: ["Siyah", "Beyaz", "Gri", "Kırmızı"]}] },
-                                    { name: "Gömlek", image: "", order: 3, attrs: [{name: "Beden", options: ["34", "36", "38", "40", "42", "44"]}] },
-                                    { name: "Pantolon", image: "", order: 4, attrs: [{name: "Beden", options: ["34", "36", "38", "40", "42", "44"]}] },
-                                    { name: "Etek", image: "", order: 5, attrs: [{name: "Beden", options: ["34", "36", "38", "40", "42"]}] },
-                                    { name: "Kot Pantolon", image: "", order: 6, attrs: [{name: "Beden", options: ["24", "25", "26", "27", "28", "29", "30"]}] },
-                                    { name: "Şort & Bermuda", image: "", order: 7, attrs: [{name: "Beden", options: ["34", "36", "38", "40"]}] },
-                                    { name: "Bluz", image: "", order: 8, attrs: [{name: "Beden", options: ["XS", "S", "M", "L"]}] },
-                                    { name: "Ceket", image: "", order: 9, attrs: [{name: "Beden", options: ["34", "36", "38", "40"]}] },
-                                    { name: "Tesettür Giyim", image: "", order: 10, attrs: [{name: "Beden", options: ["36", "38", "40", "42", "44"]}] },
-                                    { name: "Body", image: "", order: 11, attrs: [{name: "Beden", options: ["XS", "S", "M", "L"]}] },
-                                    { name: "Kot Ceket", image: "", order: 12, attrs: [{name: "Beden", options: ["XS", "S", "M", "L"]}] },
-                                    { name: "Büyük Beden", image: "", order: 13, attrs: [{name: "Beden", options: ["44", "46", "48", "50"]}] },
-                                    { name: "Trençkot", image: "", order: 14, attrs: [{name: "Beden", options: ["34", "36", "38", "40"]}] },
-                                    { name: "Sweatshirt", image: "", order: 15, attrs: [{name: "Beden", options: ["XS", "S", "M", "L"]}] },
-                                    { name: "Mont", image: "", order: 16, attrs: [{name: "Beden", options: ["XS", "S", "M", "L"]}] },
-                                    { name: "Kazak", image: "", order: 17, attrs: [{name: "Beden", options: ["XS", "S", "M", "L"]}] }
-                                ]
-                            },
-                            {
-                                name: "Ayakkabı & Çanta", order: 2,
-                                sub: [
-                                    { name: "Sneaker", image: "", order: 1, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39", "40"]}] },
-                                    { name: "Topuklu Ayakkabı", image: "", order: 2, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39", "40"]}] },
-                                    { name: "Omuz Çantası", image: "", order: 3, attrs: [{name: "Materyal", options: ["Deri", "Kumaş"]}] },
-                                    { name: "Terlik", image: "", order: 4, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39"]}] },
-                                    { name: "Sandalet", image: "", order: 5, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39"]}] },
-                                    { name: "Babet", image: "", order: 6, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39"]}] },
-                                    { name: "Loafer Ayakkabı", image: "", order: 7, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39"]}] },
-                                    { name: "Cüzdan & Kartlık", image: "", order: 8, attrs: [{name: "Materyal", options: ["Deri"]}] },
-                                    { name: "Abiye Ayakkabı", image: "", order: 9, attrs: [{name: "Numara", options: ["35", "36", "37", "38"]}] },
-                                    { name: "El Çantası", image: "", order: 10, attrs: [{name: "Materyal", options: ["Deri"]}] },
-                                    { name: "Casual Ayakkabı", image: "", order: 11, attrs: [{name: "Numara", options: ["35", "36", "37", "38"]}] },
-                                    { name: "Valiz & Bavul", image: "", order: 12, attrs: [{name: "Boyut", options: ["Kabin", "Orta", "Büyük"]}] },
-                                    { name: "Bot", image: "", order: 13, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39"]}] },
-                                    { name: "Çizme", image: "", order: 14, attrs: [{name: "Numara", options: ["35", "36", "37", "38", "39"]}] }
-                                ]
-                            },
-                            {
-                                name: "Saat & Aksesuar", order: 3,
-                                sub: [
-                                    { name: "Gözlük & Gözlük Aks...", image: "", order: 1, attrs: [{name: "Çerçeve", options: ["Kemik", "Metal"]}] },
-                                    { name: "Saat", image: "", order: 2, attrs: [{name: "Kordon", options: ["Çelik", "Deri"]}] },
-                                    { name: "Takı & Mücevher", image: "", order: 3, attrs: [{name: "Materyal", options: ["Altın", "Gümüş"]}] },
-                                    { name: "Şapka", image: "", order: 4, attrs: [{name: "Beden", options: ["Standart"]}] },
-                                    { name: "Saç Aksesuarları", image: "", order: 5, attrs: [{name: "Tür", options: ["Toka"]}] },
-                                    { name: "Saat Seti", image: "", order: 6, attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Kemer", image: "", order: 7, attrs: [{name: "Materyal", options: ["Deri"]}] }
-                                ]
-                            },
-                            {
-                                name: "Ev & İç Giyim", order: 4,
-                                sub: [
-                                    { name: "Çorap", image: "", order: 1, attrs: [{name: "Beden", options: ["36-40"]}] },
-                                    { name: "Pijama Takımı", image: "", order: 2, attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Külot", image: "", order: 3, attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Sütyen", image: "", attrs: [{name: "Beden", options: ["75B", "80B", "85B"]}] },
-                                    { name: "Atlet", image: "", attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Boxer", image: "", attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Gecelik", image: "", attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "İç Çamaşırı Takımları", image: "", order: 8, attrs: [{name: "Beden", options: ["S", "M"]}] },
-                                    { name: "Fantezi Giyim", image: "", order: 9, attrs: [{name: "Beden", options: ["S", "M"]}] }
-                                ]
-                            },
-                            {
-                                name: "Kozmetik", order: 5,
-                                sub: [
-                                    { name: "Cilt Bakım", image: "", order: 1, attrs: [{name: "Ürün", options: ["Krem"]}] },
-                                    { name: "Makyaj", image: "", attrs: [{name: "Ürün", options: ["Ruj"]}] },
-                                    { name: "Parfüm", image: "", attrs: [{name: "Hacim", options: ["50ml"]}] },
-                                    { name: "Saç Bakım", image: "", attrs: [{name: "Ürün", options: ["Şampuan"]}] },
-                                    { name: "Güneş Ürünleri", image: "", attrs: [{name: "SPF", options: ["SPF 50"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Erkek", icon: "user", isMegaMenu: true, order: 2,
-                        groups: [
-                            { 
-                                name: "Giyim", order: 1,
-                                sub: [
-                                    { name: "Polo Yaka Tshirt", image: "", order: 1, attrs: [{name: "Beden", options: ["S", "M", "L", "XL"]}] },
-                                    { name: "T-shirt", image: "", order: 2, attrs: [{name: "Beden", options: ["S", "M", "L", "XL"]}] },
-                                    { name: "Gömlek", image: "", order: 3, attrs: [{name: "Beden", options: ["S", "M", "L", "XL"]}] },
-                                    { name: "Pantolon", image: "", order: 4, attrs: [{name: "Beden", options: ["30", "32", "34", "36"]}] },
-                                    { name: "Şort", image: "", order: 5, attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Sweatshirt", image: "", order: 6, attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Ceket", image: "", order: 7, attrs: [{name: "Beden", options: ["48", "50", "52"]}] },
-                                    { name: "Takım Elbise", image: "", order: 8, attrs: [{name: "Beden", options: ["48", "50", "52"]}] },
-                                    { name: "Eşofman", image: "", order: 9, attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Jeans", image: "", attrs: [{name: "Beden", options: ["30", "32", "34"]}] },
-                                    { name: "Yelek", image: "", attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Forma", image: "", attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Kazak", image: "", attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Mont", image: "", attrs: [{name: "Beden", options: ["S", "M", "L"]}] }
-                                ]
-                            },
-                            {
-                                name: "Ayakkabı & Çanta", order: 2,
-                                sub: [
-                                    { name: "Sneaker", image: "", order: 1, attrs: [{name: "Numara", options: ["40", "41", "42", "43", "44"]}] },
-                                    { name: "Casual Ayakkabı", image: "", order: 2, attrs: [{name: "Numara", options: ["40", "41", "42", "43"]}] },
-                                    { name: "Klasik Ayakkabı", image: "", order: 3, attrs: [{name: "Numara", options: ["40", "41", "42", "43"]}] },
-                                    { name: "Terlik", image: "", order: 4, attrs: [{name: "Numara", options: ["40", "41", "42", "43"]}] },
-                                    { name: "Cüzdan & Kartlık", image: "", order: 5, attrs: [{name: "Materyal", options: ["Deri"]}] },
-                                    { name: "Loafer Ayakkabı", image: "", order: 6, attrs: [{name: "Numara", options: ["40", "41", "42", "43"]}] },
-                                    { name: "Sandalet", image: "", order: 7, attrs: [{name: "Numara", options: ["40", "41", "42"]}] },
-                                    { name: "El Çantası", image: "", order: 8, attrs: [{name: "Tür", options: ["Postacı"]}] },
-                                    { name: "Krampon", image: "", order: 9, attrs: [{name: "Numara", options: ["41", "42", "43"]}] },
-                                    { name: "Sırt Çantası", image: "", order: 10, attrs: [{name: "Tür", options: ["Günlük"]}] },
-                                    { name: "Yürüyüş Ayakkabısı", image: "", order: 11, attrs: [{name: "Numara", options: ["41", "42", "43"]}] },
-                                    { name: "Outdoor Ayakkabı", image: "", order: 12, attrs: [{name: "Numara", options: ["41", "42", "43"]}] },
-                                    { name: "Koşu Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["41", "42", "43"]}] },
-                                    { name: "Bot", image: "", order: 14, attrs: [{name: "Numara", options: ["41", "42", "43"]}] }
-                                ]
-                            },
-                            {
-                                name: "Kişisel Bakım", order: 3,
-                                sub: [
-                                    { name: "Parfüm", image: "", order: 1, attrs: [{name: "Hacim", options: ["100ml"]}] },
-                                    { name: "Cinsel Sağlık", image: "", order: 2, attrs: [{name: "Tür", options: ["Prezervatif"]}] },
-                                    { name: "Tıraş Bıçağı", image: "", order: 3, attrs: [{name: "Tür", options: ["Bıçak"]}] },
-                                    { name: "Güneş Ürünleri", image: "", order: 4, attrs: [{name: "SPF", options: ["SPF 50"]}] }
-                                ]
-                            },
-                            {
-                                name: "Saat & Aksesuar", order: 4,
-                                sub: [
-                                    { name: "Saat", image: "", order: 1, attrs: [{name: "Kordon", options: ["Çelik"]}] },
-                                    { name: "Güneş Gözlüğü", image: "", order: 2, attrs: [{name: "Çerçeve", options: ["Kemik"]}] },
-                                    { name: "Cüzdan", image: "", order: 3, attrs: [{name: "Materyal", options: ["Deri"]}] },
-                                    { name: "Kemer", image: "", order: 4, attrs: [{name: "Materyal", options: ["Deri"]}] },
-                                    { name: "Çanta", image: "", order: 5, attrs: [{name: "Tür", options: ["Omuz"]}] },
-                                    { name: "Şapka", image: "", order: 6, attrs: [{name: "Beden", options: ["Standart"]}] },
-                                    { name: "Bileklik", image: "", order: 7, attrs: [{name: "Materyal", options: ["Çelik"]}] }
-                                ]
-                            },
-                            {
-                                name: "İç Giyim", order: 5,
-                                sub: [
-                                    { name: "Boxer", image: "", order: 1, attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Çorap", image: "", order: 2, attrs: [{name: "Beden", options: ["40-44"]}] },
-                                    { name: "Pijama", image: "", order: 3, attrs: [{name: "Beden", options: ["S", "M", "L"]}] },
-                                    { name: "Atlet", image: "", order: 4, attrs: [{name: "Beden", options: ["S", "M", "L"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Ev & Mobilya", icon: "home", isMegaMenu: true, order: 3,
-                        groups: [
-                            {
-                                name: "Sofra & Mutfak", order: 1,
-                                sub: [
-                                    { name: "Tencere", image: "", order: 1, attrs: [{name: "Set", options: ["Set"]}] },
-                                    { name: "Yemek Takımı", image: "", order: 2, attrs: [{name: "Kişi", options: ["12 Kişilik"]}] },
-                                    { name: "Çatal Kaşık Bıçak Seti", image: "", order: 3, attrs: [{name: "Kişi", options: ["84 Parça"]}] },
-                                    { name: "Saklama Kabı", image: "", order: 4, attrs: [{name: "Malzeme", options: ["Cam"]}] },
-                                    { name: "Kahve & Çay Fincanı", image: "", order: 5, attrs: [{name: "Kişi", options: ["6 Kişilik"]}] },
-                                    { name: "Bardak ve Kadehler", image: "", order: 6, attrs: [{name: "Tür", options: ["Su Bardağı"]}] },
-                                    { name: "Tava & Sahan", image: "", order: 7, attrs: [{name: "Malzeme", options: ["Granit"]}] },
-                                    { name: "Tabak & Kase", image: "", order: 8, attrs: [{name: "Malzeme", options: ["Porselen"]}] },
-                                    { name: "Tepsi", image: "", order: 9, attrs: [{name: "Malzeme", options: ["Ahşap"]}] },
-                                    { name: "Baharat Takımı", image: "", order: 10, attrs: [{name: "Parça", options: ["6'lı"]}] },
-                                    { name: "Kahvaltı Takımı", image: "", order: 11, attrs: [{name: "Kişi", options: ["6 Kişilik"]}] },
-                                    { name: "Fırın & Kek Kalıbı", image: "", order: 12, attrs: [{name: "Tür", options: ["Kek"]}] },
-                                    { name: "Çay ve Kahve Demleme", image: "", order: 13, attrs: [{name: "Tür", options: ["Demlik"]}] },
-                                    { name: "Servis Seti", image: "", order: 14, attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Yemek Hazırlık", image: "", order: 15, attrs: [{name: "Tür", options: ["Rende"]}] }
-                                ]
-                            },
-                            {
-                                name: "Banyo", order: 2,
-                                sub: [
-                                    { name: "Havlu & Havlu Seti", image: "", order: 1, attrs: [{name: "Tür", options: ["Yüz"]}] },
-                                    { name: "Bornoz", image: "", order: 2, attrs: [{name: "Beden", options: ["S-M"]}] },
-                                    { name: "Banyo Düzenleyici", image: "", order: 3, attrs: [{name: "Tür", options: ["Raf"]}] },
-                                    { name: "Banyo Seti", image: "", order: 4, attrs: [{name: "Parça", options: ["4 Parça"]}] },
-                                    { name: "Banyo Paspası", image: "", order: 5, attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Peştemal", image: "", order: 6, attrs: [{name: "Malzeme", options: ["Pamuk"]}] },
-                                    { name: "Sabunluk", image: "", order: 7, attrs: [{name: "Tür", options: ["Sıvı"]}] },
-                                    { name: "Bebek & Çocuk Havl.", image: "", order: 8, attrs: [{name: "Tür", options: ["Bornoz"]}] },
-                                    { name: "Tuvalet Kağıtlığı", image: "", order: 9, attrs: [{name: "Malzeme", options: ["Metal"]}] },
-                                    { name: "Tuvalet Fırçası", image: "", order: 10, attrs: [{name: "Tür", options: ["Standlı"]}] },
-                                    { name: "Diş Fırçalık", image: "", order: 11, attrs: [{name: "Malzeme", options: ["Seramik"]}] },
-                                    { name: "Duş Sistemleri", image: "", order: 12, attrs: [{name: "Tür", options: ["Kolon"]}] }
-                                ]
-                            },
-                            {
-                                name: "Bahçe", order: 3,
-                                sub: [
-                                    { name: "Saksı & Saksılık", image: "", order: 1, attrs: [{name: "Malzeme", options: ["Plastik"]}] },
-                                    { name: "Bahçe Dekorasyonu", image: "", order: 2, attrs: [{name: "Tür", options: ["Çit"]}] },
-                                    { name: "Bahçe Aydınlatma", image: "", order: 3, attrs: [{name: "Tür", options: ["Aplik"]}] },
-                                    { name: "Çiçek & Bitki Yetiştirme", image: "", order: 4, attrs: [{name: "Tür", options: ["Tohum"]}] },
-                                    { name: "Bahçe Makineleri", image: "", order: 5, attrs: [{name: "Tür", options: ["Çim Biçme"]}] },
-                                    { name: "Mangal & Barbekü", image: "", order: 6, attrs: [{name: "Tür", options: ["Kömürlü"]}] },
-                                    { name: "Bahçe Sulama", image: "", order: 7, attrs: [{name: "Tür", options: ["Hortum"]}] },
-                                    { name: "Bahçe Aletleri", image: "", order: 8, attrs: [{name: "Tür", options: ["Makas"]}] },
-                                    { name: "Bahçe Mobilyası", image: "", order: 9, attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Salıncak & Hamak", image: "", order: 10, attrs: [{name: "Tür", options: ["Salıncak"]}] },
-                                    { name: "Şezlong", image: "", order: 11, attrs: [{name: "Malzeme", options: ["Ahşap"]}] },
-                                    { name: "Armut Koltuk & Minderler", image: "", order: 12, attrs: [{name: "Tür", options: ["Minder"]}] }
-                                ]
-                            },
-                            {
-                                name: "Ev Tekstili", order: 4,
-                                sub: [
-                                    { name: "Nevresim Takımı", image: "", order: 1, attrs: [{name: "Ölçü", options: ["Çift Kişilik"]}] },
-                                    { name: "Yatak Örtüsü", image: "", order: 2, attrs: [{name: "Ölçü", options: ["Çift Kişilik"]}] },
-                                    { name: "Pike & Pike Takımı", image: "", order: 3, attrs: [{name: "Ölçü", options: ["Çift Kişilik"]}] },
-                                    { name: "Çarşaf Takımı", image: "", order: 4, attrs: [{name: "Ölçü", options: ["Çift Kişilik"]}] },
-                                    { name: "Yastık & Yastık Kılıfı", image: "", order: 5, attrs: [{name: "Tür", options: ["Yastık"]}] },
-                                    { name: "Koltuk Örtüsü", image: "", order: 6, attrs: [{name: "Tür", options: ["Örtü"]}] },
-                                    { name: "Alez", image: "", attrs: [{name: "Ölçü", options: ["160x200"]}] },
-                                    { name: "Uyku Seti & Yorgan", image: "", order: 8, attrs: [{name: "Ölçü", options: ["Çift Kişilik"]}] },
-                                    { name: "Battaniye", image: "", order: 9, attrs: [{name: "Ölçü", options: ["Çift Kişilik"]}] },
-                                    { name: "Masa Örtüsü", image: "", order: 10, attrs: [{name: "Tür", options: ["Örtü"]}] },
-                                    { name: "Halı & Kilim & Paspas", image: "", order: 11, attrs: [{name: "Ölçü", options: ["160x230"]}] },
-                                    { name: "Perde", image: "", attrs: [{name: "Tür", options: ["Tül"]}] }
-                                ]
-                            },
-                            {
-                                name: "Ev Dekorasyon", order: 5,
-                                sub: [
-                                    { name: "Ayna", image: "", order: 1, attrs: [{name: "Tür", options: ["Duvar Aynası"]}] },
-                                    { name: "Yapay Çiçek & Vazo", image: "", order: 2, attrs: [{name: "Tür", options: ["Vazo"]}] },
-                                    { name: "Tablo", image: "", attrs: [{name: "Tür", options: ["Kanvas"]}] },
-                                    { name: "Duvar Saati", image: "", order: 4, attrs: [{name: "Tür", options: ["Saat"]}] },
-                                    { name: "Kırlent ve Kılıfı", image: "", order: 5, attrs: [{name: "Ölçü", options: ["43x43"]}] },
-                                    { name: "Dekoratif Obje ve Biblo", image: "", order: 6, attrs: [{name: "Tür", options: ["Biblo"]}] },
-                                    { name: "Duvar Dekorasyon...", image: "", order: 7, attrs: [{name: "Tür", options: ["Makrome"]}] },
-                                    { name: "Mum & Şamdan", image: "", order: 8, attrs: [{name: "Tür", options: ["Mum"]}] },
-                                    { name: "Oda Kokusu", image: "", order: 9, attrs: [{name: "Tür", options: ["Koku"]}] },
-                                    { name: "Duvar Kağıdı & Sticker", image: "", order: 10, attrs: [{name: "Tür", options: ["Kağıt"]}] },
-                                    { name: "Çerçeve", image: "", order: 11, attrs: [{name: "Tür", options: ["Çerçeve"]}] },
-                                    { name: "Dekoratif Kutu", image: "", order: 12, attrs: [{name: "Tür", options: ["Kutu"]}] }
-                                ]
-                            },
-                            {
-                                name: "Aydınlatma", order: 6,
-                                sub: [
-                                    { name: "Avize", image: "", attrs: [{name: "Tür", options: ["Avize"]}] },
-                                    { name: "Lambader", image: "", attrs: [{name: "Tür", options: ["Lambader"]}] },
-                                    { name: "Abajur", image: "", attrs: [{name: "Tür", options: ["Abajur"]}] },
-                                    { name: "Ampul", image: "", attrs: [{name: "Tür", options: ["LED"]}] },
-                                    { name: "Spot Lamba", image: "", attrs: [{name: "Tür", options: ["Spot"]}] },
-                                    { name: "Masa ve Gece Lamb...", image: "", attrs: [{name: "Tür", options: ["Lamba"]}] }
-                                ]
-                            },
-                            {
-                                name: "Mobilya", order: 7,
-                                sub: [
-                                    { name: "Salon & Oturma Odası", image: "", attrs: [{name: "Tür", options: ["Koltuk"]}] },
-                                    { name: "Mutfak & Banyo Mobi...", image: "", attrs: [{name: "Tür", options: ["Dolap"]}] },
-                                    { name: "Bahçe & Balkon Mob...", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Çalışma Odası", image: "", attrs: [{name: "Tür", options: ["Koltuk"]}] },
-                                    { name: "Bebek & Çocuk Mobi...", image: "", attrs: [{name: "Tür", options: ["Beşik"]}] },
-                                    { name: "Mobilya Kulpu", image: "", attrs: [{name: "Tür", options: ["Kulp"]}] },
-                                    { name: "Mobilya Ayakları", image: "", attrs: [{name: "Tür", options: ["Ayak"]}] }
-                                ]
-                            },
-                            {
-                                name: "Ev Gereçleri", order: 8,
-                                sub: [
-                                    { name: "Dolap İçi Düzenleyici", image: "", attrs: [{name: "Tür", options: ["Organizer"]}] },
-                                    { name: "Hurç", image: "", attrs: [{name: "Boyut", options: ["Büyük"]}] },
-                                    { name: "Çamaşır Sepeti", image: "", attrs: [{name: "Malzeme", options: ["Plastik"]}] },
-                                    { name: "Askı", image: "", attrs: [{name: "Paket", options: ["10'lu"]}] },
-                                    { name: "Ütü Masası ve Aksesuarı", image: "", attrs: [{name: "Tür", options: ["Masa"]}] },
-                                    { name: "Makyaj & Takı Organi...", image: "", attrs: [{name: "Tür", options: ["Organizer"]}] },
-                                    { name: "Çamaşır Kurutmalık", image: "", attrs: [{name: "Tür", options: ["Kurutmalık"]}] },
-                                    { name: "Çöp Kovası", image: "", attrs: [{name: "Kapasite", options: ["20L"]}] },
-                                    { name: "Saklama Kutusu & Se...", image: "", attrs: [{name: "Tür", options: ["Kutu"]}] },
-                                    { name: "Ayakkabı Düzenleyici", image: "", attrs: [{name: "Tür", options: ["Kutu"]}] },
-                                    { name: "Buzdolabı Düzenleyici", image: "", attrs: [{name: "Tür", options: ["Sepet"]}] },
-                                    { name: "Bavul İçi Düzenleyici", image: "", attrs: [{name: "Set", options: ["Set"]}] },
-                                    { name: "Pazar Arabası & Ç...", image: "", attrs: [{name: "Tür", options: ["Tekerlekli"]}] },
-                                    { name: "Damacana Pompası", image: "", attrs: [{name: "Tür", options: ["Şarjlı"]}] },
-                                    { name: "Çamaşır Yıkama Top...", image: "", attrs: [{name: "Tür", options: ["Top"]}] }
-                                ]
-                            },
-                            {
-                                name: "Yapı Market", order: 9,
-                                sub: [
-                                    { name: "Banyo Yapı Malzemeleri", image: "", attrs: [{name: "Tür", options: ["Duşakabin"]}] },
-                                    { name: "Elektrikli El Aleti", image: "", attrs: [{name: "Tür", options: ["Matkap"]}] },
-                                    { name: "Hırdavat Ürünleri", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Mobilya Kulpu", image: "", attrs: [{name: "Tür", options: ["Kulp"]}] },
-                                    { name: "Matkap", image: "", attrs: [{name: "Tür", options: ["Matkap"]}] },
-                                    { name: "Ampul", image: "", attrs: [{name: "Tür", options: ["LED"]}] },
-                                    { name: "İş Kıyafeti", image: "", attrs: [{name: "Tür", options: ["Önlük"]}] },
-                                    { name: "Bahçe Ürünleri", image: "", attrs: [{name: "Tür", options: ["Saksı"]}] },
-                                    { name: "Su Arıtma Cihazı", image: "", attrs: [{name: "Tür", options: ["Arıtma"]}] },
-                                    { name: "Elektrik & Tesisat Mal...", image: "", attrs: [{name: "Tür", options: ["Kablo"]}] },
-                                    { name: "Bahçe Makineleri", image: "", attrs: [{name: "Tür", options: ["Makine"]}] },
-                                    { name: "Tavan Vantilatörü", image: "", attrs: [{name: "Tür", options: ["Vantilatör"]}] },
-                                    { name: "Boya", image: "", attrs: [{name: "Tür", options: ["Boya"]}] },
-                                    { name: "Jeneratörler", image: "", attrs: [{name: "Kapasite", options: ["5kVA"]}] },
-                                    { name: "Enerji Sistemleri", image: "", attrs: [{name: "Tür", options: ["Panel"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Anne, Bebek & Oyuncak", icon: "baby", isMegaMenu: true, order: 4,
-                        groups: [
-                            {
-                                name: "Bebek", order: 1,
-                                sub: [
-                                    { name: "Bebek Arabası & P...", image: "", order: 1, attrs: [{name: "Tür", options: ["Travel"]}] },
-                                    { name: "Seyahat Sistem Beb...", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "İkiz Bebek Arabası", image: "", attrs: [{name: "Tür", options: ["İkiz"]}] },
-                                    { name: "3 Tekerlekli Bebek Bisikl...", image: "", attrs: [{name: "Tür", options: ["Bisiklet"]}] },
-                                    { name: "Oto Koltuğu", image: "", attrs: [{name: "Kilo", options: ["0-18 kg"]}] },
-                                    { name: "Park Yatak & Oyun Parkı", image: "", attrs: [{name: "Tür", options: ["Yatak"]}] },
-                                    { name: "Ana Kucağı", image: "", attrs: [{name: "Tür", options: ["Ana Kucağı"]}] },
-                                    { name: "Mama Sandalyesi", image: "", attrs: [{name: "Tür", options: ["Sandalye"]}] },
-                                    { name: "Portbebe & Kanguru", image: "", attrs: [{name: "Tür", options: ["Kanguru"]}] },
-                                    { name: "Yürüteç", image: "", attrs: [{name: "Tür", options: ["Yürüteç"]}] },
-                                    { name: "Bebek Bakım Çantası", image: "", attrs: [{name: "Tür", options: ["Çanta"]}] },
-                                    { name: "Bebek Güvenlik", image: "", attrs: [{name: "Tür", options: ["Kamera"]}] },
-                                    { name: "Bebek Takımları", image: "", attrs: [{name: "Beden", options: ["0-3 Ay"]}] },
-                                    { name: "Ayakkabı", image: "", attrs: [{name: "Numara", options: ["18"]}] },
-                                    { name: "Hastane Çıkışı", image: "", attrs: [{name: "Parça", options: ["Set"]}] },
-                                    { name: "Yenidoğan Kıyafetleri", image: "", attrs: [{name: "Beden", options: ["Yenidoğan"]}] },
-                                    { name: "Tulum & Salopet", image: "", attrs: [{name: "Beden", options: ["3-6 Ay"]}] },
-                                    { name: "Body & Zıbın", image: "", attrs: [{name: "Beden", options: ["0-3 Ay"]}] },
-                                    { name: "Tişört & Atlet", image: "", attrs: [{name: "Beden", options: ["6-9 Ay"]}] },
-                                    { name: "Elbise", image: "", attrs: [{name: "Beden", options: ["1 Yaş"]}] },
-                                    { name: "Şort", image: "", attrs: [{name: "Beden", options: ["1 Yaş"]}] },
-                                    { name: "Bebek Patiği", image: "", attrs: [{name: "Numara", options: ["Standart"]}] }
-                                ]
-                            },
-                            {
-                                name: "Anne & Bebek Bakım", order: 2,
-                                sub: [
-                                    { name: "Bebek Bezi", image: "", attrs: [{name: "Beden", options: ["Beden 3"]}] },
-                                    { name: "Bebek Maması", image: "", attrs: [{name: "Ay", options: ["6+ Ay"]}] },
-                                    { name: "Bebek Hediyelik", image: "", attrs: [{name: "Tür", options: ["Kutu"]}] },
-                                    { name: "Islak Mendil", image: "", attrs: [{name: "Tür", options: ["Paket"]}] },
-                                    { name: "Banyo & Tuvalet", image: "", attrs: [{name: "Tür", options: ["Küvet"]}] },
-                                    { name: "Bebek Bakım ve Kozmetik", image: "", attrs: [{name: "Tür", options: ["Şampuan"]}] },
-                                    { name: "Bebek Ek Besin", image: "", attrs: [{name: "Tür", options: ["Püre"]}] },
-                                    { name: "Bebek Temizlik", image: "", attrs: [{name: "Tür", options: ["Deterjan"]}] },
-                                    { name: "Biberon & Emzik", image: "", attrs: [{name: "Malzeme", options: ["Cam"]}] },
-                                    { name: "Göğüs Pompası", image: "", attrs: [{name: "Tür", options: ["Elektrikli"]}] },
-                                    { name: "Mama Önlüğü", image: "", attrs: [{name: "Malzeme", options: ["Silikon"]}] },
-                                    { name: "Alıştırma Bardağı", image: "", attrs: [{name: "Tür", options: ["Bardak"]}] }
-                                ]
-                            },
-                            {
-                                name: "Kız Çocuk", order: 3,
-                                sub: [
-                                    { name: "Elbise", image: "", attrs: [{name: "Yaş", options: ["3-4 Yaş"]}] },
-                                    { name: "Sweatshirt", image: "", attrs: [{name: "Yaş", options: ["4-5 Yaş"]}] },
-                                    { name: "Spor Ayakkabı", image: "", attrs: [{name: "Numara", options: ["25-30"]}] },
-                                    { name: "Eşofman", image: "", attrs: [{name: "Yaş", options: ["5-6 Yaş"]}] },
-                                    { name: "İç Giyim & Pijama", image: "", attrs: [{name: "Yaş", options: ["4 Yaş"]}] },
-                                    { name: "Tshirt & Atlet", image: "", attrs: [{name: "Yaş", options: ["6 Yaş"]}] },
-                                    { name: "Tayt", image: "", attrs: [{name: "Yaş", options: ["5 Yaş"]}] },
-                                    { name: "Günlük Ayakkabı", image: "", attrs: [{name: "Numara", options: ["28"]}] },
-                                    { name: "Şort", image: "", attrs: [{name: "Yaş", options: ["4 Yaş"]}] },
-                                    { name: "Mont", image: "", attrs: [{name: "Yaş", options: ["6 Yaş"]}] },
-                                    { name: "Çocuk Oyun Evi", image: "", attrs: [{name: "Tür", options: ["Ev"]}] },
-                                    { name: "Oyuncak Bebek", image: "", attrs: [{name: "Tür", options: ["Bebek"]}] }
-                                ]
-                            },
-                            {
-                                name: "Erkek Çocuk", order: 4,
-                                sub: [
-                                    { name: "Sweatshirt", image: "", attrs: [{name: "Yaş", options: ["5-6 Yaş"]}] },
-                                    { name: "Spor Ayakkabı", image: "", attrs: [{name: "Numara", options: ["30-35"]}] },
-                                    { name: "Eşofman", image: "", attrs: [{name: "Yaş", options: ["7-8 Yaş"]}] },
-                                    { name: "İç Giyim & Pijama", image: "", attrs: [{name: "Yaş", options: ["6 Yaş"]}] },
-                                    { name: "Tişört & Atlet", image: "", attrs: [{name: "Yaş", options: ["8 Yaş"]}] },
-                                    { name: "Günlük Ayakkabı", image: "", attrs: [{name: "Numara", options: ["32"]}] },
-                                    { name: "Okul Çantası", image: "", attrs: [{name: "Tür", options: ["Çanta"]}] },
-                                    { name: "Şort", image: "", attrs: [{name: "Yaş", options: ["7 Yaş"]}] },
-                                    { name: "Gömlek", image: "", attrs: [{name: "Yaş", options: ["6 Yaş"]}] },
-                                    { name: "Mont", image: "", attrs: [{name: "Yaş", options: ["8 Yaş"]}] },
-                                    { name: "Oyuncak Araba", image: "", attrs: [{name: "Tür", options: ["Araba"]}] },
-                                    { name: "Akülü Araba", image: "", attrs: [{name: "Volt", options: ["12V"]}] }
-                                ]
-                            },
-                            {
-                                name: "Oyuncak", order: 5,
-                                sub: [
-                                    { name: "Eğitici Oyuncaklar", image: "", attrs: [{name: "Yaş", options: ["3+ Yaş"]}] },
-                                    { name: "Oyuncak Araba", image: "", attrs: [{name: "Tür", options: ["Araba"]}] },
-                                    { name: "Oyuncak Bebek", image: "", attrs: [{name: "Tür", options: ["Bebek"]}] },
-                                    { name: "Bebek & Okul Öncesi", image: "", attrs: [{name: "Tür", options: ["Blok"]}] },
-                                    { name: "Oyun Hamuru", image: "", attrs: [{name: "Set", options: ["Set"]}] },
-                                    { name: "Yapı Oyuncakları", image: "", attrs: [{name: "Tür", options: ["Lego"]}] },
-                                    { name: "Bahçe & Dış Mekan", image: "", attrs: [{name: "Tür", options: ["Kaydırak"]}] },
-                                    { name: "Akülü & Pedallı Araç...", image: "", attrs: [{name: "Tür", options: ["Araç"]}] },
-                                    { name: "Scooter", image: "", attrs: [{name: "Tür", options: ["Scooter"]}] },
-                                    { name: "Peluş Oyuncak", image: "", attrs: [{name: "Boy", options: ["Ayı"]}] },
-                                    { name: "Figür Oyuncaklar", image: "", attrs: [{name: "Tür", options: ["Figür"]}] },
-                                    { name: "Ahşap Oyuncaklar", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Puzzle", image: "", attrs: [{name: "Parça", options: ["1000 Parça"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Süpermarket", icon: "shopping-cart", isMegaMenu: true, order: 5,
-                        groups: [
-                            {
-                                name: "Ev Bakım & Temizlik", order: 1,
-                                sub: [
-                                    { name: "Çamaşır Yıkama", image: "", attrs: [{name: "Tür", options: ["Deterjan"]}] },
-                                    { name: "Bulaşık Yıkama", image: "", attrs: [{name: "Tür", options: ["Tablet"]}] },
-                                    { name: "Ev Temizlik", image: "", attrs: [{name: "Tür", options: ["Temizleyici"]}] },
-                                    { name: "Paspas & Mop", image: "", attrs: [{name: "Tür", options: ["Mop"]}] },
-                                    { name: "Kağıt Ürünleri", image: "", attrs: [{name: "Tür", options: ["Kağıt"]}] }
-                                ]
-                            },
-                            {
-                                name: "Gıda & İçecek", order: 2,
-                                sub: [
-                                    { name: "Çay", image: "", attrs: [{name: "Ağırlık", options: ["1 kg"]}] },
-                                    { name: "Kahve", image: "", attrs: [{name: "Tür", options: ["Türk Kahvesi"]}] },
-                                    { name: "Kuruyemiş", image: "", attrs: [{name: "Tür", options: ["Karışık"]}] },
-                                    { name: "Kahvaltılık", image: "", attrs: [{name: "Tür", options: ["Peynir"]}] },
-                                    { name: "Gurme & Organik Ürü...", image: "", attrs: [{name: "Tür", options: ["Reçel"]}] },
-                                    { name: "Atıştırmalık", image: "", attrs: [{name: "Tür", options: ["Çikolata"]}] },
-                                    { name: "Kuru Gıda", image: "", attrs: [{name: "Tür", options: ["Makarna"]}] },
-                                    { name: "Hazır Gıda", image: "", attrs: [{name: "Tür", options: ["Konserve"]}] },
-                                    { name: "Süt Arttırıcı İçecekler", image: "", attrs: [{name: "Tür", options: ["Şerbet"]}] }
-                                ]
-                            },
-                            {
-                                name: "Kişisel Bakım", order: 3,
-                                sub: [
-                                    { name: "Güneş Ürünleri", image: "", attrs: [{name: "SPF", options: ["SPF 50+"]}] },
-                                    { name: "Saç Bakım", image: "", attrs: [{name: "Tür", options: ["Şampuan"]}] },
-                                    { name: "Tıraş & Ağda & Epilasyon", image: "", attrs: [{name: "Tür", options: ["Ağda"]}] },
-                                    { name: "Banyo & Duş", image: "", attrs: [{name: "Tür", options: ["Duş Jeli"]}] },
-                                    { name: "Ağız Bakım", image: "", attrs: [{name: "Tür", options: ["Macun"]}] },
-                                    { name: "Cilt Bakımı", image: "", attrs: [{name: "Tür", options: ["Krem"]}] },
-                                    { name: "Deodorant & Roll On", image: "", attrs: [{name: "Tür", options: ["Roll-On"]}] },
-                                    { name: "Kadın Hijyen", image: "", attrs: [{name: "Tür", options: ["Ped"]}] }
-                                ]
-                            },
-                            {
-                                name: "Sağlık", order: 4,
-                                sub: [
-                                    { name: "Cinsel Sağlık", image: "", attrs: [{name: "Tür", options: ["Prezervatif"]}] },
-                                    { name: "Hijyenik Ped", image: "", attrs: [{name: "Tür", options: ["Ped"]}] },
-                                    { name: "Sporcu Besinleri", image: "", attrs: [{name: "Tür", options: ["Protein Tozu"]}] },
-                                    { name: "Vitamin & Ek Gıda", image: "", attrs: [{name: "Tür", options: ["Vitamin"]}] },
-                                    { name: "Hasta Bezi & Temizlik", image: "", attrs: [{name: "Beden", options: ["Large"]}] }
-                                ]
-                            },
-                            {
-                                name: "Petshop", order: 5,
-                                sub: [
-                                    { name: "Kedi Maması", image: "", attrs: [{name: "Ağırlık", options: ["15 kg"]}] },
-                                    { name: "Kedi Kumu", image: "", attrs: [{name: "Tür", options: ["Kum"]}] },
-                                    { name: "Köpek Maması", image: "", attrs: [{name: "Ağırlık", options: ["15 kg"]}] },
-                                    { name: "Köpek Tasması", image: "", attrs: [{name: "Tür", options: ["Tasma"]}] },
-                                    { name: "Kuş Ürünleri", image: "", attrs: [{name: "Tür", options: ["Yem"]}] },
-                                    { name: "Akvaryum Ürünleri", image: "", attrs: [{name: "Tür", options: ["Yem"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Kozmetik", icon: "sparkles", isMegaMenu: true, order: 6,
-                        groups: [
-                            {
-                                name: "Makyaj", order: 1,
-                                sub: [
-                                    { name: "Göz Makyajı", image: "", attrs: [{name: "Ürün", options: ["Maskara"]}] },
-                                    { name: "Ten Makyajı", image: "", attrs: [{name: "Ürün", options: ["Fondöten"]}] },
-                                    { name: "Dudak Makyajı", image: "", attrs: [{name: "Ürün", options: ["Ruj"]}] },
-                                    { name: "Makyaj Seti", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Tırnak Bakım", image: "", attrs: [{name: "Tür", options: ["Oje"]}] },
-                                    { name: "Makyaj Aksesuarları", image: "", attrs: [{name: "Tür", options: ["Fırça"]}] }
-                                ]
-                            },
-                            {
-                                name: "Parfüm & Deodorant", order: 2,
-                                sub: [
-                                    { name: "Parfüm", image: "", attrs: [{name: "Hacim", options: ["100ml"]}] },
-                                    { name: "Parfüm Setleri", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Deodorant & Roll On", image: "", attrs: [{name: "Tür", options: ["Deodorant"]}] },
-                                    { name: "Vücut Spreyi", image: "", attrs: [{name: "Tür", options: ["Sprey"]}] }
-                                ]
-                            },
-                            {
-                                name: "Cilt Bakımı", order: 3,
-                                sub: [
-                                    { name: "Yüz Kremi", image: "", attrs: [{name: "Tür", options: ["Krem"]}] },
-                                    { name: "Vücut Bakım", image: "", attrs: [{name: "Tür", options: ["Losyon"]}] },
-                                    { name: "Yüz Maskesi", image: "", attrs: [{name: "Tür", options: ["Maske"]}] },
-                                    { name: "Göz Bakımı", image: "", attrs: [{name: "Tür", options: ["Krem"]}] },
-                                    { name: "Güneş Ürünleri", image: "", attrs: [{name: "SPF", options: ["SPF 50"]}] },
-                                    { name: "Cilt Bakım Seti", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Bakım Yağları", image: "", attrs: [{name: "Tür", options: ["Yağ"]}] }
-                                ]
-                            },
-                            {
-                                name: "Saç Bakımı", order: 4,
-                                sub: [
-                                    { name: "Şampuan", image: "", attrs: [{name: "Tür", options: ["Şampuan"]}] },
-                                    { name: "Saç Bakım Seti", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Saç Serum ve Yağı", image: "", attrs: [{name: "Tür", options: ["Serum"]}] },
-                                    { name: "Saç Boyası", image: "", attrs: [{name: "Renk", options: ["Boya"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Elektronik", icon: "monitor", isMegaMenu: true, order: 7,
-                        groups: [
-                            {
-                                name: "Beyaz Eşya", order: 1,
-                                sub: [
-                                    { name: "Buzdolabı", image: "", attrs: [{name: "Tür", options: ["Buzdolabı"]}] },
-                                    { name: "Çamaşır Makinesi", image: "", attrs: [{name: "Kapasite", options: ["9 kg"]}] },
-                                    { name: "Bulaşık Makinesi", image: "", attrs: [{name: "Program", options: ["Program"]}] },
-                                    { name: "Kurutma Makinesi", image: "", attrs: [{name: "Kapasite", options: ["8 kg"]}] },
-                                    { name: "Derin Dondurucu", image: "", attrs: [{name: "Tür", options: ["Dondurucu"]}] },
-                                    { name: "Klima", image: "", attrs: [{name: "Kapasite", options: ["12000 BTU"]}] },
-                                    { name: "Kombi", image: "", attrs: [{name: "Tür", options: ["Kombi"]}] },
-                                    { name: "Ankastre Set", image: "", attrs: [{name: "Parça", options: ["Set"]}] },
-                                    { name: "Isıtıcılar", image: "", attrs: [{name: "Tür", options: ["Isıtıcı"]}] }
-                                ]
-                            },
-                            {
-                                name: "Bilgisayar & Tablet", order: 2,
-                                sub: [
-                                    { name: "Laptop", image: "", attrs: [{name: "RAM", options: ["16 GB"]}] },
-                                    { name: "Oyuncu Laptop", image: "", attrs: [{name: "Ekran Kartı", options: ["RTX"]}] },
-                                    { name: "Desktop", image: "", attrs: [{name: "Tür", options: ["Kasa"]}] },
-                                    { name: "Tablet", image: "", attrs: [{name: "Hafıza", options: ["128 GB"]}] },
-                                    { name: "Monitör", image: "", attrs: [{name: "Boyut", options: ["27 inç"]}] },
-                                    { name: "Grafik Tablet", image: "", attrs: [{name: "Tür", options: ["Tablet"]}] },
-                                    { name: "Yazıcı & Tarayıcı", image: "", attrs: [{name: "Tür", options: ["Yazıcı"]}] },
-                                    { name: "Çevre Birimleri", image: "", attrs: [{name: "Tür", options: ["Klavye"]}] },
-                                    { name: "Ağ & Modem", image: "", attrs: [{name: "Tür", options: ["Modem"]}] },
-                                    { name: "Bilgisayar Bileşenleri", image: "", attrs: [{name: "Tür", options: ["Parça"]}] },
-                                    { name: "Veri Depolama ...", image: "", attrs: [{name: "Tür", options: ["SSD"]}] },
-                                    { name: "Yazıcı Sarf Malzemeleri", image: "", attrs: [{name: "Tür", options: ["Kartuş"]}] }
-                                ]
-                            },
-                            {
-                                name: "Küçük Ev Aletleri", order: 3,
-                                sub: [
-                                    { name: "Süpürge", image: "", attrs: [{name: "Tür", options: ["Süpürge"]}] },
-                                    { name: "Ütü", image: "", attrs: [{name: "Tür", options: ["Ütü"]}] },
-                                    { name: "Kahve Makinesi", image: "", attrs: [{name: "Tür", options: ["Makine"]}] },
-                                    { name: "Robot Süpürge", image: "", attrs: [{name: "Özellik", options: ["Robot"]}] },
-                                    { name: "Blender & Rondo & Mi...", image: "", attrs: [{name: "Set", options: ["Set"]}] },
-                                    { name: "Çay Makinesi", image: "", attrs: [{name: "Malzeme", options: ["Çelik"]}] },
-                                    { name: "Tost Makinesi", image: "", attrs: [{name: "Kapasite", options: ["4 Dilim"]}] },
-                                    { name: "Airfryer & Fritöz", image: "", attrs: [{name: "Kapasite", options: ["5 Litre"]}] },
-                                    { name: "Su Isıtıcı & Kettle", image: "", attrs: [{name: "Malzeme", options: ["Cam"]}] },
-                                    { name: "Hava Temizleyici", image: "", attrs: [{name: "Filtre", options: ["Filtre"]}] },
-                                    { name: "Hava Nemlendirici", image: "", attrs: [{name: "Tür", options: ["Cihaz"]}] }
-                                ]
-                            },
-                            {
-                                name: "Telefon", order: 4,
-                                sub: [
-                                    { name: "iPhone iOS Cep Telefon...", image: "", attrs: [{name: "Hafıza", options: ["128 GB"]}] },
-                                    { name: "Android Cep Telefonları", image: "", attrs: [{name: "Hafıza", options: ["256 GB"]}] },
-                                    { name: "Yenilenmiş Cep Telefonu", image: "", attrs: [{name: "Durum", options: ["Yenilenmiş"]}] },
-                                    { name: "İthalatçı Garantili Ce...", image: "", attrs: [{name: "Garanti", options: ["1 Yıl"]}] },
-                                    { name: "Şarj Cihazları", image: "", attrs: [{name: "Güç", options: ["Şarj"]}] },
-                                    { name: "Powerbank", image: "", attrs: [{name: "Kapasite", options: ["10000 mAh"]}] },
-                                    { name: "Telefon Kılıfları", image: "", attrs: [{name: "Malzeme", options: ["Silikon"]}] },
-                                    { name: "Ekran Koruyucu Fi...", image: "", attrs: [{name: "Tür", options: ["Cam"]}] }
-                                ]
-                            },
-                            {
-                                name: "Kişisel Bakım Aletleri", order: 5,
-                                sub: [
-                                    { name: "Saç Düzleştirici", image: "", attrs: [{name: "Plaka", options: ["Seramik"]}] },
-                                    { name: "Saç Maşası", image: "", attrs: [{name: "Tür", options: ["Maşa"]}] },
-                                    { name: "Saç Kurutma Makinesi", image: "", attrs: [{name: "Güç", options: ["2000W"]}] },
-                                    { name: "Tıraş Makinesi", image: "", attrs: [{name: "Tür", options: ["Makine"]}] },
-                                    { name: "Epilasyon Aleti", image: "", attrs: [{name: "Tür", options: ["Alet"]}] },
-                                    { name: "IPL Lazer Epilasyon A...", image: "", attrs: [{name: "Atım", options: ["Lazer"]}] },
-                                    { name: "Tartı", image: "", attrs: [{name: "Tür", options: ["Baskül"]}] }
-                                ]
-                            },
-                            {
-                                name: "Giyilebilir Teknoloji ve", order: 6,
-                                sub: [
-                                    { name: "Akıllı Saat", image: "", attrs: [{name: "Uyum", options: ["iOS"]}] },
-                                    { name: "Akıllı Çocuk Saati", image: "", attrs: [{name: "Özellik", options: ["Konum"]}] },
-                                    { name: "Akıllı Bileklik", image: "", attrs: [{name: "Özellik", options: ["Bileklik"]}] },
-                                    { name: "Kulak İçi Kulaklık", image: "", attrs: [{name: "Tür", options: ["Kablosuz"]}] },
-                                    { name: "Kulak Üstü Kulaklık", image: "", attrs: [{name: "Tür", options: ["Bluetooth"]}] },
-                                    { name: "Boyun Bantlı Kulaklık", image: "", attrs: [{name: "Tür", options: ["Kulaklık"]}] },
-                                    { name: "Akıllı Saat Aksesuarları", image: "", attrs: [{name: "Tür", options: ["Kordon"]}] },
-                                    { name: "Akıllı Bileklik Aksesuarları", image: "", attrs: [{name: "Tür", options: ["Kayış"]}] },
-                                    { name: "Sanal Gerçeklik G...", image: "", attrs: [{name: "Tür", options: ["Gözlük"]}] }
-                                ]
-                            },
-                            {
-                                name: "TV & Görüntü & Ses", order: 7,
-                                sub: [
-                                    { name: "Televizyon", image: "", attrs: [{name: "Çözünürlük", options: ["4K"]}] },
-                                    { name: "Soundbar", image: "", attrs: [{name: "Kanal", options: ["Ses"]}] },
-                                    { name: "Projeksiyon Cihazı", image: "", attrs: [{name: "Çözünürlük", options: ["HD"]}] },
-                                    { name: "Media Player", image: "", attrs: [{name: "Tür", options: ["Box"]}] },
-                                    { name: "Hoparlör", image: "", attrs: [{name: "Tür", options: ["Hoparlör"]}] },
-                                    { name: "TV Aksesuarları", image: "", attrs: [{name: "Tür", options: ["Askı"]}] },
-                                    { name: "Mikrofon", image: "", attrs: [{name: "Tür", options: ["Mikrofon"]}] }
-                                ]
-                            },
-                            {
-                                name: "Elektronik Aksesuarlar", order: 8,
-                                sub: [
-                                    { name: "Bilgisayar Aksesuar", image: "", attrs: [{name: "Tür", options: ["Mouse"]}] },
-                                    { name: "Telefon Aksesuarları", image: "", attrs: [{name: "Tür", options: ["Tutucu"]}] },
-                                    { name: "TV Aksesuarları", image: "", attrs: [{name: "Tür", options: ["Kablo"]}] },
-                                    { name: "Veri Depolama", image: "", attrs: [{name: "Kapasite", options: ["1 TB"]}] }
-                                ]
-                            },
-                            {
-                                name: "Oyunculara Özel", order: 9,
-                                sub: [
-                                    { name: "Playstation", image: "", attrs: [{name: "Model", options: ["PS5"]}] },
-                                    { name: "Oyuncu Dizüstü Bilg...", image: "", attrs: [{name: "Ekran", options: ["144 Hz"]}] },
-                                    { name: "Xbox", image: "", attrs: [{name: "Model", options: ["Series X"]}] },
-                                    { name: "Nintendo", image: "", attrs: [{name: "Model", options: ["OLED"]}] },
-                                    { name: "Playstation Oyunları", image: "", attrs: [{name: "Tür", options: ["Oyun"]}] },
-                                    { name: "Konsol Aksesuarları", image: "", attrs: [{name: "Tür", options: ["Kol"]}] },
-                                    { name: "Oyuncu Masaüstü B...", image: "", attrs: [{name: "İşlemci", options: ["Intel"]}] },
-                                    { name: "Oyuncu Donanımları", image: "", attrs: [{name: "Tür", options: ["Kulaklık"]}] },
-                                    { name: "Oyuncu Monitörleri", image: "", attrs: [{name: "Tepki", options: ["1ms"]}] },
-                                    { name: "Ekran Kartı", image: "", attrs: [{name: "Model", options: ["RTX"]}] }
-                                ]
-                            },
-                            {
-                                name: "Foto & Kamera", order: 10,
-                                sub: [
-                                    { name: "Dijital Fotoğraf Ma...", image: "", attrs: [{name: "Tür", options: ["Kamera"]}] },
-                                    { name: "Aynasız Kompakt S...", image: "", attrs: [{name: "Lens", options: ["Lens"]}] },
-                                    { name: "Aksiyon Kamera", image: "", attrs: [{name: "Çözünürlük", options: ["4K"]}] },
-                                    { name: "Foto & Kamera Aks...", image: "", attrs: [{name: "Tür", options: ["Tripod"]}] }
-                                ]
-                            },
-                            {
-                                name: "Dijital Kod & Ürünler", order: 11,
-                                sub: [
-                                    { name: "Dijital Hediye Kartları", image: "", attrs: [{name: "Tür", options: ["Kart"]}] },
-                                    { name: "E-pin & Cüzdan Kod...", image: "", attrs: [{name: "Tür", options: ["Kod"]}] },
-                                    { name: "Ön Ödemeli Kartlar", image: "", attrs: [{name: "Tür", options: ["Kart"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Saat & Aksesuar", icon: "watch", isMegaMenu: true, order: 8,
-                        groups: [
-                            {
-                                name: "Aksesuar&Saat&Gözlük", order: 1,
-                                sub: [
-                                    { name: "Saat", image: "", attrs: [{name: "Tür", options: ["Saat"]}] },
-                                    { name: "Güneş Gözlüğü", image: "", attrs: [{name: "Tür", options: ["Gözlük"]}] },
-                                    { name: "Takı", image: "", attrs: [{name: "Tür", options: ["Bileklik"]}] },
-                                    { name: "Cüzdan", image: "", attrs: [{name: "Malzeme", options: ["Deri"]}] },
-                                    { name: "Kemer", image: "", attrs: [{name: "Malzeme", options: ["Deri"]}] },
-                                    { name: "Şapka", image: "", attrs: [{name: "Tür", options: ["Şapka"]}] },
-                                    { name: "Şal & Fular", image: "", attrs: [{name: "Malzeme", options: ["İpek"]}] },
-                                    { name: "Kravat", image: "", attrs: [{name: "Tür", options: ["Kravat"]}] },
-                                    { name: "Valiz", image: "", attrs: [{name: "Boyut", options: ["Valiz"]}] }
-                                ]
-                            },
-                            {
-                                name: "Takı & Mücevher", order: 2,
-                                sub: [
-                                    { name: "Kolye", image: "", attrs: [{name: "Maden", options: ["Gümüş"]}] },
-                                    { name: "Küpe", image: "", attrs: [{name: "Maden", options: ["Çelik"]}] },
-                                    { name: "Bileklik", image: "", attrs: [{name: "Maden", options: ["Altın"]}] },
-                                    { name: "Halhal", image: "", attrs: [{name: "Maden", options: ["Gümüş"]}] },
-                                    { name: "Yüzük", image: "", attrs: [{name: "Maden", options: ["Yüzük"]}] },
-                                    { name: "Altın", image: "", attrs: [{name: "Tür", options: ["Altın"]}] },
-                                    { name: "Piercing", image: "", attrs: [{name: "Bölge", options: ["Piercing"]}] }
-                                ]
-                            },
-                            {
-                                name: "Çocuk Aksesuar", order: 3,
-                                sub: [
-                                    { name: "Saat", image: "", attrs: [{name: "Tür", options: ["Saat"]}] },
-                                    { name: "Güneş Gözlüğü", image: "", attrs: [{name: "Tür", options: ["Gözlük"]}] },
-                                    { name: "Şapka", image: "", attrs: [{name: "Tür", options: ["Şapka"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Spor & Outdoor", icon: "activity", isMegaMenu: true, order: 9,
-                        groups: [
-                            {
-                                name: "Spor Ayakkabı", order: 1,
-                                sub: [
-                                    { name: "Sneaker", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Koşu Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Krampon&Halı saha Ayak...", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Basketbol Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Yürüyüş Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Outdoor Ayakkabı", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Tenis Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Voleybol Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["40"]}] },
-                                    { name: "Fitness Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Deniz Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["Standart"]}] },
-                                    { name: "Kaykay Ayakkabısı", image: "", attrs: [{name: "Numara", options: ["42"]}] },
-                                    { name: "Spor Terlik", image: "", attrs: [{name: "Numara", options: ["42"]}] }
-                                ]
-                            },
-                            {
-                                name: "Spor Giyim", order: 2,
-                                sub: [
-                                    { name: "Spor Tişört", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Spor Şort", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Spor Tayt", image: "", attrs: [{name: "Beden", options: ["S"]}] },
-                                    { name: "Sporcu Sütyeni", image: "", attrs: [{name: "Beden", options: ["S"]}] },
-                                    { name: "Eşofman", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Spor Sweatshirt", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Spor Yelek", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Spor Atlet", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Forma", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Spor Mont", image: "", attrs: [{name: "Beden", options: ["M"]}] },
-                                    { name: "Şapka", image: "", attrs: [{name: "Beden", options: ["Standart"]}] },
-                                    { name: "Spor Çorap", image: "", attrs: [{name: "Beden", options: ["42"]}] }
-                                ]
-                            },
-                            {
-                                name: "Outdoor Ekipmanları", order: 3,
-                                sub: [
-                                    { name: "Termos", image: "", attrs: [{name: "Hacim", options: ["1L"]}] },
-                                    { name: "Çadır", image: "", attrs: [{name: "Kişi", options: ["3 Kişilik"]}] },
-                                    { name: "Kamp Mobilyası", image: "", attrs: [{name: "Tür", options: ["Sandalye"]}] },
-                                    { name: "Kamp Mutfağı", image: "", attrs: [{name: "Tür", options: ["Ocak"]}] },
-                                    { name: "Kamp Ekipmanları", image: "", attrs: [{name: "Tür", options: ["Fener"]}] },
-                                    { name: "Av & Balıkçılık", image: "", attrs: [{name: "Tür", options: ["Olta"]}] },
-                                    { name: "Tırmanış", image: "", attrs: [{name: "Tür", options: ["Karabina"]}] }
-                                ]
-                            },
-                            {
-                                name: "Spor Ekipmanları", order: 4,
-                                sub: [
-                                    { name: "Fitness & Kondisyon", image: "", attrs: [{name: "Tür", options: ["Dambıl"]}] },
-                                    { name: "Evde Spor Aletleri", image: "", attrs: [{name: "Tür", options: ["Koşu Bandı"]}] },
-                                    { name: "Elektrikli Bisiklet & S...", image: "", attrs: [{name: "Tür", options: ["Bisiklet"]}] },
-                                    { name: "Pilates & Yoga", image: "", attrs: [{name: "Tür", options: ["Mat"]}] },
-                                    { name: "Su Sporu & Dalış", image: "", attrs: [{name: "Tür", options: ["Şnorkel"]}] },
-                                    { name: "Bisiklet", image: "", attrs: [{name: "Vites", options: ["21 Vites"]}] },
-                                    { name: "Paten & Kaykay", image: "", attrs: [{name: "Tür", options: ["Paten"]}] },
-                                    { name: "Dövüş Sporları", image: "", attrs: [{name: "Tür", options: ["Eldiven"]}] },
-                                    { name: "Futbol", image: "", attrs: [{name: "Tür", options: ["Top"]}] },
-                                    { name: "Voleybol", image: "", attrs: [{name: "Tür", options: ["Top"]}] },
-                                    { name: "Basketbol", image: "", attrs: [{name: "Tür", options: ["Top"]}] },
-                                    { name: "Tenis & Padel", image: "", attrs: [{name: "Tür", options: ["Raket"]}] },
-                                    { name: "Badminton", image: "", attrs: [{name: "Set", options: ["Set"]}] },
-                                    { name: "Kayak & Snowboard", image: "", attrs: [{name: "Tür", options: ["Board"]}] }
-                                ]
-                            },
-                            {
-                                name: "Sporcu Besin", order: 5,
-                                sub: [
-                                    { name: "Protein Tozu", image: "", attrs: [{name: "Aroma", options: ["Çikolata"]}] },
-                                    { name: "Amino Asit", image: "", attrs: [{name: "Tür", options: ["BCAA"]}] },
-                                    { name: "Karbonhidrat", image: "", attrs: [{name: "Tür", options: ["Gainer"]}] },
-                                    { name: "L-Karnitin(CL A)", image: "", attrs: [{name: "Tür", options: ["Sıvı"]}] },
-                                    { name: "Güç ve Performans", image: "", attrs: [{name: "Tür", options: ["Kreatin"]}] },
-                                    { name: "Gıda Takviyesi & ...", image: "", attrs: [{name: "Tür", options: ["Vitamin"]}] },
-                                    { name: "Kreatin", image: "", attrs: [{name: "Tür", options: ["Monohidrat"]}] },
-                                    { name: "Protein Bar", image: "", attrs: [{name: "Aroma", options: ["Fıstık"]}] },
-                                    { name: "Shaker", image: "", attrs: [{name: "Hacim", options: ["700ml"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Kitap & Kırtasiye & Hobi", icon: "book", isMegaMenu: true, order: 10,
-                        groups: [
-                            {
-                                name: "Kırtasiye & Ofis", order: 1,
-                                sub: [
-                                    { name: "Defter & Ajanda", image: "", attrs: [{name: "Tür", options: ["Defter"]}] },
-                                    { name: "Kalem & Yazı Gereçleri", image: "", attrs: [{name: "Tür", options: ["Kalem"]}] },
-                                    { name: "Etiket", image: "", attrs: [{name: "Tür", options: ["Etiket"]}] },
-                                    { name: "Suluk & Matara", image: "", attrs: [{name: "Kapasite", options: ["750ml"]}] },
-                                    { name: "Fotokopi & Baskı Kağıt...", image: "", attrs: [{name: "Ölçü", options: ["A4"]}] },
-                                    { name: "Ofis Teknolojileri", image: "", attrs: [{name: "Tür", options: ["Pos"]}] },
-                                    { name: "Pil & Şarj Cihazı", image: "", attrs: [{name: "Tür", options: ["Pil"]}] },
-                                    { name: "Dosyalama & Arşivleme", image: "", attrs: [{name: "Tür", options: ["Klasör"]}] },
-                                    { name: "Masaüstü Gereçleri", image: "", attrs: [{name: "Tür", options: ["Kalemlik"]}] },
-                                    { name: "Boyalar & Sanatsal M...", image: "", attrs: [{name: "Tür", options: ["Boya"]}] },
-                                    { name: "Kırtasiye Seti", image: "", attrs: [{name: "İçerik", options: ["Set"]}] },
-                                    { name: "Ofis Sarf Tüketim Ma...", image: "", attrs: [{name: "Tür", options: ["Bant"]}] }
-                                ]
-                            },
-                            {
-                                name: "Hobi", order: 2,
-                                sub: [
-                                    { name: "Parti Malzemeleri", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Müzik Alet ve Ekipmanları", image: "", attrs: [{name: "Tür", options: ["Gitar"]}] },
-                                    { name: "Hediyelik Ürünler", image: "", attrs: [{name: "Tür", options: ["Kutu"]}] },
-                                    { name: "Hobi Malzemeleri", image: "", attrs: [{name: "Tür", options: ["İp"]}] },
-                                    { name: "Uzaktan Kumandalı ...", image: "", attrs: [{name: "Tür", options: ["Araç"]}] },
-                                    { name: "Tütün & Tütün Akse...", image: "", attrs: [{name: "Tür", options: ["Çakmak"]}] },
-                                    { name: "Drone", image: "", attrs: [{name: "Kamera", options: ["4K"]}] },
-                                    { name: "Oyun Grupları", image: "", attrs: [{name: "Tür", options: ["Oyun"]}] },
-                                    { name: "Led Işık", image: "", attrs: [{name: "Tür", options: ["LED"]}] },
-                                    { name: "Düğün & Kına & Nikah", image: "", attrs: [{name: "Tür", options: ["Çiçek"]}] },
-                                    { name: "Örgü İpi", image: "", attrs: [{name: "Renk", options: ["İp"]}] },
-                                    { name: "Puzzle", image: "", attrs: [{name: "Parça", options: ["1000 Parça"]}] }
-                                ]
-                            },
-                            {
-                                name: "Kitap", order: 3,
-                                sub: [
-                                    { name: "Eğitim", image: "", attrs: [{name: "Sınav", options: ["TYT"]}] },
-                                    { name: "Çocuk ve Ebeveyn Kit...", image: "", attrs: [{name: "Yaş", options: ["Kitap"]}] },
-                                    { name: "Roman ve Edebiyat", image: "", attrs: [{name: "Tür", options: ["Roman"]}] },
-                                    { name: "Kişisel Gelişim & P...", image: "", attrs: [{name: "Tür", options: ["Kitap"]}] },
-                                    { name: "Yabancı Dil Kitaplar", image: "", attrs: [{name: "Seviye", options: ["B1"]}] },
-                                    { name: "E-Kitap", image: "", attrs: [{name: "Tür", options: ["Dijital"]}] },
-                                    { name: "Din ve Mitoloji", image: "", attrs: [{name: "Tür", options: ["Kitap"]}] },
-                                    { name: "Hobi, Sanat, Spor", image: "", attrs: [{name: "Tür", options: ["Kitap"]}] },
-                                    { name: "Çizgi Roman, Dergi ve Ga...", image: "", attrs: [{name: "Tür", options: ["Dergi"]}] },
-                                    { name: "İş, Ekonomi ve Pazarlama", image: "", attrs: [{name: "Tür", options: ["Kitap"]}] }
-                                ]
-                            }
-                        ]
-                    },
-                    { 
-                        name: "Otomobil & Motosiklet", icon: "car", isMegaMenu: true, order: 11,
-                        groups: [
-                            {
-                                name: "Otomobil", order: 1,
-                                sub: [
-                                    { name: "Lastik", image: "", attrs: [{name: "Ebat", options: ["16 inç"]}] },
-                                    { name: "Koltuk Kılıfı", image: "", attrs: [{name: "Tür", options: ["Set"]}] },
-                                    { name: "Paspas", image: "", attrs: [{name: "Tür", options: ["Paspas"]}] },
-                                    { name: "Araç İçi Süpürge", image: "", attrs: [{name: "Tür", options: ["Süpürge"]}] },
-                                    { name: "Bakım ve Temizlik", image: "", attrs: [{name: "Tür", options: ["Şampuan"]}] },
-                                    { name: "Silecekler", image: "", attrs: [{name: "Tür", options: ["Silecek"]}] },
-                                    { name: "Yağ ve Motor Katkısı", image: "", attrs: [{name: "Tür", options: ["Yağ"]}] },
-                                    { name: "Far & Ampül", image: "", attrs: [{name: "Tür", options: ["LED"]}] },
-                                    { name: "Ses ve Görüntü Sis...", image: "", attrs: [{name: "Tür", options: ["Kamera"]}] }
-                                ]
-                            },
-                            {
-                                name: "Motosiklet", order: 2,
-                                sub: [
-                                    { name: "Benzinli Motosiklet", image: "", attrs: [{name: "Hacim", options: ["50 CC"]}] },
-                                    { name: "Elektrikli Motosiklet", image: "", attrs: [{name: "Menzil", options: ["50 km"]}] },
-                                    { name: "Lastik", image: "", attrs: [{name: "Tür", options: ["Lastik"]}] },
-                                    { name: "Kask", image: "", attrs: [{name: "Tip", options: ["Kask"]}] },
-                                    { name: "Mont", image: "", attrs: [{name: "Koruma", options: ["Mont"]}] },
-                                    { name: "Eldiven", image: "", attrs: [{name: "Malzeme", options: ["Deri"]}] },
-                                    { name: "Pantolon", image: "", attrs: [{name: "Tür", options: ["Pantolon"]}] },
-                                    { name: "Ayakkabı Bot", image: "", attrs: [{name: "Tür", options: ["Bot"]}] },
-                                    { name: "Yedek Parça", image: "", attrs: [{name: "Tür", options: ["Parça"]}] }
-                                ]
-                            }
-                        ]
-                    }
-                ];
-
-                try {
-                    let batches = [];
-                    let currentBatch = writeBatch(db);
-                    let opCount = 0;
-
-                    for(let mainCategory of trendyolTree) {
-                        const mainRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
-                        currentBatch.set(mainRef, { 
-                            name: mainCategory.name, 
-                            slug: window.generateSlug(mainCategory.name), 
-                            icon: mainCategory.icon, 
-                            isMegaMenu: true, 
-                            order: mainCategory.order || 0,
-                            parentId: "", 
-                            createdAt: Date.now() 
-                        });
-                        opCount++;
-                        if(opCount === 490) { batches.push(currentBatch.commit()); currentBatch = writeBatch(db); opCount = 0; }
-
-                        if(mainCategory.groups && mainCategory.groups.length > 0) {
-                            for(let group of mainCategory.groups) {
-                                const groupRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
-                                currentBatch.set(groupRef, { 
-                                    name: group.name, 
-                                    slug: window.generateSlug(group.name), 
-                                    isGroupTitle: true, 
-                                    order: group.order || 0,
-                                    parentId: mainRef.id, 
-                                    createdAt: Date.now() 
-                                });
-                                opCount++;
-                                if(opCount === 490) { batches.push(currentBatch.commit()); currentBatch = writeBatch(db); opCount = 0; }
-
-                                if(group.sub && group.sub.length > 0) {
-                                    for(let sub of group.sub) {
-                                        const subRef = doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
-                                        currentBatch.set(subRef, { 
-                                            name: sub.name, 
-                                            slug: window.generateSlug(sub.name), 
-                                            image: sub.image || "", 
-                                            icon: "", 
-                                            order: sub.order || 0,
-                                            attributes: sub.attrs || [], 
-                                            parentId: groupRef.id, 
-                                            createdAt: Date.now() 
-                                        });
-                                        opCount++;
-                                        if(opCount === 490) { batches.push(currentBatch.commit()); currentBatch = writeBatch(db); opCount = 0; }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if(opCount > 0) batches.push(currentBatch.commit());
-                    await Promise.all(batches);
-
-                    window.showMessage("TRENDYOL STANDARTLARINDA 64 RESİMLİ KATEGORİ VE SIRALAMA BAŞARIYLA YÜKLENDİ!");
-                } catch(e) {
-                    console.error(e);
-                    window.showMessage("Yükleme sırasında hata oluştu.", "error");
-                } finally {
-                    document.getElementById('fullScreenLoader').classList.add('hidden');
-                    if(btn) { btn.innerHTML = `<i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Trendyol 64 Resimli Şablonu Yükle`; btn.disabled = false; }
-                    lucide.createIcons();
-                }
+            window.customConfirm("DİKKAT: Bu işlem veritabanınıza Trendyol yapısında kategorileri yükleyecektir. Onaylıyor musunuz?", async () => {
+                window.showMessage("Otomasyon şablonu şuan sadece kod yapısında mevcut. API ile bağlandığında aktif olacaktır.");
             });
         };
 
-        // --- DİĞER MAĞAZA VE KONTROL İŞLEMLERİ ---
         function renderStores() {
             const tbody = document.getElementById('storesTableBody');
             if(!tbody) return;
@@ -1891,7 +925,6 @@
         window.completelyDeleteStore = (storeId) => {
             const store = dbStores.find(s => s.id === storeId);
             if(!store) return;
-
             window.customConfirm(`<b>${store.name}</b> adlı mağazayı kalıcı olarak silmek üzeresiniz.`, async () => {
                 document.getElementById('fullScreenLoader').classList.remove('hidden');
                 document.getElementById('loaderText').innerText = "Mağaza ve verileri siliniyor...";
@@ -2112,12 +1145,56 @@
             });
         };
 
+        // --- SİSTEM AYARLARI VE DİNAMİK BANNER VERİ DOLDURMA (POPULATE) ---
         function populateSettingsForm() {
             if(systemSettings.platformName) document.getElementById('setPlatformName').value = systemSettings.platformName;
             if(systemSettings.platformLogo) {
                 document.getElementById('setLogoPreview').src = systemSettings.platformLogo;
                 document.getElementById('setLogoPreview').classList.remove('hidden');
                 if(document.getElementById('setLogoFallback')) document.getElementById('setLogoFallback').classList.add('hidden');
+            }
+
+            // 1. Ana (Büyük) Banner Yüklemesi
+            if(systemSettings.mainBanner) {
+                if(systemSettings.mainBanner.tag) document.getElementById('setMainBannerTag').value = systemSettings.mainBanner.tag;
+                if(systemSettings.mainBanner.btnText) document.getElementById('setMainBannerBtn').value = systemSettings.mainBanner.btnText;
+                if(systemSettings.mainBanner.title) document.getElementById('setMainBannerTitle').value = systemSettings.mainBanner.title;
+                if(systemSettings.mainBanner.subtitle) document.getElementById('setMainBannerSubtitle').value = systemSettings.mainBanner.subtitle;
+                if(systemSettings.mainBanner.linkType) document.getElementById('setMainBannerLinkType').value = systemSettings.mainBanner.linkType;
+                if(systemSettings.mainBanner.linkValue) document.getElementById('setMainBannerLinkValue').value = systemSettings.mainBanner.linkValue;
+                if(systemSettings.mainBanner.image) {
+                    document.getElementById('setMainBannerImagePreview').src = systemSettings.mainBanner.image;
+                    document.getElementById('setMainBannerImagePreview').classList.remove('hidden');
+                    document.getElementById('setMainBannerImageFallback').classList.add('hidden');
+                }
+            }
+
+            // 2. Yan Banner 1 (2. Kaydırma Kartı)
+            if(systemSettings.sideBanner1) {
+                if(systemSettings.sideBanner1.title) document.getElementById('setSide1Title').value = systemSettings.sideBanner1.title;
+                if(systemSettings.sideBanner1.subtitle) document.getElementById('setSide1Subtitle').value = systemSettings.sideBanner1.subtitle;
+                if(systemSettings.sideBanner1.icon) document.getElementById('setSide1Icon').value = systemSettings.sideBanner1.icon;
+                if(systemSettings.sideBanner1.linkType) document.getElementById('setSide1LinkType').value = systemSettings.sideBanner1.linkType;
+                if(systemSettings.sideBanner1.linkValue) document.getElementById('setSide1LinkValue').value = systemSettings.sideBanner1.linkValue;
+                if(systemSettings.sideBanner1.image) {
+                    document.getElementById('setSide1ImagePreview').src = systemSettings.sideBanner1.image;
+                    document.getElementById('setSide1ImagePreview').classList.remove('hidden');
+                    document.getElementById('setSide1ImageFallback').classList.add('hidden');
+                }
+            }
+
+            // 3. Yan Banner 2 (3. Kaydırma Kartı)
+            if(systemSettings.sideBanner2) {
+                if(systemSettings.sideBanner2.title) document.getElementById('setSide2Title').value = systemSettings.sideBanner2.title;
+                if(systemSettings.sideBanner2.subtitle) document.getElementById('setSide2Subtitle').value = systemSettings.sideBanner2.subtitle;
+                if(systemSettings.sideBanner2.icon) document.getElementById('setSide2Icon').value = systemSettings.sideBanner2.icon;
+                if(systemSettings.sideBanner2.linkType) document.getElementById('setSide2LinkType').value = systemSettings.sideBanner2.linkType;
+                if(systemSettings.sideBanner2.linkValue) document.getElementById('setSide2LinkValue').value = systemSettings.sideBanner2.linkValue;
+                if(systemSettings.sideBanner2.image) {
+                    document.getElementById('setSide2ImagePreview').src = systemSettings.sideBanner2.image;
+                    document.getElementById('setSide2ImagePreview').classList.remove('hidden');
+                    document.getElementById('setSide2ImageFallback').classList.add('hidden');
+                }
             }
         }
 
@@ -2155,6 +1232,7 @@
             });
         }
 
+        // --- SİSTEM AYARLARINI KAYDETME (DİNAMİK BANNER DESTEKLİ) ---
         window.saveSystemSettings = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSaveSettings');
@@ -2163,14 +1241,61 @@
 
             try {
                 let updates = { platformName: document.getElementById('setPlatformName').value };
+                
+                // Platform Logosu
                 const logoInput = document.getElementById('setLogoInput');
                 if (logoInput.files.length > 0) updates.platformLogo = await compressAdminImage(logoInput.files[0], 400); 
 
+                // 1. Ana (Büyük) Banner
+                let mainB = {
+                    tag: document.getElementById('setMainBannerTag').value.trim(),
+                    btnText: document.getElementById('setMainBannerBtn').value.trim(),
+                    title: document.getElementById('setMainBannerTitle').value.trim(),
+                    subtitle: document.getElementById('setMainBannerSubtitle').value.trim(),
+                    linkType: document.getElementById('setMainBannerLinkType').value,
+                    linkValue: document.getElementById('setMainBannerLinkValue').value.trim(),
+                    image: systemSettings?.mainBanner?.image || null
+                };
+                const mbImgInput = document.getElementById('setMainBannerImageInput');
+                if (mbImgInput.files.length > 0) mainB.image = await compressAdminImage(mbImgInput.files[0], 1200);
+
+                // 2. Yan Banner 1
+                let side1 = {
+                    title: document.getElementById('setSide1Title').value.trim(),
+                    subtitle: document.getElementById('setSide1Subtitle').value.trim(),
+                    icon: document.getElementById('setSide1Icon').value.trim(),
+                    linkType: document.getElementById('setSide1LinkType').value,
+                    linkValue: document.getElementById('setSide1LinkValue').value.trim(),
+                    image: systemSettings?.sideBanner1?.image || null
+                };
+                const s1ImgInput = document.getElementById('setSide1ImageInput');
+                if (s1ImgInput.files.length > 0) side1.image = await compressAdminImage(s1ImgInput.files[0], 800);
+
+                // 3. Yan Banner 2
+                let side2 = {
+                    title: document.getElementById('setSide2Title').value.trim(),
+                    subtitle: document.getElementById('setSide2Subtitle').value.trim(),
+                    icon: document.getElementById('setSide2Icon').value.trim(),
+                    linkType: document.getElementById('setSide2LinkType').value,
+                    linkValue: document.getElementById('setSide2LinkValue').value.trim(),
+                    image: systemSettings?.sideBanner2?.image || null
+                };
+                const s2ImgInput = document.getElementById('setSide2ImageInput');
+                if (s2ImgInput.files.length > 0) side2.image = await compressAdminImage(s2ImgInput.files[0], 800);
+
+                updates.mainBanner = mainB;
+                updates.sideBanner1 = side1;
+                updates.sideBanner2 = side2;
+
                 await setDoc(settingsRef, updates, { merge: true });
-                window.showMessage("Sistem ayarları güncellendi.");
+                systemSettings = { ...systemSettings, ...updates };
+
+                window.showMessage("Sistem ayarları ve banner vitrinleri başarıyla güncellendi.");
             } catch(err) {
+                console.error(err);
                 window.showMessage("Ayarlar kaydedilemedi.", "error");
             }
+            
             btn.innerHTML = `<i data-lucide="save" class="w-5 h-5"></i> Değişiklikleri Yayına Al`;
             btn.disabled = false;
             lucide.createIcons();
