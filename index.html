@@ -20,24 +20,33 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
+        /* Çekmece & Tam Ekran Menü Animasyonları */
         .drawer-overlay { transition: opacity 0.3s ease; }
         .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
+        /* Trendyol Tarzı Toggle Switch */
         .toggle-checkbox:checked { right: 0; border-color: #f97316; }
         .toggle-checkbox:checked + .toggle-label { background-color: #f97316; }
         .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
         .toggle-label { background-color: #e2e8f0; transition: all 0.3s; }
         
         .custom-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
+
+        /* Kategori Menüsü Özel Scrollbar Ayarları */
         .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
 
+        /* Mobil Alt Menü Padding */
         @media (max-width: 640px) {
             body { padding-bottom: 70px; }
         }
 
         /* Slider Animations */
-        .slider-scroll { scroll-behavior: smooth; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+        .slider-scroll { scroll-behavior: smooth; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
         .slider-scroll::-webkit-scrollbar { display: none; }
+        .snap-start { scroll-snap-align: start; }
+        
+        /* Banner Slider Scroll Bar (Gizli ama smooth) */
+        #mainBannerSlider::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen overflow-x-hidden">
@@ -45,7 +54,9 @@
     <!-- Üst Menü / Navbar (Sabit) -->
     <header id="mainHeader" class="sticky top-0 z-[100] bg-white border-b border-slate-200">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
+            
             <div class="flex items-center gap-3 shrink-0">
+                <!-- Mobil Hamburger Menü -->
                 <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition sm:block">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
@@ -118,40 +129,26 @@
         <!-- VİTRİN İÇERİKLERİ (Maks Genişlik) -->
         <div class="max-w-[1400px] mx-auto w-full px-3 sm:px-6 lg:px-8 flex flex-col gap-8 mt-2">
             
-            <!-- 1. BÜYÜK DİNAMİK BANNER (Admin Panelinden Gelecek) -->
-            <div id="dynamicMainBanner" class="w-full bg-slate-200 rounded-3xl overflow-hidden relative shadow-lg min-h-[160px] sm:min-h-[300px] flex items-center group cursor-pointer">
-                <!-- Varsayılan Yükleniyor veya Fallback -->
-                <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-orange-400 to-rose-500 text-white p-8">
-                    <div class="max-w-xl relative z-10">
-                        <span class="bg-white text-orange-600 text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-3 inline-block shadow-sm">Hoş Geldiniz</span>
-                        <h2 class="text-2xl sm:text-4xl md:text-5xl font-black leading-tight mb-2">Kıbrıs Bazar'da<br>Alışverişe Başla!</h2>
-                        <button class="mt-2 bg-slate-900 text-white text-xs font-bold py-2.5 px-6 rounded-full shadow-lg hover:scale-105 transition-transform">Fırsatları İncele</button>
+            <!-- 1. YATAY KAYDIRMALI BÜYÜK BANNER SLIDERI (Tüm admin bannerları buraya gelir) -->
+            <div class="w-full relative">
+                <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl">
+                    <!-- Varsayılan Yükleniyor veya Fallback -->
+                    <div class="w-full shrink-0 snap-start bg-slate-200 rounded-3xl overflow-hidden relative shadow-lg min-h-[160px] sm:min-h-[300px] flex items-center group cursor-pointer">
+                        <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-orange-400 to-rose-500 text-white p-8">
+                            <div class="max-w-xl relative z-10">
+                                <span class="bg-white text-orange-600 text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-3 inline-block shadow-sm">Hoş Geldiniz</span>
+                                <h2 class="text-2xl sm:text-4xl md:text-5xl font-black leading-tight mb-2">Kıbrıs Bazar'da<br>Alışverişe Başla!</h2>
+                                <button class="mt-2 bg-slate-900 text-white text-xs font-bold py-2.5 px-6 rounded-full shadow-lg hover:scale-105 transition-transform">Fırsatları İncele</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- 2. İKİ ADET KÜÇÜK BANNER (Admin Panelinden Gelecek) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="dynamicSmallBanners">
-                <!-- Fallback Banner 1 -->
-                <div class="w-full bg-blue-100 rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition">
-                    <div class="relative z-10 w-2/3">
-                        <h3 class="text-lg font-black text-blue-900 mb-1">Elektronik Fırsatları</h3>
-                        <p class="text-xs text-blue-700 font-medium mb-3">En yeni teknolojiler uygun fiyata</p>
-                        <span class="text-[10px] font-bold text-white bg-blue-600 px-3 py-1.5 rounded-lg">Keşfet</span>
-                    </div>
-                </div>
-                <!-- Fallback Banner 2 -->
-                <div class="w-full bg-emerald-100 rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition">
-                    <div class="relative z-10 w-2/3">
-                        <h3 class="text-lg font-black text-emerald-900 mb-1">Ev & Mobilya</h3>
-                        <p class="text-xs text-emerald-700 font-medium mb-3">Evinizi baştan yaratın</p>
-                        <span class="text-[10px] font-bold text-white bg-emerald-600 px-3 py-1.5 rounded-lg">İncele</span>
-                    </div>
-                </div>
+                <!-- Banner Noktaları (Indicators) -->
+                <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
             </div>
 
             <!-- 3. POPÜLER ÜRÜNLER SLIDER -->
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-3 mt-4">
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="flame" class="w-5 h-5 text-orange-500 fill-orange-100"></i> Popüler Ürünler</h2>
                     <button class="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center">Tümünü Gör <i data-lucide="chevron-right" class="w-4 h-4"></i></button>
@@ -448,6 +445,7 @@
             else if (name.includes("perde") || name.includes("halı") || name.includes("kilim") || name.includes("paspas") || name.includes("dekorasyon") || name.includes("ayna") || name.includes("tablo") || name.includes("saat") || name.includes("mum")) keyword = "homedecor,rug";
             else if (name.includes("aydınlatma") || name.includes("avize") || name.includes("lamba") || name.includes("ampul")) keyword = "lighting,lamp";
             else if (name.includes("mobilya") || name.includes("koltuk") || name.includes("yatak") || name.includes("dolap") || name.includes("masa")) keyword = "furniture,sofa";
+            else if (name.includes("ev gereçleri") || name.includes("düzenleyici") || name.includes("çöp kovası") || name.includes("hurç") || name.includes("askı")) keyword = "organizer,home";
             else if (name.includes("yapı market") || name.includes("matkap") || name.includes("boya") || name.includes("hırdavat") || name.includes("jeneratör")) keyword = "tools,hardware";
             else if (name.includes("bebek arabası") || name.includes("oto koltuğu") || name.includes("ana kucağı") || name.includes("park yatak") || name.includes("bebek bezi") || name.includes("ıslak mendil") || name.includes("bebek maması") || name.includes("biberon") || name.includes("emzik") || name.includes("çocuk") || name.includes("bebek") || name.includes("hastane çıkışı") || name.includes("tulum") || name.includes("zıbın")) keyword = "baby,stroller,baby-clothes";
             else if (name.includes("oyuncak") || name.includes("lego") || name.includes("puzzle") || name.includes("peluş") || name.includes("akülü") || name.includes("araba")) keyword = "toys,lego";
@@ -478,9 +476,7 @@
             else { favorites.push(id); }
             localStorage.setItem('user_favorites', JSON.stringify(favorites));
             
-            // Eğer kategori sonuçları veya arama modundaysak mevcut listeyi güncelle
             if (!document.getElementById('heroBannerSection').classList.contains('hidden')) {
-                // Ana sayfa modundayız, sadece o kartların ikonlarını güncelle
                 document.querySelectorAll(`button[onclick="window.toggleFavorite('${id}')"] i`).forEach(icon => {
                     if (favorites.includes(id)) {
                         icon.classList.remove('text-slate-400');
@@ -490,7 +486,7 @@
                         icon.classList.add('text-slate-400');
                     }
                 });
-                renderVitrinFavoriteProducts(); // Favoriler sliderını anlık tazele
+                renderVitrinFavoriteProducts(); 
             } else {
                 window.applyFilters();
             }
@@ -662,63 +658,100 @@
 
         window.resetCategorySelection = () => { window.resetToHome(); };
 
-        // --- ANA SAYFA YENİ VİTRİN BÖLÜMLERİ ---
+        // --- ANA SAYFA YENİ VİTRİN BÖLÜMLERİ (BANNER SLIDER VE YATAY VİTRİNLER) ---
 
         function renderAdminBanners() {
-            const mainBannerContainer = document.getElementById('dynamicMainBanner');
-            const smallBannersContainer = document.getElementById('dynamicSmallBanners');
+            const sliderContainer = document.getElementById('mainBannerSlider');
+            const indicatorsContainer = document.getElementById('bannerIndicators');
+            
+            // Eğer admin panelden hiçbir banner yüklenmemişse boş bırak
+            if (!systemSettings.mainBanner && !systemSettings.sideBanner1 && !systemSettings.sideBanner2) {
+                sliderContainer.innerHTML = '';
+                indicatorsContainer.innerHTML = '';
+                return;
+            }
 
-            // Büyük Banner İşleme
-            if (systemSettings.mainBanner && systemSettings.mainBanner.image) {
-                const b = systemSettings.mainBanner;
+            let sliderHtml = '';
+            let indicatorsHtml = '';
+            let slideCount = 0;
+
+            // Yardımcı: Banner Slide'ı Oluşturma Şablonu
+            const createSlide = (b, index) => {
                 let targetAction = `onclick="window.location.href='${b.linkValue}'"`;
-                if(b.linkType === 'category') targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; // Slug mantığına göre uyarlanabilir
-                
-                mainBannerContainer.innerHTML = `
-                    <div class="absolute inset-0 w-full h-full">
-                        <img src="${b.image}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-transparent"></div>
-                    </div>
-                    <div class="relative z-10 p-8 sm:p-12 w-full max-w-2xl text-left" ${targetAction}>
-                        ${b.tag ? `<span class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-3 inline-block shadow-sm">${b.tag}</span>` : ''}
-                        <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-2">${b.title || ''}</h2>
-                        ${b.subtitle ? `<p class="text-sm text-slate-300 mb-4 font-medium max-w-md">${b.subtitle}</p>` : ''}
-                        ${b.btnText ? `<button class="bg-white text-slate-900 font-bold py-2.5 px-6 rounded-full shadow-lg hover:scale-105 transition-transform text-xs inline-flex items-center gap-2">${b.btnText} <i data-lucide="chevron-right" class="w-4 h-4"></i></button>` : ''}
-                    </div>
-                `;
-            }
+                if(b.linkType === 'category') targetAction = `onclick="window.selectCategory('', '', '${b.linkValue}', 'Kategori')"`; 
 
-            // Küçük Bannerları İşleme
-            let smallHtml = '';
-            const b1 = systemSettings.sideBanner1;
-            const b2 = systemSettings.sideBanner2;
+                indicatorsHtml += `<button class="w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-orange-500 w-4' : 'bg-slate-300'}" id="indicator-${index}"></button>`;
 
-            if (b1 && b1.image) {
-                smallHtml += `
-                    <div class="w-full rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition group">
-                        <img src="${b1.image}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/70 to-transparent"></div>
-                        <div class="relative z-10 w-2/3">
-                            <h3 class="text-lg font-black text-white mb-1 flex items-center gap-1.5"><i data-lucide="${b1.icon || 'star'}" class="w-4 h-4"></i> ${b1.title || ''}</h3>
-                            <p class="text-xs text-slate-300 font-medium mb-3">${b1.subtitle || ''}</p>
+                return `
+                    <div class="w-full shrink-0 snap-start rounded-3xl overflow-hidden relative shadow-lg min-h-[160px] sm:min-h-[300px] flex items-center group cursor-pointer slide-item" ${targetAction}>
+                        <div class="absolute inset-0 w-full h-full bg-slate-900">
+                            ${b.image ? `<img src="${b.image}" class="w-full h-full object-cover">` : `<div class="w-full h-full bg-gradient-to-r from-slate-800 to-slate-700"></div>`}
+                            <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
+                        </div>
+                        <div class="relative z-10 p-8 sm:p-12 w-full max-w-2xl text-left">
+                            ${b.tag ? `<span class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase mb-3 inline-block shadow-sm">${b.tag}</span>` : ''}
+                            ${b.title ? `<h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-2">${b.title}</h2>` : ''}
+                            ${b.subtitle ? `<p class="text-sm text-slate-300 mb-4 font-medium max-w-md">${b.subtitle}</p>` : ''}
+                            ${b.btnText ? `<button class="bg-white text-slate-900 font-bold py-2.5 px-6 rounded-full shadow-lg hover:scale-105 transition-transform text-xs inline-flex items-center gap-2">${b.btnText} <i data-lucide="chevron-right" class="w-4 h-4"></i></button>` : ''}
                         </div>
                     </div>
                 `;
+            };
+
+            // Banner 1 (Main)
+            if (systemSettings.mainBanner && systemSettings.mainBanner.image) {
+                sliderHtml += createSlide(systemSettings.mainBanner, slideCount);
+                slideCount++;
             }
-            if (b2 && b2.image) {
-                smallHtml += `
-                    <div class="w-full rounded-2xl overflow-hidden relative shadow-sm min-h-[120px] sm:min-h-[160px] flex items-center p-6 cursor-pointer hover:shadow-md transition group">
-                        <img src="${b2.image}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/70 to-transparent"></div>
-                        <div class="relative z-10 w-2/3">
-                            <h3 class="text-lg font-black text-white mb-1 flex items-center gap-1.5"><i data-lucide="${b2.icon || 'star'}" class="w-4 h-4"></i> ${b2.title || ''}</h3>
-                            <p class="text-xs text-slate-300 font-medium mb-3">${b2.subtitle || ''}</p>
-                        </div>
-                    </div>
-                `;
+            // Banner 2 (Side 1)
+            if (systemSettings.sideBanner1 && systemSettings.sideBanner1.image) {
+                sliderHtml += createSlide(systemSettings.sideBanner1, slideCount);
+                slideCount++;
             }
-            if(smallHtml !== '') smallBannersContainer.innerHTML = smallHtml;
+            // Banner 3 (Side 2)
+            if (systemSettings.sideBanner2 && systemSettings.sideBanner2.image) {
+                sliderHtml += createSlide(systemSettings.sideBanner2, slideCount);
+                slideCount++;
+            }
+
+            sliderContainer.innerHTML = sliderHtml;
+            indicatorsContainer.innerHTML = indicatorsHtml;
             lucide.createIcons();
+
+            // Slider Scroll Olayını Dinleyerek Noktaları (Indicators) Güncelle
+            if (slideCount > 1) {
+                sliderContainer.addEventListener('scroll', () => {
+                    const slideWidth = sliderContainer.clientWidth;
+                    const scrollPosition = sliderContainer.scrollLeft;
+                    // Hangi slide'ın daha çok görünür olduğunu hesapla
+                    const activeIndex = Math.round(scrollPosition / slideWidth);
+
+                    // Noktaları güncelle
+                    for (let i = 0; i < slideCount; i++) {
+                        const ind = document.getElementById(`indicator-${i}`);
+                        if(ind) {
+                            if (i === activeIndex) {
+                                ind.classList.remove('bg-slate-300', 'w-2');
+                                ind.classList.add('bg-orange-500', 'w-4');
+                            } else {
+                                ind.classList.add('bg-slate-300', 'w-2');
+                                ind.classList.remove('bg-orange-500', 'w-4');
+                            }
+                        }
+                    }
+                });
+
+                // Otomatik Geçiş (Auto-Play) - Sadece masaüstü veya her yerde isteğe bağlı
+                let currentSlide = 0;
+                setInterval(() => {
+                    currentSlide = (currentSlide + 1) % slideCount;
+                    const slideWidth = sliderContainer.clientWidth;
+                    sliderContainer.scrollTo({
+                        left: currentSlide * slideWidth,
+                        behavior: 'smooth'
+                    });
+                }, 5000); // Her 5 saniyede bir geçer
+            }
         }
 
         // --- VİTRİN ÜRÜN KARTI (Mini versiyon, slider için) ---
@@ -760,7 +793,7 @@
         function renderVitrinPopularProducts() {
             const container = document.getElementById('vitrinPopularProducts');
             if(!container) return;
-            // Popüler: Şimdilik karışık/rastgele 8 ürün alıyoruz (Gerçek senaryoda görüntülenme sayısına göre Firebase sorgusu yapılabilir)
+            // Popüler: Şimdilik karışık/rastgele 8 ürün alıyoruz
             const shuffled = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 8);
             container.innerHTML = shuffled.map(p => window.createMiniProductCard(p)).join('');
             lucide.createIcons();
@@ -771,7 +804,6 @@
             if(!container) return;
             // Favoriler: LocalStorage'daki ID'lerle eşleşenleri getir
             let favProducts = allProducts.filter(p => favorites.includes(p.id));
-            // Eğer favori yoksa, placeholder niyetine başka bir liste göster (boş durmasın diye)
             if(favProducts.length === 0) favProducts = [...allProducts].reverse().slice(0, 6);
             
             container.innerHTML = favProducts.map(p => window.createMiniProductCard(p)).join('');
@@ -781,7 +813,7 @@
         function renderVitrinNewProducts() {
             const container = document.getElementById('vitrinNewProducts');
             if(!container) return;
-            // Yeni Eklenenler: createdAt'a göre en yeniler (Zaten allProducts tüm aktifleri getiriyor, biz tarihe göre sıralayıp ilk 10'u alırız)
+            // Yeni Eklenenler: createdAt'a göre en yeniler 
             const newProducts = [...allProducts].sort((a,b) => b.createdAt - a.createdAt).slice(0, 10);
             container.innerHTML = newProducts.map(p => window.createMiniProductCard(p)).join('');
             lucide.createIcons();
@@ -791,7 +823,6 @@
             const container = document.getElementById('vitrinStores');
             if(!container) return;
             
-            // Eğer hiç mağaza yoksa
             if(allStores.length === 0) {
                 container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Öne çıkan mağaza bulunamadı.</div>`;
                 return;
@@ -804,7 +835,6 @@
             storesToShow.forEach(s => {
                 const storeUrl = `/magaza/${window.generateSlug(s.name)}-${s.id}`;
                 const followerCount = s.followers ? s.followers.length : 0;
-                // Eğer mağazanın logosu varsa onu, yoksa isminin baş harfini göster
                 const logoHtml = s.logo ? `<img src="${s.logo}" class="w-full h-full object-cover">` : `<span class="text-xl font-black text-indigo-500">${s.name.charAt(0)}</span>`;
                 
                 html += `
