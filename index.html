@@ -49,7 +49,7 @@
             
             <div class="flex items-center gap-3 shrink-0">
                 <!-- Mobil Hamburger Menü (Masaüstünde gösterilmeye devam etsin ama mobilde kategori açsın) -->
-                <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition">
+                <button onclick="window.toggleHamburgerMenu()" class="p-1 text-slate-600 hover:text-orange-500 rounded-xl transition sm:block">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
                 <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
@@ -82,33 +82,29 @@
     </header>
 
     <!-- TRENDYOL STİLİ TAM EKRAN KATEGORİ MODALI -->
-    <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden drawer-overlay opacity-0 flex justify-end">
-        <div id="hamburgerMenuContentArea" class="bg-white w-full md:max-w-[700px] h-full flex flex-col shadow-2xl transform translate-x-full drawer-content relative overflow-hidden">
-            
-            <!-- Modal Arama ve Başlık (Trendyol stili üst bar) -->
-            <div class="p-3 sm:p-4 flex items-center gap-3 bg-white shrink-0">
-                <button onclick="window.toggleHamburgerMenu()" class="p-1.5 text-slate-600 hover:text-rose-500 rounded-full transition">
-                    <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                </button>
-                <div class="flex-1 relative">
-                    <input type="text" placeholder="Marka, ürün veya kategori ara" class="w-full bg-slate-100 text-slate-600 border border-slate-200 rounded-full pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition">
-                    <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
-                    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"><i data-lucide="camera" class="w-5 h-5"></i></button>
-                </div>
-            </div>
-
-            <!-- Üst Ana Kategori Sekmeleri (Yatay Scroll) -->
-            <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-100 bg-white shrink-0" id="mainTabContainer">
-                <button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold text-slate-500 border-b-2 border-transparent transition whitespace-nowrap">Tüm Kategoriler</button>
-                <!-- JS dinamik dolduracak (Sana Özel, Kadın, Erkek...) -->
-            </div>
-
-            <!-- İçerik Alanı (Alt kategoriler veya Mega Grid) -->
-            <div class="flex-1 flex overflow-hidden bg-white" id="hamburgerMenuCategories">
-                <!-- JS dinamik dolduracak -->
+    <div id="hamburgerMenuDrawer" class="fixed inset-0 bg-white z-[200] hidden flex-col drawer-overlay opacity-0">
+        
+        <!-- Modal Üst Arama ve Geri Tuşu -->
+        <div class="p-3 sm:p-4 flex items-center gap-3 bg-white shrink-0 border-b border-slate-100 shadow-sm">
+            <button onclick="window.toggleHamburgerMenu()" class="p-1.5 text-slate-600 hover:text-orange-500 transition">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+            </button>
+            <div class="flex-1 relative">
+                <input type="text" placeholder="Marka, ürün veya kategori ara" class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition font-medium">
+                <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"><i data-lucide="camera" class="w-5 h-5"></i></button>
             </div>
         </div>
-        <div class="flex-1 h-full hidden md:block" onclick="window.toggleHamburgerMenu()"></div>
+
+        <!-- Üst Ana Kategori Sekmeleri (Yatay Scroll) -->
+        <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0" id="mainTabContainer">
+            <!-- JS Dinamik Dolduracak -->
+        </div>
+
+        <!-- İçerik Alanı (Mega Grid veya Alt Kategoriler) -->
+        <div class="flex-1 overflow-hidden bg-white w-full max-w-[1400px] mx-auto" id="hamburgerMenuCategories">
+            <!-- JS Dinamik Dolduracak -->
+        </div>
     </div>
 
     <!-- VİTRİN BANNER (Sadece Ana Sayfada) -->
@@ -269,20 +265,19 @@
     </div>
 
     <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[90] sm:hidden flex justify-around items-center h-16 px-2 pb-safe">
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[110] sm:hidden flex justify-around items-center h-16 px-1 pb-safe">
         <a href="/" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
             <span class="text-[10px] font-bold">Ana Sayfa</span>
         </a>
-        <a href="#" onclick="window.toggleHamburgerMenu(); return false;" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
+        <button onclick="window.toggleHamburgerMenu()" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
             <i data-lucide="layout-grid" class="w-5 h-5"></i>
             <span class="text-[10px] font-medium">Kategoriler</span>
-        </a>
-        <!-- Ortadaki Buton (Trendyol Go, Yemek vb. Tarzı - Şimdilik Mağazalar diyelim) -->
+        </button>
         <a href="satici.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition relative -top-3">
-            <div class="w-12 h-12 bg-white rounded-full border border-slate-200 shadow-md flex items-center justify-center relative">
+            <div class="w-12 h-12 bg-white rounded-full border border-slate-200 shadow-sm flex items-center justify-center relative">
                 <div class="absolute inset-1 bg-gradient-to-tr from-orange-500 to-rose-500 rounded-full flex items-center justify-center">
-                    <span class="text-white font-black text-xs leading-none text-center">Bazar<br>Go</span>
+                    <span class="text-white font-black text-[10px] leading-tight text-center">Bazar<br>Go</span>
                 </div>
             </div>
         </a>
@@ -293,12 +288,12 @@
         <a href="sepet.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition relative">
             <i data-lucide="shopping-cart" class="w-5 h-5"></i>
             <span class="text-[10px] font-medium">Sepetim</span>
-            <span id="cartCountBadgeMob" class="absolute top-1 right-3 bg-orange-600 text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-md hidden border border-white">0</span>
+            <span id="cartCountBadgeMob" class="absolute top-1 right-2 bg-orange-600 text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-md hidden border border-white">0</span>
         </a>
     </div>
 
     <!-- Alt Bilgi / Footer (Masaüstü için) -->
-    <footer class="bg-slate-900 border-t border-slate-800 mt-auto py-8 pb-20 sm:pb-8">
+    <footer class="bg-slate-900 border-t border-slate-800 mt-auto py-8 hidden sm:block">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
             <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
             <div class="flex items-center gap-2">
@@ -362,16 +357,13 @@
 
         window.toggleHamburgerMenu = () => {
             const drawer = document.getElementById('hamburgerMenuDrawer');
-            const content = document.getElementById('hamburgerMenuContentArea');
             if(drawer.classList.contains('hidden')) {
                 drawer.classList.remove('hidden');
                 setTimeout(() => { 
                     drawer.classList.remove('opacity-0');
-                    content.classList.remove('translate-x-full'); 
                 }, 10);
             } else {
                 drawer.classList.add('opacity-0');
-                content.classList.add('translate-x-full');
                 setTimeout(() => { drawer.classList.add('hidden'); }, 300);
             }
         };
@@ -381,9 +373,7 @@
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             const tabContainer = document.getElementById('mainTabContainer');
             
-            let html = `<button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${activeId === 'all' ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent'}">Tüm Kategoriler</button>`;
-            
-            html += `<button onclick="window.renderMegaMenuGrid()" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap text-slate-500 border-b-2 border-transparent">Sana Özel</button>`;
+            let html = `<button onclick="window.renderMegaMenuGrid()" id="mainTab-all" class="main-cat-tab flex-shrink-0 px-4 py-3 text-sm font-bold transition whitespace-nowrap ${activeId === 'all' ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent'}">Sana Özel</button>`;
 
             mainCats.forEach(main => {
                 const isActive = main.id === activeId ? 'text-orange-500 border-b-2 border-orange-500' : 'text-slate-500 border-b-2 border-transparent';
@@ -393,7 +383,7 @@
             tabContainer.innerHTML = html;
         }
 
-        // --- EKRAN 1: TÜM KATEGORİLER GRİDİ (ANA GÖRÜNÜM) ---
+        // --- EKRAN 1: TÜM KATEGORİLER GRİDİ (SANA ÖZEL GÖRÜNÜM) ---
         window.renderMegaMenuGrid = () => {
             const container = document.getElementById('hamburgerMenuCategories');
             if(!container) return;
@@ -403,13 +393,13 @@
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             
             let html = `
-                <div class="w-full h-full p-4 overflow-y-auto category-scroll pb-32">
-                    <div class="bg-gradient-to-r from-orange-500 to-rose-500 rounded-2xl p-4 text-white flex items-center justify-between shadow-lg mb-4 cursor-pointer hover:opacity-95 transition">
+                <div class="w-full h-full p-4 overflow-y-auto category-scroll bg-slate-50">
+                    <div class="bg-gradient-to-r from-orange-100 to-orange-200 rounded-xl p-4 text-orange-900 flex items-center justify-between shadow-sm mb-4 cursor-pointer">
                         <div>
-                            <span class="text-[10px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">Sana Özel Kategoriler</span>
-                            <h3 class="text-xs font-medium mt-1 opacity-90">İlgini çekebilecek kategoriler ve fırsatlar</h3>
+                            <h3 class="text-sm font-bold">Sana Özel Kategoriler <i data-lucide="chevron-right" class="w-4 h-4 inline opacity-50"></i></h3>
+                            <span class="text-[10px] mt-0.5 block opacity-80">İlgini çekebilecek kategoriler ve fırsatlar</span>
                         </div>
-                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center transform rotate-12"><i data-lucide="percent" class="w-6 h-6"></i></div>
+                        <div class="w-12 h-12 flex items-center justify-center transform -rotate-12"><i data-lucide="tag" class="w-8 h-8 text-orange-500 fill-orange-500"></i></div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3">
@@ -419,9 +409,9 @@
                 const img = main.image && main.image.trim() !== '' ? main.image : 'https://placehold.co/150x150/f1f5f9/475569?text=' + encodeURIComponent(main.name);
                 
                 html += `
-                    <button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" class="flex flex-col sm:flex-row items-center justify-between p-4 rounded-2xl bg-slate-100 hover:bg-orange-50 border border-transparent hover:border-orange-200 transition group text-left h-24 overflow-hidden relative">
-                        <span class="text-sm font-black text-slate-800 group-hover:text-orange-600 z-10 self-start sm:self-center">${main.name}</span>
-                        <img src="${img}" alt="${main.name}" loading="lazy" class="absolute -right-2 -bottom-2 w-20 h-20 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <button onclick="window.openMainCategoryDetails('${main.id}', '${main.name}')" class="flex flex-row items-center justify-between pl-3 pr-0 py-0 rounded-xl bg-slate-100/80 hover:bg-slate-200 border border-transparent transition group text-left h-20 overflow-hidden relative">
+                        <span class="text-xs font-bold text-slate-800 z-10 w-1/2 leading-tight">${main.name}</span>
+                        <img src="${img}" alt="${main.name}" loading="lazy" class="h-full w-auto max-w-[50%] object-cover absolute right-0">
                     </button>
                 `;
             });
@@ -439,38 +429,37 @@
             const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
 
             let html = `
-                <div class="flex w-full h-full pb-16">
+                <div class="flex w-full h-full">
                     <!-- Sol Dikey Grup Sekmeleri -->
-                    <div class="w-[30%] sm:w-[25%] border-r border-slate-100 bg-slate-50/50 flex flex-col py-2 overflow-y-auto category-scroll" id="groupTabsContainer">
+                    <div class="w-[28%] sm:w-[25%] bg-slate-50 flex flex-col overflow-y-auto category-scroll" id="groupTabsContainer">
             `;
 
             groups.forEach((grp, idx) => {
-                const isActive = idx === 0 ? 'bg-white text-orange-600 font-black border-l-4 border-orange-500 shadow-sm' : 'text-slate-600 font-bold hover:bg-slate-100 border-l-4 border-transparent';
-                html += `<button onclick="window.switchGroupTab('${grp.id}', this)" class="group-tab-btn text-left px-3 py-4 text-xs transition ${isActive}">${grp.name}</button>`;
+                const isActive = idx === 0 ? 'bg-white text-orange-600 font-bold' : 'text-slate-600 font-medium hover:bg-slate-100';
+                html += `<button onclick="window.switchGroupTab('${grp.id}', this)" class="group-tab-btn text-left px-3 py-4 text-[11px] transition ${isActive}">${grp.name}</button>`;
             });
 
             html += `</div>
                     <!-- Sağ 3'lü Grid Kategori Alanı -->
-                    <div class="w-[70%] sm:w-[75%] p-4 overflow-y-auto category-scroll bg-white" id="groupContentArea">
+                    <div class="w-[72%] sm:w-[75%] p-3 sm:p-4 overflow-y-auto category-scroll bg-white" id="groupContentArea">
             `;
 
             groups.forEach((grp, idx) => {
                 const isHidden = idx === 0 ? '' : 'hidden';
                 const subs = allCategories.filter(c => c.parentId === grp.id).sort((a, b) => (a.order || 0) - (b.order || 0));
                 
-                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4 pb-20">`;
+                html += `<div id="groupPane-${grp.id}" class="group-pane ${isHidden} space-y-4">`;
                 
-                // Sağ tarafta "Tümünü Gör" + İlk 2 ürün gibi özel gösterim
                 html += `
-                    <div class="grid grid-cols-3 gap-x-2 gap-y-6">
+                    <div class="grid grid-cols-3 gap-x-2 gap-y-4">
                         <button onclick="window.selectCategory('${mainId}', '', 'Tüm ${grp.name}', '${mainName}')" class="flex flex-col items-center group text-center">
-                            <div class="w-full aspect-square rounded-2xl bg-orange-50 overflow-hidden mb-2 flex items-center justify-center border border-orange-100 group-hover:bg-orange-100 transition">
-                                <div class="grid grid-cols-2 gap-1 opacity-50">
-                                    <div class="w-3 h-3 bg-orange-500 rounded-sm"></div><div class="w-3 h-3 bg-orange-500 rounded-sm"></div>
-                                    <div class="w-3 h-3 bg-orange-500 rounded-sm"></div><div class="w-3 h-3 bg-orange-500 rounded-sm flex items-center justify-center text-white"><i data-lucide="chevron-right" class="w-3 h-3"></i></div>
+                            <div class="w-[70px] h-[70px] sm:w-20 sm:h-20 rounded-2xl bg-orange-50 overflow-hidden mb-1 flex items-center justify-center border border-orange-100">
+                                <div class="grid grid-cols-2 gap-1 opacity-60">
+                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div>
+                                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px]"></div><div class="w-2.5 h-2.5 bg-orange-500 rounded-[3px] flex items-center justify-center text-white"><i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></div>
                                 </div>
                             </div>
-                            <span class="text-[10px] font-medium text-slate-600 group-hover:text-orange-600 leading-tight">Tümünü Gör</span>
+                            <span class="text-[10px] font-medium text-slate-700 leading-tight w-full truncate">Tümünü Gör</span>
                         </button>
                 `;
 
@@ -478,10 +467,10 @@
                     const subImg = sub.image && sub.image.trim() !== '' ? sub.image : 'https://placehold.co/150x150/f1f5f9/475569?text=' + encodeURIComponent(sub.name);
                     html += `
                         <button onclick="window.selectCategory('${mainId}', '${sub.slug}', '${sub.name}', '${mainName}')" class="flex flex-col items-center group text-center">
-                            <div class="w-full aspect-square rounded-2xl bg-white border border-slate-100 overflow-hidden mb-2 p-1.5 shadow-sm group-hover:border-orange-200 group-hover:shadow-md transition">
+                            <div class="w-[70px] h-[70px] sm:w-20 sm:h-20 rounded-2xl bg-white border border-slate-100 overflow-hidden mb-1 p-1 shadow-sm transition">
                                 <img src="${subImg}" alt="${sub.name}" loading="lazy" class="w-full h-full object-contain">
                             </div>
-                            <span class="text-[10px] font-medium text-slate-600 group-hover:text-orange-600 line-clamp-2 leading-tight">${sub.name}</span>
+                            <span class="text-[10px] font-medium text-slate-700 leading-tight w-full break-words line-clamp-2">${sub.name}</span>
                         </button>
                     `;
                 });
@@ -496,13 +485,13 @@
         window.switchGroupTab = (groupId, btnElement) => {
             document.querySelectorAll('.group-pane').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('.group-tab-btn').forEach(b => {
-                b.classList.remove('bg-white', 'text-orange-600', 'font-black', 'border-l-4', 'border-orange-500', 'shadow-sm');
-                b.classList.add('text-slate-600', 'font-bold', 'hover:bg-slate-100', 'border-transparent');
+                b.classList.remove('bg-white', 'text-orange-600', 'font-bold');
+                b.classList.add('text-slate-600', 'font-medium', 'hover:bg-slate-100');
             });
 
             document.getElementById(`groupPane-${groupId}`).classList.remove('hidden');
-            btnElement.classList.remove('text-slate-600', 'font-bold', 'hover:bg-slate-100', 'border-transparent');
-            btnElement.classList.add('bg-white', 'text-orange-600', 'font-black', 'border-l-4', 'border-orange-500', 'shadow-sm');
+            btnElement.classList.remove('text-slate-600', 'font-medium', 'hover:bg-slate-100');
+            btnElement.classList.add('bg-white', 'text-orange-600', 'font-bold');
         };
 
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
@@ -797,7 +786,6 @@
             if (activeSubCategorySlug && activeSubCategorySlug !== '') {
                 filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug);
             } else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) {
-                // Sadece seçili ana kategoriye ait ürünler (Tümünü Gör mantığı)
                 const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug);
                 filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug));
             }
