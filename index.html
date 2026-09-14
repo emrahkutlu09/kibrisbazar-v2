@@ -657,8 +657,10 @@
         window.resetCategorySelection = () => { window.resetToHome(); };
 
         // --- BANNER RENDER (Büyük Slider ve İkili Küçük Slider) ---
-        function renderAdminBanners() {
-            // -- BÜYÜK BANNER KISMI --
+      function renderAdminBanners() {
+            // ==========================================
+            // 1) BÜYÜK BANNER KISMI
+            // ==========================================
             const mainSliderContainer = document.getElementById('mainBannerSlider');
             const indicatorsContainer = document.getElementById('bannerIndicators');
             
@@ -688,33 +690,28 @@
                 `;
             };
 
-            // DİNAMİK BÜYÜK BANNER YÜKLEMESİ
+            // Büyük Banner Verilerini Topla (Array veya Object)
+            let mainBannersData = [];
             if (systemSettings.mainBanners && Array.isArray(systemSettings.mainBanners) && systemSettings.mainBanners.length > 0) {
-                systemSettings.mainBanners.forEach((b) => {
-                    mainSliderHtml += createMainSlide(b, mainSlideCount); 
-                    mainSlideCount++;
-                });
-            } else if (systemSettings.mainBanner && systemSettings.mainBanner.image) {
-                mainSliderHtml += createMainSlide(systemSettings.mainBanner, mainSlideCount); 
-                mainSlideCount++;
+                mainBannersData = systemSettings.mainBanners;
+            } else if (systemSettings.mainBanner && (systemSettings.mainBanner.title || systemSettings.mainBanner.image || systemSettings.mainBanner.tag)) {
+                mainBannersData.push(systemSettings.mainBanner);
             }
 
-            if (mainSlideCount === 0) {
-                const fallbackBanner = {
-                    tag: "Özel Teklif",
-                    title: "Kıbrıs Bazar'a<br>Hoş Geldiniz",
-                    subtitle: "Yerel mağazaların dijital pazaryerinde binlerce ürünü keşfedin.",
-                    btnText: "Alışverişe Başla",
-                    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000"
-                };
-                mainSliderHtml += createMainSlide(fallbackBanner, mainSlideCount); 
-                mainSlideCount++;
+            if (mainBannersData.length === 0) {
+                mainBannersData.push({
+                    tag: "Özel Teklif", title: "Kıbrıs Bazar'a<br>Hoş Geldiniz", subtitle: "Yerel mağazaların dijital pazaryerinde binlerce ürünü keşfedin.", btnText: "Alışverişe Başla", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000"
+                });
             }
+
+            mainBannersData.forEach((b) => {
+                mainSliderHtml += createMainSlide(b, mainSlideCount); 
+                mainSlideCount++;
+            });
 
             mainSliderContainer.innerHTML = mainSliderHtml;
             indicatorsContainer.innerHTML = indicatorsHtml;
 
-            // OTOMATİK KAYDIRMA (Büyük Banner)
             if (mainSlideCount > 1) {
                 mainSliderContainer.addEventListener('scroll', () => {
                     const slideWidth = mainSliderContainer.clientWidth;
@@ -729,7 +726,6 @@
                 });
                 
                 if(window.mainSliderInterval) clearInterval(window.mainSliderInterval);
-                
                 let currentMainSlide = 0;
                 window.mainSliderInterval = setInterval(() => {
                     currentMainSlide = (currentMainSlide + 1) % mainSlideCount;
@@ -737,9 +733,12 @@
                 }, 5000);
             }
 
-            // -- KÜÇÜK BANNERLAR (İkili Slider) KISMI --
+            // ==========================================
+            // 2) KÜÇÜK (YAN) BANNERLAR KISMI
+            // ==========================================
             const smallBannersContainer = document.getElementById('dynamicSmallBanners');
             const smallIndicatorsContainer = document.getElementById('smallBannerIndicators');
+            
             let smallHtml = '';
             let smallIndicatorsHtml = '';
             let smallSlideCount = 0;
@@ -763,32 +762,35 @@
             };
 
             const bgColors = ['bg-blue-100', 'bg-emerald-100', 'bg-purple-100', 'bg-rose-100', 'bg-amber-100'];
-
+            
+            // Küçük Banner Verilerini Topla (Kapsamlı Kontrol)
+            let smallBannersData = [];
+            
             if (systemSettings.sideBanners && Array.isArray(systemSettings.sideBanners) && systemSettings.sideBanners.length > 0) {
-                systemSettings.sideBanners.forEach((b, idx) => {
-                    smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount);
-                    smallSlideCount++;
-                });
+                smallBannersData = systemSettings.sideBanners;
+            } else if (systemSettings.smallBanners && Array.isArray(systemSettings.smallBanners) && systemSettings.smallBanners.length > 0) {
+                smallBannersData = systemSettings.smallBanners;
             } else {
-                const b1 = systemSettings.sideBanner1;
-                const b2 = systemSettings.sideBanner2;
-
-                if (b1 && b1.image) {
-                    smallHtml += createSmallSlide(b1, 'bg-blue-100', smallSlideCount);
-                    smallSlideCount++;
-                } else {
-                    smallHtml += createSmallSlide({title: "Elektronik Fırsatları", subtitle: "En yeni teknolojiler", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800", icon: "laptop"}, 'bg-blue-100', smallSlideCount);
-                    smallSlideCount++;
+                // Eski sistem 1 ve 2. banner olarak ayrı ayrı kaydedildiyse
+                if (systemSettings.sideBanner1 && (systemSettings.sideBanner1.title || systemSettings.sideBanner1.image || systemSettings.sideBanner1.subtitle)) {
+                    smallBannersData.push(systemSettings.sideBanner1);
                 }
-
-                if (b2 && b2.image) {
-                    smallHtml += createSmallSlide(b2, 'bg-emerald-100', smallSlideCount);
-                    smallSlideCount++;
-                } else {
-                    smallHtml += createSmallSlide({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"}, 'bg-emerald-100', smallSlideCount);
-                    smallSlideCount++;
+                if (systemSettings.sideBanner2 && (systemSettings.sideBanner2.title || systemSettings.sideBanner2.image || systemSettings.sideBanner2.subtitle)) {
+                    smallBannersData.push(systemSettings.sideBanner2);
                 }
             }
+
+            // Hiç banner yoksa Varsayılan (Fallback) Göster
+            if (smallBannersData.length === 0) {
+                smallBannersData.push({title: "Elektronik Fırsatları", subtitle: "En yeni teknolojiler", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&q=80&w=800", icon: "laptop"});
+                smallBannersData.push({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"});
+            }
+
+            // Çekilen Datayı Ekrana Bastır
+            smallBannersData.forEach((b, idx) => {
+                smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount);
+                smallSlideCount++;
+            });
 
             smallBannersContainer.innerHTML = smallHtml;
             
@@ -804,7 +806,7 @@
                 smallBannersContainer.addEventListener('scroll', () => {
                     const childElement = smallBannersContainer.children[0];
                     if(!childElement) return;
-                    const slideWidth = childElement.clientWidth + 16; // eleman genişliği + gap(16px)
+                    const slideWidth = childElement.clientWidth + 16; 
                     const activeIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth);
                     
                     for (let i = 0; i < smallSlideCount; i++) {
@@ -825,7 +827,6 @@
                     
                     let nextIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth) + 1;
                     
-                    // En sona geldiğinde başa sarsın
                     if (smallBannersContainer.scrollLeft + smallBannersContainer.clientWidth >= smallBannersContainer.scrollWidth - 10) {
                         nextIndex = 0;
                     } else if(nextIndex >= smallSlideCount) {
@@ -833,12 +834,11 @@
                     }
                     
                     smallBannersContainer.scrollTo({ left: nextIndex * slideWidth, behavior: 'smooth' });
-                }, 4000); 
+                }, 4000); // Küçük bannerlar 4 saniyede bir döner
             }
 
             lucide.createIcons();
         }
-
         window.createMiniProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
             const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://placehold.co/400x500/cbd5e1/475569?text=Gorsel';
