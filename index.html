@@ -32,6 +32,7 @@
 
         .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
 
+        /* Mobil Alt Menü Padding */
         @media (max-width: 640px) {
             body.has-bottom-nav { padding-bottom: 70px; }
         }
@@ -57,7 +58,6 @@
                 </a>
             </div>
 
-            <!-- Arama Çubuğu (Masaüstü) -->
             <div class="flex-1 max-w-2xl mx-8 hidden sm:block relative">
                 <input type="text" id="searchInput" placeholder="Aradığınız ürün, kategori veya markayı yazınız..." 
                     class="w-full bg-slate-100 border border-transparent hover:border-slate-300 rounded-full pl-12 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-500/20 transition-all font-medium">
@@ -67,9 +67,7 @@
                 </button>
             </div>
 
-            <!-- Sağ Butonlar -->
             <div class="flex items-center gap-3 shrink-0">
-                <!-- Masaüstü İkonları -->
                 <div class="hidden sm:flex items-center gap-2">
                     <a href="satici.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
                         <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
@@ -194,7 +192,7 @@
         </div>
     </div>
 
-    <!-- UYGULAMA ÜST BAR (Kategori Seçilince Çıkar) -->
+    <!-- UYGULAMA ÜST BAR -->
     <div id="categoryTopBar" class="hidden flex-col bg-white border-b border-slate-200 sticky top-14 sm:top-16 z-40 w-full shadow-sm">
         <div class="px-4 py-3 flex items-center justify-between relative">
             <button onclick="window.resetCategorySelection()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500 transition shrink-0">
@@ -224,7 +222,7 @@
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-2.5 bg-slate-50 border-t border-slate-100" id="quickFilterPills"></div>
     </div>
 
-    <!-- MEVCUT KATEGORİ & ARAMA ÜRÜN IZGARASI -->
+    <!-- ÜRÜN IZGARASI -->
     <main class="w-full flex-1 max-w-[1400px] mx-auto p-3 sm:p-4 lg:p-6 bg-slate-50 min-h-[50vh] hidden" id="mainProductsSection">
         <div id="homeResultsTitle" class="mb-4 flex items-center gap-2">
             <h2 class="text-lg font-black text-slate-800">Sizin İçin Seçtiklerimiz</h2>
@@ -326,7 +324,7 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Ana sayfada gizli) -->
+    <!-- MOBİL ALT MENÜ -->
     <div id="mobileBottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] hidden">
         <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
@@ -364,6 +362,7 @@
         </div>
     </footer>
 
+    <!-- SADECE BURADA İMPORT YAPILIR (Çift import hatasını önlemek için) -->
     <script type="module">
         import { db, auth } from "./js/firebase-config.js";
         import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -388,17 +387,19 @@
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
 
-        // TÜRKÇE KARAKTER DÖNÜŞTÜRÜCÜ
+        window.generateSlug = (text) => {
+            if (!text) return 'kibris-bazar';
+            return text.toString().toLowerCase()
+                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                .replace(/ı/g, 'i').replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                .replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
+        };
+
         window.normalizeText = (text) => {
             if (!text) return '';
             return text.toString().toLowerCase()
                 .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
                 .replace(/ı/g, 'i').replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
-        };
-
-        window.generateSlug = (text) => {
-            if (!text) return 'kibris-bazar';
-            return window.normalizeText(text).replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
         };
 
         function getSmartCategoryImage(categoryName) {
@@ -597,7 +598,10 @@
         function renderAdminBanners() {
             const mainSliderContainer = document.getElementById('mainBannerSlider');
             const indicatorsContainer = document.getElementById('bannerIndicators');
-            let mainSliderHtml = ''; let indicatorsHtml = ''; let mainSlideCount = 0;
+            
+            let mainSliderHtml = '';
+            let indicatorsHtml = '';
+            let mainSlideCount = 0;
 
             const createMainSlide = (b, index) => {
                 let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
@@ -629,11 +633,18 @@
             }
 
             if (mainBannersData.length === 0) {
-                mainBannersData.push({ tag: "Özel Teklif", title: "Kıbrıs Bazar'a<br>Hoş Geldiniz", subtitle: "Yerel mağazaların dijital pazaryerinde binlerce ürünü keşfedin.", btnText: "Alışverişe Başla", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000" });
+                mainBannersData.push({
+                    tag: "Özel Teklif", title: "Kıbrıs Bazar'a<br>Hoş Geldiniz", subtitle: "Yerel mağazaların dijital pazaryerinde binlerce ürünü keşfedin.", btnText: "Alışverişe Başla", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000"
+                });
             }
 
-            mainBannersData.forEach((b) => { mainSliderHtml += createMainSlide(b, mainSlideCount); mainSlideCount++; });
-            mainSliderContainer.innerHTML = mainSliderHtml; indicatorsContainer.innerHTML = indicatorsHtml;
+            mainBannersData.forEach((b) => {
+                mainSliderHtml += createMainSlide(b, mainSlideCount); 
+                mainSlideCount++;
+            });
+
+            mainSliderContainer.innerHTML = mainSliderHtml;
+            indicatorsContainer.innerHTML = indicatorsHtml;
 
             if (mainSlideCount > 1) {
                 mainSliderContainer.addEventListener('scroll', () => {
@@ -647,6 +658,7 @@
                         }
                     }
                 });
+                
                 if(window.mainSliderInterval) clearInterval(window.mainSliderInterval);
                 let currentMainSlide = 0;
                 window.mainSliderInterval = setInterval(() => {
@@ -657,7 +669,10 @@
 
             const smallBannersContainer = document.getElementById('dynamicSmallBanners');
             const smallIndicatorsContainer = document.getElementById('smallBannerIndicators');
-            let smallHtml = ''; let smallIndicatorsHtml = ''; let smallSlideCount = 0;
+            
+            let smallHtml = '';
+            let smallIndicatorsHtml = '';
+            let smallSlideCount = 0;
             
             const createSmallSlide = (b, colorClass, index) => {
                 let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
@@ -678,6 +693,7 @@
             };
 
             const bgColors = ['bg-blue-100', 'bg-emerald-100', 'bg-purple-100', 'bg-rose-100', 'bg-amber-100'];
+            
             let smallBannersData = [];
             
             if (systemSettings.sideBanners && Array.isArray(systemSettings.sideBanners) && systemSettings.sideBanners.length > 0) {
@@ -685,8 +701,12 @@
             } else if (systemSettings.smallBanners && Array.isArray(systemSettings.smallBanners) && systemSettings.smallBanners.length > 0) {
                 smallBannersData = systemSettings.smallBanners;
             } else {
-                if (systemSettings.sideBanner1 && (systemSettings.sideBanner1.title || systemSettings.sideBanner1.image || systemSettings.sideBanner1.subtitle)) smallBannersData.push(systemSettings.sideBanner1);
-                if (systemSettings.sideBanner2 && (systemSettings.sideBanner2.title || systemSettings.sideBanner2.image || systemSettings.sideBanner2.subtitle)) smallBannersData.push(systemSettings.sideBanner2);
+                if (systemSettings.sideBanner1 && (systemSettings.sideBanner1.title || systemSettings.sideBanner1.image || systemSettings.sideBanner1.subtitle)) {
+                    smallBannersData.push(systemSettings.sideBanner1);
+                }
+                if (systemSettings.sideBanner2 && (systemSettings.sideBanner2.title || systemSettings.sideBanner2.image || systemSettings.sideBanner2.subtitle)) {
+                    smallBannersData.push(systemSettings.sideBanner2);
+                }
             }
 
             if (smallBannersData.length === 0) {
@@ -694,12 +714,18 @@
                 smallBannersData.push({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"});
             }
 
-            smallBannersData.forEach((b, idx) => { smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount); smallSlideCount++; });
+            smallBannersData.forEach((b, idx) => {
+                smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount);
+                smallSlideCount++;
+            });
+
             smallBannersContainer.innerHTML = smallHtml;
             
             if (smallIndicatorsContainer) {
                 smallIndicatorsContainer.innerHTML = smallIndicatorsHtml;
-                if(smallSlideCount > 1) smallIndicatorsContainer.classList.remove('hidden');
+                if(smallSlideCount > 1) { 
+                    smallIndicatorsContainer.classList.remove('hidden');
+                }
             }
 
             if (smallSlideCount > 1) {
@@ -708,6 +734,7 @@
                     if(!childElement) return;
                     const slideWidth = childElement.clientWidth + 16; 
                     const activeIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth);
+                    
                     for (let i = 0; i < smallSlideCount; i++) {
                         const ind = document.getElementById(`small-indicator-${i}`);
                         if(ind) {
@@ -716,17 +743,26 @@
                         }
                     }
                 });
+                
                 if(window.smallSliderInterval) clearInterval(window.smallSliderInterval);
+                
                 window.smallSliderInterval = setInterval(() => {
                     const childElement = smallBannersContainer.children[0];
                     if(!childElement) return;
                     const slideWidth = childElement.clientWidth + 16;
+                    
                     let nextIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth) + 1;
-                    if (smallBannersContainer.scrollLeft + smallBannersContainer.clientWidth >= smallBannersContainer.scrollWidth - 10) nextIndex = 0;
-                    else if(nextIndex >= smallSlideCount) nextIndex = 0;
+                    
+                    if (smallBannersContainer.scrollLeft + smallBannersContainer.clientWidth >= smallBannersContainer.scrollWidth - 10) {
+                        nextIndex = 0;
+                    } else if(nextIndex >= smallSlideCount) {
+                        nextIndex = 0;
+                    }
+                    
                     smallBannersContainer.scrollTo({ left: nextIndex * slideWidth, behavior: 'smooth' });
                 }, 4000);
             }
+
             lucide.createIcons();
         }
 
@@ -795,6 +831,7 @@
         function renderVitrinStores() {
             const container = document.getElementById('vitrinStores');
             if(!container) return;
+            
             if(allStores.length === 0) { container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Öne çıkan mağaza bulunamadı.</div>`; return; }
             const storesToShow = allStores.filter(s => s.status === 'active').sort((a,b) => (b.isPremium ? 1 : 0) - (a.isPremium ? 1 : 0)).slice(0, 8);
 
@@ -1053,12 +1090,8 @@
 
         document.addEventListener('DOMContentLoaded', initPage);
 
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        
-        const authControl = getAuth();
         const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; 
-
-        onAuthStateChanged(authControl, async (user) => {
+        onAuthStateChanged(auth, async (user) => {
             const guestDesk = document.getElementById('authGuestDesktop');
             const loggedDesk = document.getElementById('authLoggedDesktop');
             const guestMob = document.getElementById('authGuestMobile');
