@@ -13,34 +13,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-orange-500 selection:text-white pb-12">
+<body class="text-slate-900 antialiased min-h-screen flex flex-col">
 
     <!-- Üst Bar / Header -->
-    <header class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="p-2 -ml-2 text-slate-600 hover:text-orange-500 rounded-xl transition">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <a href="index.html" class="p-2 -ml-2 text-slate-500 hover:text-orange-500 transition rounded-full hover:bg-orange-50">
+                    <i data-lucide="arrow-left" class="w-6 h-6"></i>
                 </a>
-                <h1 class="text-base sm:text-lg font-black text-slate-800 tracking-tight">Sipariş Geçmişim</h1>
+                <h1 class="text-lg font-black text-slate-800">Sipariş Geçmişim</h1>
             </div>
-            
-            <a href="index.html" class="text-xs font-bold text-orange-600 hover:text-orange-700 transition flex items-center gap-1.5 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-xl">
-                <i data-lucide="shopping-bag" class="w-4 h-4"></i> Alışverişe Devam Et
+            <a href="/" class="text-sm font-bold text-orange-500 hover:text-orange-600 transition flex items-center gap-1">
+                Alışverişe Dön <i data-lucide="home" class="w-4 h-4"></i>
             </a>
         </div>
     </header>
 
-    <!-- Ana İçerik -->
-    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-6">
-
+    <main class="flex-1 w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+        
         <!-- Durum Filtreleme Sekmeleri -->
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-slate-200 pb-3 mb-6" id="orderFilterTabs">
             <button onclick="window.filterOrders('all')" id="tab-all" class="filter-tab px-4 py-2 rounded-xl text-xs font-bold bg-orange-500 text-white shadow-sm transition whitespace-nowrap">
@@ -58,9 +55,9 @@
         </div>
 
         <!-- Yükleniyor Göstergesi -->
-        <div id="loader" class="flex flex-col items-center justify-center py-24">
-            <i data-lucide="loader-2" class="w-10 h-10 text-orange-500 animate-spin mb-3"></i>
-            <p class="text-xs font-bold text-slate-500">Siparişleriniz yükleniyor...</p>
+        <div id="loader" class="flex flex-col items-center justify-center py-20">
+            <i data-lucide="loader-2" class="w-10 h-10 text-orange-500 animate-spin mb-4"></i>
+            <p class="text-slate-500 font-bold">Siparişleriniz kontrol ediliyor...</p>
         </div>
 
         <!-- Giriş Yapılmadı Durumu -->
@@ -77,19 +74,19 @@
 
         <!-- Sipariş Bulunamadı Durumu -->
         <div id="emptyState" class="hidden text-center py-20 bg-white rounded-3xl border border-slate-200 border-dashed p-6">
-            <div class="w-16 h-16 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
-                <i data-lucide="package-search" class="w-8 h-8"></i>
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                <i data-lucide="package-x" class="w-10 h-10 text-slate-400"></i>
             </div>
-            <h2 class="text-base sm:text-lg font-black text-slate-800 mb-1">Henüz Siparişiniz Bulunmuyor</h2>
-            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-6">Seçtiğiniz filtrede herhangi bir sipariş kaydına rastlanmadı.</p>
-            <a href="index.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold py-3.5 px-8 rounded-2xl shadow-lg shadow-orange-500/20 transition">
-                Ürünleri Keşfet
+            <h2 class="text-xl font-black text-slate-800 mb-2">Henüz Siparişiniz Yok</h2>
+            <p class="text-slate-500 mb-6 text-sm">Seçili filtreye uygun kayıt bulunamadı. Kıbrıs Bazar'ı keşfetmeye devam edin.</p>
+            <a href="index.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg shadow-orange-500/30">
+                Keşfetmeye Başla
             </a>
         </div>
 
-        <!-- Sipariş Listesi Konteyneri -->
-        <div id="ordersContainer" class="space-y-4 hidden">
-            <!-- JS ile dinamik doldurulacak -->
+        <!-- Siparişler Listesi -->
+        <div id="ordersContainer" class="space-y-6 hidden">
+            <!-- JS ile dinamik olarak doldurulacak -->
         </div>
 
     </main>
@@ -117,14 +114,23 @@
 
     <script type="module">
         import { db, auth } from "./js/firebase-config.js";
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const APP_ID = 'kibris-pazar';
         let userOrders = [];
         let activeFilter = 'all';
 
-        // Durum Tanımlamaları ve Rozetleri
+        // URL Yapılandırıcı
+        window.generateSlug = (text) => {
+            if (!text) return 'kibris-bazar';
+            return text.toString().toLowerCase()
+                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                .replace(/ı/g, 'i').replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                .replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
+        };
+
+        // Durum Tanımlamaları
         const STATUS_MAP = {
             'pending': { label: 'Onay Bekliyor', icon: 'clock', bg: 'bg-amber-500/10 text-amber-600 border-amber-200' },
             'preparing': { label: 'Hazırlanıyor', icon: 'package', bg: 'bg-blue-500/10 text-blue-600 border-blue-200' },
@@ -136,7 +142,6 @@
         window.filterOrders = (filterType) => {
             activeFilter = filterType;
             
-            // Tab aktiflik sınıflarını güncelle
             document.querySelectorAll('.filter-tab').forEach(tab => {
                 tab.className = "filter-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition whitespace-nowrap";
             });
@@ -177,6 +182,35 @@
                 const items = order.items || [];
                 const totalAmount = order.totalAmount || (order.price ? order.price * (order.quantity || 1) : 0);
 
+                // MAĞAZA VE ÜRÜN LİNKLERİ
+                const storeUrl = order.storeId ? `/magaza/${window.generateSlug(items[0]?.storeName || 'magaza')}-${order.storeId}` : '#';
+
+                let itemsHtml = '';
+                items.forEach(item => {
+                    const img = item.image || item.images?.[0] || 'https://placehold.co/100x100?text=Urun';
+                    const productUrl = item.productId ? `/urun/${window.generateSlug(item.title || item.name)}-${item.productId}` : '#';
+
+                    itemsHtml += `
+                        <div class="py-3 first:pt-0 last:pb-0 flex items-center gap-3 sm:gap-4 border-b border-slate-100 last:border-0">
+                            <a href="${productUrl}" class="shrink-0 group">
+                                <img src="${img}" class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover bg-slate-100 border border-slate-100 group-hover:opacity-80 transition" />
+                            </a>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-xs sm:text-sm font-bold text-slate-800 truncate">
+                                    <a href="${productUrl}" class="hover:text-orange-500 transition">${item.title || item.name || 'Ürün'}</a>
+                                </h4>
+                                <div class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-2">
+                                    <span>Adet: <strong class="text-slate-600">${item.quantity || 1}</strong></span>
+                                    ${item.storeName ? `<span class="border-l pl-2 border-slate-200">Satıcı: <a href="${storeUrl}" class="font-bold text-slate-600 hover:text-orange-500 transition">${item.storeName}</a></span>` : ''}
+                                </div>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <span class="text-xs sm:text-sm font-black text-slate-900">${((item.price || 0) * (item.quantity || 1)).toLocaleString('tr-TR')} TL</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
                 html += `
                     <div class="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition">
                         
@@ -201,23 +235,8 @@
                         </div>
 
                         <!-- Ürünler Listesi -->
-                        <div class="p-4 divide-y divide-slate-100">
-                            ${items.map(item => `
-                                <div class="py-3 first:pt-0 last:pb-0 flex items-center gap-3 sm:gap-4">
-                                    <img src="${item.image || item.images?.[0] || 'https://placehold.co/100x100?text=Urun'}" 
-                                         class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover bg-slate-100 shrink-0 border border-slate-100" />
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 truncate">${item.title || item.name || 'Ürün'}</h4>
-                                        <div class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-2">
-                                            <span>Adet: <strong class="text-slate-600">${item.quantity || 1}</strong></span>
-                                            ${item.storeName ? `<span class="border-l pl-2 border-slate-200">Satıcı: <strong class="text-slate-600">${item.storeName}</strong></span>` : ''}
-                                        </div>
-                                    </div>
-                                    <div class="text-right shrink-0">
-                                        <span class="text-xs sm:text-sm font-black text-slate-900">${((item.price || 0) * (item.quantity || 1)).toLocaleString('tr-TR')} TL</span>
-                                    </div>
-                                </div>
-                            `).join('')}
+                        <div class="p-4">
+                            ${itemsHtml}
                         </div>
 
                         <!-- Alt Bilgi & İşlemler -->
@@ -240,7 +259,6 @@
                                 ` : ''}
                             </div>
                         </div>
-
                     </div>
                 `;
             });
@@ -261,7 +279,6 @@
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-1.5">
                     <div class="flex justify-between"><span class="text-slate-400">Durum:</span> <span class="font-bold ${statusInfo.bg} px-2 py-0.5 rounded">${statusInfo.label}</span></div>
                     <div class="flex justify-between"><span class="text-slate-400">Tarih:</span> <span class="font-bold text-slate-700">${dateStr}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-400">Ödeme Şekli:</span> <span class="font-bold text-slate-700">${order.paymentMethod === 'cod' ? 'Kapıda Ödeme' : 'Online Ödeme'}</span></div>
                 </div>
 
                 <div>
@@ -269,7 +286,7 @@
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-600 leading-relaxed">
                         <p class="font-bold text-slate-800">${order.customerName || '-'}</p>
                         <p>${order.customerPhone || '-'}</p>
-                        <p class="mt-1 text-slate-500">${order.deliveryAddress || order.address || 'Adres belirtilmemiş.'}</p>
+                        <p class="mt-1 text-slate-500">${order.customerAddress || order.deliveryAddress || order.address || 'Adres belirtilmemiş.'}</p>
                     </div>
                 </div>
 
@@ -310,14 +327,12 @@
             try {
                 const ordersRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders');
                 
-                // Hem e-posta hem de uid kontrolü ile siparişleri ara
                 const qEmail = query(ordersRef, where("customerEmail", "==", user.email));
                 const snapEmail = await getDocs(qEmail);
 
                 userOrders = [];
                 snapEmail.forEach(doc => userOrders.push({ id: doc.id, ...doc.data() }));
 
-                // UID ile kayıtlı olanlar varsa onları da ekle
                 if (user.uid) {
                     const qUid = query(ordersRef, where("customerId", "==", user.uid));
                     const snapUid = await getDocs(qUid);
@@ -328,10 +343,8 @@
                     });
                 }
 
-                // Tarihe göre sırala (Yeniden eskiye)
                 userOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-                // Sayı sayaçlarını güncelle
                 document.getElementById('count-all').innerText = userOrders.length;
                 document.getElementById('count-active').innerText = userOrders.filter(o => ['pending', 'preparing', 'shipped'].includes(o.status || 'pending')).length;
                 document.getElementById('count-delivered').innerText = userOrders.filter(o => o.status === 'delivered').length;
