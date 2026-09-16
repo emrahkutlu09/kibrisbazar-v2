@@ -121,7 +121,7 @@
 
     <!-- Firebase ve Sepet Mantığı -->
     <script type="module">
-        import { db } from "./js/firebase-config.js";
+        import { db, auth } from "./js/firebase-config.js";
         import { doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const APP_ID = 'kibris-pazar';
@@ -219,6 +219,14 @@
                 let storesMap = {};
                 let totalOrderAmount = 0;
 
+                // --- SİPARİŞLER SAYFASI İÇİN E-POSTA VE UID ÇEKME İŞLEMİ ---
+                let userEmail = "";
+                let userId = "";
+                if (auth && auth.currentUser) {
+                    userEmail = auth.currentUser.email || "";
+                    userId = auth.currentUser.uid || "";
+                }
+
                 cart.forEach(item => {
                     const storeId = item.product.storeId;
                     if(!storesMap[storeId]) {
@@ -239,7 +247,9 @@
                         title: item.product.title,
                         quantity: item.quantity,
                         price: itemPrice,
-                        variant: item.variant || null
+                        variant: item.variant || null,
+                        image: item.dynamicImage || (item.product.images && item.product.images.length > 0 ? item.product.images[0] : ''),
+                        storeName: item.product.storeName || 'Mağaza'
                     });
                 });
 
@@ -253,6 +263,8 @@
                         customerName: name,
                         customerPhone: phone,
                         customerAddress: address,
+                        customerEmail: userEmail, // MÜŞTERİ E-POSTASI BURAYA EKLENDİ
+                        customerId: userId,       // MÜŞTERİ ID'Sİ BURAYA EKLENDİ
                         items: storeData.items,
                         totalAmount: storeData.amount,
                         status: 'pending',
