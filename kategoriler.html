@@ -33,8 +33,11 @@
             <i data-lucide="arrow-left" class="w-6 h-6"></i>
         </a>
         <div class="flex-1 relative">
-            <input type="text" id="catSearchInput" placeholder="Kategorilerde ara..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition font-medium">
+            <input type="text" id="catSearchInput" placeholder="Tüm kategorilerde ara..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition font-medium">
             <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <button id="clearSearchBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 hidden" onclick="document.getElementById('catSearchInput').value=''; document.getElementById('catSearchInput').dispatchEvent(new Event('input'));">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
         </div>
     </div>
 
@@ -57,7 +60,6 @@
             <i data-lucide="home" class="w-5 h-5"></i>
             <span class="text-[10px] font-medium">Ana Sayfa</span>
         </a>
-        <!-- Kategoriler Butonu Aktif (Turuncu) -->
         <a href="kategoriler.html" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="layout-grid" class="w-5 h-5 fill-current"></i>
             <span class="text-[10px] font-bold">Kategoriler</span>
@@ -86,8 +88,16 @@
 
         const APP_ID = 'kibris-pazar';
         let allCategories = [];
+        window.activeMainTab = 'all'; // Bulunulan kategoriyi hafızada tutar
 
-        // --- AKILLI KATEGORİ RESİM EŞLEŞTİRİCİ ---
+        // TÜRKÇE KARAKTER DÖNÜŞTÜRÜCÜ (Arama motoru için)
+        window.normalizeText = (text) => {
+            if (!text) return '';
+            return text.toString().toLowerCase()
+                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                .replace(/ı/g, 'i').replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
+        };
+
         function getSmartCategoryImage(categoryName) {
             if (!categoryName) return 'https://placehold.co/150x150/f1f5f9/475569?text=Gorsel';
             const name = categoryName.toLowerCase();
@@ -114,7 +124,6 @@
             return `https://source.unsplash.com/150x150/?${keyword}`;
         }
 
-        // Ana Tabları Oluşturur
         function renderMainTabs(activeId = 'all') {
             const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
             const tabContainer = document.getElementById('mainTabContainer');
@@ -127,8 +136,12 @@
             tabContainer.innerHTML = html;
         }
 
-        // Ana Sayfa (Grid) Görünümü
         window.renderMegaMenuGrid = () => {
+            window.activeMainTab = 'all';
+            document.getElementById('catSearchInput').placeholder = "Tüm kategorilerde ara...";
+            document.getElementById('catSearchInput').value = "";
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+
             const container = document.getElementById('hamburgerMenuCategories');
             if(!container) return;
             renderMainTabs('all');
@@ -155,8 +168,12 @@
             lucide.createIcons();
         };
 
-        // Kategori Detay (Sol Menü / Sağ İçerik) Görünümü
         window.openMainCategoryDetails = (mainId, mainName) => {
+            window.activeMainTab = mainId;
+            document.getElementById('catSearchInput').placeholder = `'${mainName}' içinde ara...`;
+            document.getElementById('catSearchInput').value = "";
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+
             const container = document.getElementById('hamburgerMenuCategories');
             renderMainTabs(mainId);
             const groups = allCategories.filter(c => c.parentId === mainId && c.isGroupTitle).sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -204,7 +221,6 @@
             lucide.createIcons();
         };
 
-        // Grup (Sol Menü) Geçişi
         window.switchGroupTab = (groupId, btnElement) => {
             document.querySelectorAll('.group-pane').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('.group-tab-btn').forEach(b => { 
@@ -217,7 +233,6 @@
             btnElement.classList.add('bg-white', 'text-orange-600', 'font-bold', 'border-orange-500');
         };
 
-        // BİR KATEGORİ SEÇİLDİĞİNDE -> INDEX'E YÖNLENDİR
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             const filterData = {
                 mainCatId: mainCatId,
@@ -229,30 +244,58 @@
             window.location.href = 'index.html';
         };
 
-        // --- KATEGORİ İÇİ ARAMA İŞLEVİ (YENİ EKLENDİ) ---
+        // --- AKILLI VE KAPSAMLI ARAMA (TÜRKÇE KARAKTER + BULUNDUĞU KATEGORİ) ---
         const setupCategorySearch = () => {
             const catSearchInput = document.getElementById('catSearchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            
             if(catSearchInput) {
                 catSearchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase().trim();
+                    const queryRaw = e.target.value;
+                    const query = window.normalizeText(queryRaw).trim();
                     const container = document.getElementById('hamburgerMenuCategories');
                     const tabsContainer = document.getElementById('mainTabContainer');
                     
+                    if (query.length > 0) clearBtn.classList.remove('hidden');
+                    else clearBtn.classList.add('hidden');
+
                     if (query.length === 0) {
                         tabsContainer.classList.remove('hidden');
-                        window.renderMegaMenuGrid();
+                        if (window.activeMainTab === 'all') {
+                            window.renderMegaMenuGrid();
+                        } else {
+                            const mainCat = allCategories.find(c => c.id === window.activeMainTab);
+                            window.openMainCategoryDetails(window.activeMainTab, mainCat ? mainCat.name : '');
+                        }
                         return;
                     }
                     
-                    // Arama yapılırken üst tabları gizle
                     tabsContainer.classList.add('hidden');
                     
-                    // Alt kategoriler (isMegaMenu ve isGroupTitle olmayanlar) arasından eşleşme bul
-                    const matchingSubs = allCategories.filter(c => 
-                        !c.isMegaMenu && !c.isGroupTitle && c.name.toLowerCase().includes(query)
-                    );
+                    // Sadece alt kategorileri (mega menü ve başlık olmayanları) filtrele
+                    const matchingSubs = allCategories.filter(c => {
+                        if (c.isMegaMenu || c.isGroupTitle) return false;
+                        
+                        const normalizedName = window.normalizeText(c.name);
+                        if (!normalizedName.includes(query)) return false;
+
+                        // Eğer belirli bir ana kategori içindeysek, diğerlerini ele!
+                        if (window.activeMainTab !== 'all') {
+                            let isBelongsToActiveTab = false;
+                            let parentId = c.parentId;
+                            let grandParentId = null;
+                            if (parentId) {
+                                const p = allCategories.find(x => x.id === parentId);
+                                if (p) grandParentId = p.parentId;
+                            }
+                            if (parentId === window.activeMainTab || grandParentId === window.activeMainTab) {
+                                isBelongsToActiveTab = true;
+                            }
+                            if (!isBelongsToActiveTab) return false;
+                        }
+                        return true;
+                    });
                     
-                    // Eşleşme yoksa
                     if (matchingSubs.length === 0) {
                         container.innerHTML = `
                             <div class="flex flex-col items-center justify-center h-full text-slate-500 py-20 bg-slate-50">
@@ -267,7 +310,6 @@
                         return;
                     }
                     
-                    // Eşleşen kategorileri listele
                     let html = `<div class="p-4 bg-slate-50 h-full overflow-y-auto pb-24"><div class="bg-white rounded-2xl border border-slate-200 overflow-hidden divide-y divide-slate-100 shadow-sm">`;
                     
                     matchingSubs.forEach(sub => {
@@ -275,7 +317,6 @@
                         let mainCatName = '';
                         let path = '';
                         
-                        // Hangi ana kategori ve grubun altında olduğunu bul
                         if (sub.parentId) {
                             const parent = allCategories.find(c => c.id === sub.parentId);
                             if (parent) {
@@ -321,7 +362,6 @@
             }
         };
 
-        // Sepet Sayısını Güncelle
         function updateCartBadge() {
             let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
             let totalQty = 0;
@@ -338,15 +378,11 @@
             updateCartBadge();
             
             try {
-                // Firebase'den Tüm Kategorileri Çek
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
-                // Arama Sistemini Kur
                 setupCategorySearch();
-
-                // İlk Açılışta Ana Kategori Grid'ini Çiz
                 window.renderMegaMenuGrid();
             } catch (error) {
                 console.error("Kategoriler yüklenirken hata:", error);
