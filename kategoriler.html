@@ -39,7 +39,7 @@
     </div>
 
     <!-- Ana Kategori Sekmeleri (Yatay Kaydırılabilir) -->
-    <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0" id="mainTabContainer">
+    <div class="flex items-center overflow-x-auto category-scroll border-b border-slate-200 bg-white shrink-0 transition-all duration-300" id="mainTabContainer">
         <!-- JS ile Dolacak -->
     </div>
 
@@ -69,7 +69,7 @@
                 </div>
             </div>
         </a>
-        <a href="#" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
+        <a href="index.html" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-orange-500 gap-1 transition">
             <i data-lucide="heart" class="w-5 h-5"></i>
             <span class="text-[10px] font-medium">Favorilerim</span>
         </a>
@@ -217,9 +217,8 @@
             btnElement.classList.add('bg-white', 'text-orange-600', 'font-bold', 'border-orange-500');
         };
 
-        // BİR KATEGORİ SEÇİLDİĞİNDE -> INDEX'E YÖNLENDİR (Akıllı Filtreleme Mantığı)
+        // BİR KATEGORİ SEÇİLDİĞİNDE -> INDEX'E YÖNLENDİR
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
-            // Seçimi LocalStorage'a kaydet ki index.html okuyabilsin
             const filterData = {
                 mainCatId: mainCatId,
                 subCatSlug: subCatSlug,
@@ -227,9 +226,99 @@
                 mainCatName: mainCatName
             };
             localStorage.setItem('kibris_active_category', JSON.stringify(filterData));
-            
-            // Kullanıcıyı Ana Sayfaya Gönder (Index.html orada bu datayı okuyup filtreyi açacak)
             window.location.href = 'index.html';
+        };
+
+        // --- KATEGORİ İÇİ ARAMA İŞLEVİ (YENİ EKLENDİ) ---
+        const setupCategorySearch = () => {
+            const catSearchInput = document.getElementById('catSearchInput');
+            if(catSearchInput) {
+                catSearchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    const container = document.getElementById('hamburgerMenuCategories');
+                    const tabsContainer = document.getElementById('mainTabContainer');
+                    
+                    if (query.length === 0) {
+                        tabsContainer.classList.remove('hidden');
+                        window.renderMegaMenuGrid();
+                        return;
+                    }
+                    
+                    // Arama yapılırken üst tabları gizle
+                    tabsContainer.classList.add('hidden');
+                    
+                    // Alt kategoriler (isMegaMenu ve isGroupTitle olmayanlar) arasından eşleşme bul
+                    const matchingSubs = allCategories.filter(c => 
+                        !c.isMegaMenu && !c.isGroupTitle && c.name.toLowerCase().includes(query)
+                    );
+                    
+                    // Eşleşme yoksa
+                    if (matchingSubs.length === 0) {
+                        container.innerHTML = `
+                            <div class="flex flex-col items-center justify-center h-full text-slate-500 py-20 bg-slate-50">
+                                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center border border-slate-200 mb-3 shadow-sm">
+                                    <i data-lucide="search-x" class="w-8 h-8 text-slate-400"></i>
+                                </div>
+                                <p class="text-sm font-bold text-slate-800">Kategori bulunamadı.</p>
+                                <p class="text-xs text-slate-500 mt-1">Farklı bir kelimeyle tekrar arayın.</p>
+                            </div>
+                        `;
+                        lucide.createIcons();
+                        return;
+                    }
+                    
+                    // Eşleşen kategorileri listele
+                    let html = `<div class="p-4 bg-slate-50 h-full overflow-y-auto pb-24"><div class="bg-white rounded-2xl border border-slate-200 overflow-hidden divide-y divide-slate-100 shadow-sm">`;
+                    
+                    matchingSubs.forEach(sub => {
+                        let mainCatId = '';
+                        let mainCatName = '';
+                        let path = '';
+                        
+                        // Hangi ana kategori ve grubun altında olduğunu bul
+                        if (sub.parentId) {
+                            const parent = allCategories.find(c => c.id === sub.parentId);
+                            if (parent) {
+                                if (parent.isMegaMenu) {
+                                    mainCatId = parent.id;
+                                    mainCatName = parent.name;
+                                    path = parent.name;
+                                } else {
+                                    const grandParent = allCategories.find(c => c.id === parent.parentId);
+                                    if (grandParent) {
+                                        mainCatId = grandParent.id;
+                                        mainCatName = grandParent.name;
+                                        path = `${grandParent.name} > ${parent.name}`;
+                                    } else {
+                                        path = parent.name;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        const img = sub.image && sub.image.trim() !== '' ? sub.image : getSmartCategoryImage(sub.name);
+                        
+                        html += `
+                            <button onclick="window.selectCategory('${mainCatId}', '${sub.slug}', '${sub.name}', '${mainCatName}')" class="w-full flex items-center justify-between p-3 sm:p-4 hover:bg-orange-50 transition text-left group">
+                                <div class="flex items-center gap-3 sm:gap-4">
+                                    <img src="${img}" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-cover bg-slate-100 border border-slate-200 shrink-0">
+                                    <div>
+                                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-orange-600 transition">${sub.name}</h4>
+                                        <p class="text-[9px] sm:text-[10px] text-slate-400 font-medium mt-0.5">${path}</p>
+                                    </div>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-slate-50 group-hover:bg-orange-100 flex items-center justify-center transition shrink-0">
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:text-orange-500"></i>
+                                </div>
+                            </button>
+                        `;
+                    });
+                    
+                    html += `</div></div>`;
+                    container.innerHTML = html;
+                    lucide.createIcons();
+                });
+            }
         };
 
         // Sepet Sayısını Güncelle
@@ -254,6 +343,9 @@
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
+                // Arama Sistemini Kur
+                setupCategorySearch();
+
                 // İlk Açılışta Ana Kategori Grid'ini Çiz
                 window.renderMegaMenuGrid();
             } catch (error) {
