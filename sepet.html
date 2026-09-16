@@ -49,64 +49,52 @@
 
         <div id="cartContentWrapper" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
-            <!-- Sol: Ürün Listesi -->
-            <div class="lg:col-span-2 space-y-4" id="cartItemsContainer">
+            <!-- Sol: Ürün Listesi (Mağazalara Göre Gruplu) -->
+            <div class="lg:col-span-2 space-y-6" id="cartItemsContainer">
                 <!-- JS ile Doldurulacak -->
             </div>
 
-            <!-- Sağ: Sipariş Özeti ve Müşteri Bilgileri -->
+            <!-- Sağ: Müşteri Bilgileri ve Genel Toplam -->
             <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm sticky top-24 space-y-6">
-                <h3 class="text-lg font-black text-slate-800 border-b border-slate-100 pb-4 flex items-center gap-2">
-                    <i data-lucide="receipt" class="w-5 h-5 text-orange-500"></i> Sipariş Özeti
-                </h3>
-
-                <div class="space-y-3 text-sm font-medium text-slate-600">
-                    <div class="flex justify-between">
-                        <span>Ara Toplam</span>
-                        <span id="summarySubtotal" class="font-bold text-slate-800">0.00 TL</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Kargo / Teslimat</span>
-                        <span class="text-emerald-600 font-bold">Satıcı ile Görüşülür</span>
-                    </div>
-                    <div class="pt-3 border-t border-slate-100 flex justify-between text-base">
-                        <span class="font-black text-slate-800">Toplam Tutar</span>
-                        <span id="summaryTotal" class="font-black text-orange-600 text-xl">0.00 TL</span>
-                    </div>
+                <div class="border-b border-slate-100 pb-4">
+                    <h3 class="text-lg font-black text-slate-800 flex items-center gap-2 mb-1">
+                        <i data-lucide="user" class="w-5 h-5 text-orange-500"></i> Teslimat Bilgileri
+                    </h3>
+                    <p class="text-[11px] text-slate-500">Siparişleriniz mağazalara ayrı ayrı iletilecektir.</p>
                 </div>
 
-                <hr class="border-slate-100">
-
-                <!-- Müşteri Bilgileri Formu -->
-                <form id="checkoutForm" onsubmit="window.completeOrder(event)" class="space-y-4">
-                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
-                        Teslimat & İletişim Bilgileri
-                    </h4>
+                <!-- Müşteri Bilgileri Formu (Global Form) -->
+                <form id="globalCheckoutForm" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Adınız Soyadınız</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Adınız Soyadınız <span class="text-rose-500">*</span></label>
                         <input type="text" id="buyerName" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Örn: Ahmet Yılmaz">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Telefon Numaranız</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Telefon Numaranız <span class="text-rose-500">*</span></label>
                         <input type="tel" id="buyerPhone" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="0533 123 45 67">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Teslimat Adresi / Bölge</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Teslimat Adresi / Bölge <span class="text-rose-500">*</span></label>
                         <textarea id="buyerAddress" rows="3" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Mahalle, Sokak, No veya Bölge (Örn: Girne Merkez)..."></textarea>
                     </div>
 
-                    <!-- Yasal Sorumluluk Reddi (Disclaimer) Metni -->
+                    <!-- Yasal Sorumluluk Reddi -->
                     <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-2xl text-[11px] text-amber-800 leading-relaxed font-medium flex gap-2.5">
                         <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
-                        <p>Kıbrıs Bazar yalnızca bir ilan ve iletişim platformudur. Satıcı ile alıcı arasındaki ödeme, teslimat veya olası anlaşmazlıklardan platformumuz hiçbir şekilde sorumlu değildir.</p>
-                    </div>
-
-                    <div class="pt-2">
-                        <button type="submit" id="btnCheckout" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-4 rounded-2xl transition shadow-xl shadow-green-500/20 flex items-center justify-center gap-2 text-base">
-                            <i data-lucide="message-circle" class="w-6 h-6"></i> WhatsApp ile Siparişi Tamamla
-                        </button>
+                        <p>Kıbrıs Bazar yalnızca bir ilan ve iletişim platformudur. Satıcı ile alıcı arasındaki anlaşmazlıklardan platformumuz sorumlu değildir.</p>
                     </div>
                 </form>
+
+                <hr class="border-slate-100">
+
+                <!-- Genel Toplam Özeti -->
+                <div class="space-y-3 text-sm font-medium text-slate-600 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    <div class="flex justify-between items-center text-base">
+                        <span class="font-black text-slate-800">GENEL TOPLAM</span>
+                        <span id="grandTotalDisplay" class="font-black text-orange-600 text-2xl">0.00 TL</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 text-right mt-1">* Kargo ücretleri dahil değildir.</p>
+                </div>
             </div>
         </div>
     </main>
@@ -158,50 +146,117 @@
                 return;
             }
 
-            let html = '';
-            let subtotal = 0;
+            // SEPETİ MAĞAZALARA GÖRE GRUPLA
+            let storesMap = {};
+            let grandTotal = 0;
 
             cart.forEach((item, index) => {
                 const p = item.product;
                 const price = item.dynamicPrice || p.price;
-                const itemTotal = price * item.quantity;
-                subtotal += itemTotal;
-                const img = item.dynamicImage || (p.images && p.images.length > 0 ? p.images[0] : 'https://placehold.co/200x200');
+                const storeId = p.storeId || 'unknown_store';
+                
+                if (!storesMap[storeId]) {
+                    storesMap[storeId] = {
+                        storeId: storeId,
+                        storeName: p.storeName || 'Mağaza',
+                        storeWhatsapp: p.storeWhatsapp || '',
+                        items: [],
+                        storeTotal: 0
+                    };
+                }
 
-                // LİNKLER
-                const productUrl = `/urun/${window.generateSlug(p.title)}-${p.id}`;
-                const storeUrl = `/magaza/${window.generateSlug(p.storeName || 'Mağaza')}-${p.storeId}`;
+                const itemTotal = price * item.quantity;
+                storesMap[storeId].storeTotal += itemTotal;
+                grandTotal += itemTotal;
+
+                storesMap[storeId].items.push({
+                    originalIndex: index, // Silme/Güncelleme işlemi için orijinal index
+                    itemData: item,
+                    price: price,
+                    itemTotal: itemTotal,
+                    img: item.dynamicImage || (p.images && p.images.length > 0 ? p.images[0] : 'https://placehold.co/200x200'),
+                    productUrl: `/urun/${window.generateSlug(p.title)}-${p.id}`
+                });
+            });
+
+            // HTML OLUŞTUR
+            let html = '';
+            
+            for (const storeId in storesMap) {
+                const storeData = storesMap[storeId];
+                const storeUrl = storeId !== 'unknown_store' ? `/magaza/${window.generateSlug(storeData.storeName)}-${storeId}` : '#';
 
                 html += `
-                    <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center gap-5">
-                        <a href="${productUrl}" class="w-24 h-24 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 hover:opacity-80 transition block">
-                            <img src="${img}" class="w-full h-full object-cover hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/200x200';">
-                        </a>
-                        <div class="flex-1 text-center sm:text-left">
-                            <a href="${storeUrl}" class="text-[10px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition px-2.5 py-1 rounded-md inline-block mb-1">${p.storeName || 'Mağaza'}</a>
-                            <h3 class="text-base font-bold text-slate-800 line-clamp-1 mb-1">
-                                <a href="${productUrl}" class="hover:text-orange-500 transition-colors">${p.title}</a>
-                            </h3>
-                            ${item.variant ? `<div class="text-xs text-purple-600 font-bold mb-2">Seçenek: ${item.variant}</div>` : ''}
-                            <div class="text-lg font-black text-slate-900">${price.toLocaleString('tr-TR')} TL</div>
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                        <!-- Mağaza Başlığı -->
+                        <div class="bg-slate-50 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+                            <a href="${storeUrl}" class="flex items-center gap-2 group">
+                                <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center">
+                                    <i data-lucide="store" class="w-4 h-4"></i>
+                                </div>
+                                <span class="font-black text-slate-800 group-hover:text-orange-600 transition">${storeData.storeName}</span>
+                            </a>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-white px-2 py-1 rounded-lg border border-slate-200">
+                                ${storeData.items.length} Ürün
+                            </span>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
-                                <button onclick="window.updateQty(${index}, -1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">-</button>
-                                <span class="px-4 py-2 font-black text-sm text-slate-800">${item.quantity}</span>
-                                <button onclick="window.updateQty(${index}, 1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">+</button>
+
+                        <!-- Mağazanın Ürünleri -->
+                        <div class="p-5 divide-y divide-slate-100">
+                `;
+
+                storeData.items.forEach(productObj => {
+                    const p = productObj.itemData.product;
+                    const v = productObj.itemData.variant;
+                    const idx = productObj.originalIndex;
+
+                    html += `
+                        <div class="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center gap-5">
+                            <a href="${productObj.productUrl}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 hover:opacity-80 transition block">
+                                <img src="${productObj.img}" class="w-full h-full object-cover hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/200x200';">
+                            </a>
+                            <div class="flex-1 text-center sm:text-left">
+                                <h3 class="text-sm font-bold text-slate-800 line-clamp-2 mb-1">
+                                    <a href="${productObj.productUrl}" class="hover:text-orange-500 transition-colors">${p.title}</a>
+                                </h3>
+                                ${v ? `<div class="text-[11px] text-purple-600 font-bold mb-2">Seçenek: ${v}</div>` : ''}
+                                <div class="text-base font-black text-slate-900">${productObj.price.toLocaleString('tr-TR')} TL</div>
                             </div>
-                            <button onclick="window.removeItem(${index})" class="text-slate-400 hover:text-rose-600 p-2.5 rounded-xl bg-slate-50 hover:bg-rose-50 border border-slate-200 transition" title="Ürünü Sil">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            <div class="flex items-center justify-center sm:justify-end gap-3 mt-3 sm:mt-0">
+                                <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
+                                    <button onclick="window.updateQty(${idx}, -1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">-</button>
+                                    <span class="px-3 py-2 font-black text-sm text-slate-800">${productObj.itemData.quantity}</span>
+                                    <button onclick="window.updateQty(${idx}, 1)" class="px-3 py-2 text-slate-600 hover:bg-slate-200 transition font-black">+</button>
+                                </div>
+                                <button onclick="window.removeItem(${idx})" class="text-slate-400 hover:text-rose-600 p-2.5 rounded-xl bg-slate-50 hover:bg-rose-50 border border-slate-200 transition" title="Ürünü Sil">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                        </div>
+                        
+                        <!-- Mağazaya Özel Sipariş Butonu -->
+                        <div class="bg-slate-50 p-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="text-center sm:text-left">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Mağaza Toplamı</span>
+                                <span class="text-lg font-black text-slate-800">${storeData.storeTotal.toLocaleString('tr-TR')} TL</span>
+                            </div>
+                            <button onclick="window.checkoutStore('${storeId}')" id="btnStore_${storeId}" class="w-full sm:w-auto bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-3 px-6 rounded-xl transition shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 text-sm">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i> Bu Mağazadan Siparişi Tamamla
                             </button>
                         </div>
                     </div>
                 `;
-            });
+            }
 
             container.innerHTML = html;
-            document.getElementById('summarySubtotal').innerText = subtotal.toLocaleString('tr-TR') + " TL";
-            document.getElementById('summaryTotal').innerText = subtotal.toLocaleString('tr-TR') + " TL";
+            
+            // Genel Toplamı Güncelle
+            document.getElementById('grandTotalDisplay').innerText = grandTotal.toLocaleString('tr-TR') + " TL";
             lucide.createIcons();
         };
 
@@ -220,29 +275,34 @@
             window.renderCart();
         };
 
-        window.completeOrder = async (e) => {
-            e.preventDefault();
-            if (cart.length === 0) return;
+        // MAĞAZAYA ÖZEL SİPARİŞİ TAMAMLAMA MANTIĞI
+        window.checkoutStore = async (storeId) => {
+            const form = document.getElementById('globalCheckoutForm');
+            
+            // HTML5 Form Doğrulaması (Eksik alan varsa uyarı verir)
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
 
             const name = document.getElementById('buyerName').value.trim();
             const phone = document.getElementById('buyerPhone').value.trim();
             const address = document.getElementById('buyerAddress').value.trim();
 
+            // SİPARİŞİ TAMAMLAYINCA ADRES BİLGİLERİNİ BİR SONRAKİ SEFER İÇİN HAFIZAYA KAYDET
             localStorage.setItem('kibris_user_info', JSON.stringify({
                 name: name,
                 phone: phone,
                 address: address
             }));
 
-            const btn = document.getElementById('btnCheckout');
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Sipariş Kaydediliyor...`;
+            const btn = document.getElementById(`btnStore_${storeId}`);
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> İşleniyor...`;
             btn.disabled = true;
-            lucide.createIcons();
 
             try {
-                let storesMap = {};
-                let totalOrderAmount = 0;
-
+                // Auth Bilgilerini Al
                 let userEmail = "";
                 let userId = "";
                 if (auth && auth.currentUser) {
@@ -250,93 +310,92 @@
                     userId = auth.currentUser.uid || "";
                 }
 
-                cart.forEach(item => {
-                    const storeId = item.product.storeId;
-                    if(!storesMap[storeId]) {
-                        storesMap[storeId] = {
-                            storeWhatsapp: item.product.storeWhatsapp || '',
-                            storeName: item.product.storeName || 'Mağaza',
-                            items: [],
-                            amount: 0
-                        };
-                    }
-                    const itemPrice = item.dynamicPrice || item.product.price;
-                    const sub = itemPrice * item.quantity;
-                    storesMap[storeId].amount += sub;
-                    totalOrderAmount += sub;
+                // SADECE O MAĞAZANIN ÜRÜNLERİNİ FİLTRELE
+                const storeItems = cart.filter(item => (item.product.storeId || 'unknown_store') === storeId);
+                
+                if (storeItems.length === 0) {
+                    alert("Bu mağazaya ait ürün bulunamadı.");
+                    return;
+                }
 
-                    storesMap[storeId].items.push({
+                let storeName = storeItems[0].product.storeName || 'Mağaza';
+                let storeWhatsapp = storeItems[0].product.storeWhatsapp || '';
+                let storeTotalAmount = 0;
+                let orderItemsPayload = [];
+
+                storeItems.forEach(item => {
+                    const itemPrice = item.dynamicPrice || item.product.price;
+                    storeTotalAmount += itemPrice * item.quantity;
+                    
+                    orderItemsPayload.push({
                         productId: item.product.id,
                         title: item.product.title,
                         quantity: item.quantity,
                         price: itemPrice,
                         variant: item.variant || null,
                         image: item.dynamicImage || (item.product.images && item.product.images.length > 0 ? item.product.images[0] : ''),
-                        storeName: item.product.storeName || 'Mağaza'
+                        storeName: storeName
                     });
                 });
 
-                let firstWhatsapp = '';
+                // Siparişi Firebase'e Kaydet
+                const orderPayload = {
+                    storeId: storeId,
+                    customerName: name,
+                    customerPhone: phone,
+                    customerAddress: address,
+                    customerEmail: userEmail,
+                    customerId: userId,
+                    items: orderItemsPayload,
+                    totalAmount: storeTotalAmount,
+                    status: 'pending',
+                    createdAt: Date.now()
+                };
 
-                for(let storeId in storesMap) {
-                    const storeData = storesMap[storeId];
-                    
-                    const orderPayload = {
-                        storeId: storeId,
-                        customerName: name,
-                        customerPhone: phone,
-                        customerAddress: address,
-                        customerEmail: userEmail,
-                        customerId: userId,
-                        items: storeData.items,
-                        totalAmount: storeData.amount,
-                        status: 'pending',
-                        createdAt: Date.now()
-                    };
+                await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders')), orderPayload);
 
-                    await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders')), orderPayload);
+                // WhatsApp Mesajı Oluştur
+                let msg = `*🛒 YENİ SİPARİŞ - KIBRIS BAZAR*\n\n`;
+                msg += `👤 *Müşteri:* ${name}\n`;
+                msg += `📞 *Telefon:* ${phone}\n`;
+                msg += `📍 *Adres:* ${address}\n\n`;
+                msg += `📦 *Sipariş Edilen Ürünler:*\n`;
+                orderItemsPayload.forEach(i => {
+                    msg += `- ${i.quantity}x ${i.title} ${i.variant ? `(${i.variant})` : ''} - ${(i.price * i.quantity).toLocaleString('tr-TR')} TL\n`;
+                });
+                msg += `\n💰 *Mağaza Toplamı:* ${storeTotalAmount.toLocaleString('tr-TR')} TL\n\n`;
+                msg += `Siparişimi onaylıyor musunuz?`;
 
-                    let msg = `*🛒 YENİ SİPARİŞ - KIBRIS BAZAR*\n\n`;
-                    msg += `👤 *Müşteri:* ${name}\n`;
-                    msg += `📞 *Telefon:* ${phone}\n`;
-                    msg += `📍 *Adres:* ${address}\n\n`;
-                    msg += `📦 *Sipariş Edilen Ürünler:*\n`;
-                    storeData.items.forEach(i => {
-                        msg += `- ${i.quantity}x ${i.title} ${i.variant ? `(${i.variant})` : ''} - ${(i.price * i.quantity).toLocaleString('tr-TR')} TL\n`;
-                    });
-                    msg += `\n💰 *Toplam Tutar:* ${storeData.amount.toLocaleString('tr-TR')} TL\n\n`;
-                    msg += `Siparişimi onaylıyor musunuz?`;
+                let phoneClean = storeWhatsapp.replace(/\D/g,'');
+                if(phoneClean.length === 10 && !phoneClean.startsWith('90')) phoneClean = '90' + phoneClean;
+                
+                // Siparişi Başarıyla Verilen Mağazanın Ürünlerini Sepetten Sil
+                cart = cart.filter(item => (item.product.storeId || 'unknown_store') !== storeId);
+                localStorage.setItem('cart_items_v2', JSON.stringify(cart));
 
-                    let phoneClean = storeData.storeWhatsapp.replace(/\D/g,'');
-                    if(phoneClean.length === 10 && !phoneClean.startsWith('90')) phoneClean = '90' + phoneClean;
-                    
-                    if(phoneClean) {
-                        firstWhatsapp = `https://wa.me/${phoneClean}?text=${encodeURIComponent(msg)}`;
-                    }
+                alert(`${storeName} mağazasına ait siparişiniz başarıyla oluşturuldu! Şimdi WhatsApp'a yönlendiriliyorsunuz.`);
+                
+                if(phoneClean) {
+                    window.open(`https://wa.me/${phoneClean}?text=${encodeURIComponent(msg)}`, '_blank');
                 }
-
-                localStorage.removeItem('cart_items_v2');
-                cart = [];
-
-                alert("Siparişiniz başarıyla oluşturuldu! Satıcıya yönlendiriliyorsunuz.");
-                if(firstWhatsapp) {
-                    window.location.href = firstWhatsapp;
-                } else {
-                    window.location.href = 'index.html';
-                }
+                
+                // Sepeti Kalan Ürünlerle Yeniden Çiz
+                window.renderCart();
 
             } catch (err) {
                 console.error(err);
                 alert("Sipariş kaydedilirken bir hata oluştu.");
-                btn.innerHTML = `<i data-lucide="message-circle" class="w-6 h-6"></i> WhatsApp ile Siparişi Tamamla`;
+                btn.innerHTML = originalHtml;
                 btn.disabled = false;
                 lucide.createIcons();
             }
         };
 
+        // SAYFA YÜKLENDİĞİNDE
         document.addEventListener('DOMContentLoaded', () => {
             window.renderCart();
 
+            // KAYITLI KULLANICI BİLGİLERİNİ FORMA OTOMATİK DOLDUR
             const savedInfo = localStorage.getItem('kibris_user_info');
             if (savedInfo) {
                 try {
@@ -344,11 +403,10 @@
                     if (parsed.name) document.getElementById('buyerName').value = parsed.name;
                     if (parsed.phone) document.getElementById('buyerPhone').value = parsed.phone;
                     if (parsed.address) document.getElementById('buyerAddress').value = parsed.address;
-                } catch (e) {
-                    console.error("Adres bilgileri okunamadı.", e);
-                }
+                } catch (e) {}
             }
 
+            // Eğer isim kısmı boşsa ve Google ile giriş yapılmışsa ismi oradan çek
             onAuthStateChanged(auth, (user) => {
                 if (user && !user.isAnonymous) {
                     const nameInput = document.getElementById('buyerName');
