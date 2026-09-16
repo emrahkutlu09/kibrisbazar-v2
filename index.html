@@ -69,6 +69,7 @@
 
             <!-- Sağ Butonlar -->
             <div class="flex items-center gap-3 shrink-0">
+                <!-- Masaüstü İkonları -->
                 <div class="hidden sm:flex items-center gap-2">
                     <a href="satici.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
                         <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
@@ -132,7 +133,6 @@
 
     <div id="heroBannerSection" class="w-full bg-slate-50 flex flex-col gap-4 pb-8">
         
-        <!-- Arama Çubuğu (Mobil) -->
         <div class="sm:hidden p-3 bg-white border-b border-slate-200 sticky top-14 z-50">
             <div class="relative w-full">
                 <input type="text" id="mobileSearchInput" placeholder="Marka, ürün veya kategori ara..." 
@@ -354,7 +354,7 @@
         </a>
     </div>
 
-    <!-- Alt Bilgi / Footer (Masaüstü için) -->
+    <!-- Alt Bilgi / Footer -->
     <footer class="bg-slate-900 border-t border-slate-800 mt-auto py-8 hidden sm:block">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
             <p>&copy; 2026 Kıbrıs Bazar. Tüm Hakları Saklıdır.</p>
@@ -365,12 +365,12 @@
     </footer>
 
     <script type="module">
-        import { db } from "./js/firebase-config.js";
+        import { db, auth } from "./js/firebase-config.js";
         import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        const auth = getAuth();
         const APP_ID = 'kibris-pazar';
+        const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; 
 
         let allProducts = [];
         let allCategories = [];
@@ -388,7 +388,7 @@
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
 
-        // TÜRKÇE KARAKTER DÖNÜŞTÜRÜCÜ (Akıllı Arama İçin)
+        // TÜRKÇE KARAKTER DÖNÜŞTÜRÜCÜ
         window.normalizeText = (text) => {
             if (!text) return '';
             return text.toString().toLowerCase()
@@ -472,6 +472,12 @@
 
             return `https://source.unsplash.com/150x150/?${keyword}`;
         }
+
+        window.logoutUser = () => {
+            signOut(auth).then(() => {
+                window.location.reload();
+            });
+        };
 
         function updateCartBadge() {
             let totalQty = 0;
@@ -588,11 +594,9 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // --- BANNER RENDER ---
         function renderAdminBanners() {
             const mainSliderContainer = document.getElementById('mainBannerSlider');
             const indicatorsContainer = document.getElementById('bannerIndicators');
-            
             let mainSliderHtml = ''; let indicatorsHtml = ''; let mainSlideCount = 0;
 
             const createMainSlide = (b, index) => {
@@ -723,7 +727,6 @@
                     smallBannersContainer.scrollTo({ left: nextIndex * slideWidth, behavior: 'smooth' });
                 }, 4000);
             }
-
             lucide.createIcons();
         }
 
@@ -792,7 +795,6 @@
         function renderVitrinStores() {
             const container = document.getElementById('vitrinStores');
             if(!container) return;
-            
             if(allStores.length === 0) { container.innerHTML = `<div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Öne çıkan mağaza bulunamadı.</div>`; return; }
             const storesToShow = allStores.filter(s => s.status === 'active').sort((a,b) => (b.isPremium ? 1 : 0) - (a.isPremium ? 1 : 0)).slice(0, 8);
 
@@ -1051,7 +1053,6 @@
 
         document.addEventListener('DOMContentLoaded', initPage);
 
-        // --- AUTH GÖZLEMCİSİ (Kullanıcı Rolüne Göre Menü Güncelleme) ---
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         
         const authControl = getAuth();
