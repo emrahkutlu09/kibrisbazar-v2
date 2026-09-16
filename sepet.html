@@ -79,7 +79,9 @@
 
                 <!-- Müşteri Bilgileri Formu -->
                 <form id="checkoutForm" onsubmit="window.completeOrder(event)" class="space-y-4">
-                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Teslimat & İletişim Bilgileri</h4>
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
+                        Teslimat & İletişim Bilgileri
+                    </h4>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1">Adınız Soyadınız</label>
                         <input type="text" id="buyerName" required class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500 transition" placeholder="Örn: Ahmet Yılmaz">
@@ -123,6 +125,7 @@
     <script type="module">
         import { db, auth } from "./js/firebase-config.js";
         import { doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const APP_ID = 'kibris-pazar';
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
@@ -210,6 +213,13 @@
             const phone = document.getElementById('buyerPhone').value.trim();
             const address = document.getElementById('buyerAddress').value.trim();
 
+            // SİPARİŞİ TAMAMLAYINCA ADRES BİLGİLERİNİ BİR SONRAKİ SEFER İÇİN HAFIZAYA KAYDET
+            localStorage.setItem('kibris_user_info', JSON.stringify({
+                name: name,
+                phone: phone,
+                address: address
+            }));
+
             const btn = document.getElementById('btnCheckout');
             btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Sipariş Kaydediliyor...`;
             btn.disabled = true;
@@ -219,7 +229,6 @@
                 let storesMap = {};
                 let totalOrderAmount = 0;
 
-                // --- SİPARİŞLER SAYFASI İÇİN E-POSTA VE UID ÇEKME İŞLEMİ ---
                 let userEmail = "";
                 let userId = "";
                 if (auth && auth.currentUser) {
@@ -263,8 +272,8 @@
                         customerName: name,
                         customerPhone: phone,
                         customerAddress: address,
-                        customerEmail: userEmail, // MÜŞTERİ E-POSTASI BURAYA EKLENDİ
-                        customerId: userId,       // MÜŞTERİ ID'Sİ BURAYA EKLENDİ
+                        customerEmail: userEmail,
+                        customerId: userId,
                         items: storeData.items,
                         totalAmount: storeData.amount,
                         status: 'pending',
@@ -311,7 +320,33 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', window.renderCart);
+        document.addEventListener('DOMContentLoaded', () => {
+            window.renderCart();
+
+            // KAYITLI KULLANICI BİLGİLERİNİ FORMA OTOMATİK DOLDUR
+            const savedInfo = localStorage.getItem('kibris_user_info');
+            if (savedInfo) {
+                try {
+                    const parsed = JSON.parse(savedInfo);
+                    if (parsed.name) document.getElementById('buyerName').value = parsed.name;
+                    if (parsed.phone) document.getElementById('buyerPhone').value = parsed.phone;
+                    if (parsed.address) document.getElementById('buyerAddress').value = parsed.address;
+                } catch (e) {
+                    console.error("Adres bilgileri okunamadı.", e);
+                }
+            }
+
+            // Eğer isim kısmı boşsa ve Google ile giriş yapılmışsa ismi oradan çek
+            onAuthStateChanged(auth, (user) => {
+                if (user && !user.isAnonymous) {
+                    const nameInput = document.getElementById('buyerName');
+                    if (!nameInput.value && user.displayName) {
+                        nameInput.value = user.displayName;
+                    }
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
