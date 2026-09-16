@@ -105,9 +105,10 @@
                     <button onclick="window.addToCart()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-2xl transition shadow-xl shadow-orange-500/20 flex items-center justify-center gap-2 text-base">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i> Sepete Ekle
                     </button>
-                    <a id="whatsappOrderBtn" href="#" target="_blank" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-3.5 rounded-2xl transition flex items-center justify-center gap-2 text-sm shadow-md">
+                    <!-- Hemen Al (Satın Al) Butonu -->
+                    <button id="whatsappOrderBtn" onclick="window.buyNow()" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-black py-3.5 rounded-2xl transition flex items-center justify-center gap-2 text-sm shadow-md">
                         <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp ile Hemen Sipariş Ver
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -122,10 +123,10 @@
         </div>
     </footer>
 
-    <!-- DİKKAT: firebase-config.js import yolu "/" ile başlar -->
+    <!-- Firebase -->
     <script type="module">
-        import { db } from "/js/firebase-config.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { db, auth } from "/js/firebase-config.js";
+        import { doc, getDoc, setDoc, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const APP_ID = 'kibris-pazar';
         let currentProduct = null;
@@ -241,8 +242,6 @@
                     renderVariants();
                 }
 
-                setupWhatsAppButton();
-
                 document.getElementById('loadingIndicator').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('loadingIndicator').classList.add('hidden'), 300);
                 lucide.createIcons();
@@ -307,24 +306,7 @@
             document.getElementById('productPrice').innerText = price.toLocaleString('tr-TR') + " TL";
             renderImages();
             renderVariants();
-            setupWhatsAppButton();
         };
-
-        function setupWhatsAppButton() {
-            const waBtn = document.getElementById('whatsappOrderBtn');
-            let phone = (currentProduct.storeWhatsapp || '').replace(/\D/g,'');
-            if (phone.length === 10 && !phone.startsWith('90')) phone = '90' + phone;
-
-            const priceText = currentActivePrice.toLocaleString('tr-TR') + " TL";
-            const variantText = selectedVariant ? ` (Seçenek: ${selectedVariant})` : '';
-            
-            let message = `Merhaba *${currentProduct.storeName || 'Mağaza'}*, şu ürününüzü sipariş etmek istiyorum:\n\n`;
-            message += `📦 *Ürün:* ${currentProduct.title}${variantText}\n`;
-            message += `💰 *Fiyat:* ${priceText}\n\n`;
-            message += `Siparişimi onaylıyor musunuz?`;
-
-            waBtn.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-        }
 
         window.addToCart = () => {
             if (currentProduct.variants && currentProduct.variants.length > 0 && !selectedVariant) {
@@ -351,6 +333,99 @@
             localStorage.setItem('cart_items_v2', JSON.stringify(cart));
             updateCartBadge();
             alert("Ürün sepete başarıyla eklendi!");
+        };
+
+        // --- HEMEN AL SİPARİŞ MANTIĞI ---
+        window.buyNow = async () => {
+            if (currentProduct.variants && currentProduct.variants.length > 0 && !selectedVariant) {
+                alert("Lütfen bir seçenek (renk/beden vb.) seçiniz.");
+                return;
+            }
+
+            const btn = document.getElementById('whatsappOrderBtn');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> İşleniyor...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            try {
+                // Auth Bilgilerini Al
+                let userEmail = "";
+                let userId = "";
+                if (auth && auth.currentUser) {
+                    userEmail = auth.currentUser.email || "";
+                    userId = auth.currentUser.uid || "";
+                }
+
+                // Önceden Kaydedilmiş Kullanıcı Bilgilerini Al
+                let customerName = "Belirtilmedi";
+                let customerPhone = "Belirtilmedi";
+                let customerAddress = "Belirtilmedi";
+                const savedInfo = localStorage.getItem('kibris_user_info');
+                
+                if (savedInfo) {
+                    try {
+                        const parsed = JSON.parse(savedInfo);
+                        if(parsed.name) customerName = parsed.name;
+                        if(parsed.phone) customerPhone = parsed.phone;
+                        if(parsed.address) customerAddress = parsed.address;
+                    } catch(e) {}
+                } else if (auth && auth.currentUser && auth.currentUser.displayName) {
+                    customerName = auth.currentUser.displayName;
+                }
+
+                // Ürün Payload
+                const item = {
+                    productId: currentProduct.id,
+                    title: currentProduct.title,
+                    quantity: 1,
+                    price: currentActivePrice,
+                    variant: selectedVariant || null,
+                    image: currentActiveImage || (currentProduct.images && currentProduct.images.length > 0 ? currentProduct.images[0] : ''),
+                    storeName: currentProduct.storeName || 'Mağaza'
+                };
+
+                // Sipariş Payload
+                const orderPayload = {
+                    storeId: currentProduct.storeId,
+                    customerName: customerName,
+                    customerPhone: customerPhone,
+                    customerAddress: customerAddress,
+                    customerEmail: userEmail,
+                    customerId: userId,
+                    items: [item],
+                    totalAmount: currentActivePrice,
+                    status: 'pending',
+                    createdAt: Date.now()
+                };
+
+                // Siparişi Firebase'e Kaydet
+                await setDoc(doc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders')), orderPayload);
+
+                // WhatsApp'a Yönlendir
+                let phone = (currentProduct.storeWhatsapp || '').replace(/\D/g,'');
+                if (phone.length === 10 && !phone.startsWith('90')) phone = '90' + phone;
+
+                const priceText = currentActivePrice.toLocaleString('tr-TR') + " TL";
+                const variantText = selectedVariant ? ` (Seçenek: ${selectedVariant})` : '';
+                
+                let message = `Merhaba *${currentProduct.storeName || 'Mağaza'}*, şu ürününüzü sipariş etmek istiyorum:\n\n`;
+                message += `📦 *Ürün:* ${currentProduct.title}${variantText}\n`;
+                message += `💰 *Fiyat:* ${priceText}\n\n`;
+                message += `Siparişimi onaylıyor musunuz?`;
+
+                let waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+                
+                alert("Siparişiniz başarıyla kaydedildi! Satıcıya yönlendiriliyorsunuz.");
+                window.location.href = waUrl;
+
+            } catch (err) {
+                console.error("Sipariş Hata:", err);
+                alert("Sipariş oluşturulurken bir hata oluştu.");
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
         };
 
         document.addEventListener('DOMContentLoaded', initProductPage);
