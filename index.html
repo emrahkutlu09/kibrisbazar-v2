@@ -20,11 +20,9 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Çekmece & Tam Ekran Menü Animasyonları */
         .drawer-overlay { transition: opacity 0.3s ease; }
         .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Trendyol Tarzı Toggle Switch */
         .toggle-checkbox:checked { right: 0; border-color: #f97316; }
         .toggle-checkbox:checked + .toggle-label { background-color: #f97316; }
         .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
@@ -32,29 +30,26 @@
         
         .custom-checkbox { @apply w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer; }
 
-        /* Mobil Alt Menü Padding (Sadece alt menü açıksa padding uygula) */
+        .category-scroll::-webkit-scrollbar { width: 0px; height: 0px; }
+
         @media (max-width: 640px) {
             body.has-bottom-nav { padding-bottom: 70px; }
         }
 
-        /* Slider Animations */
         .slider-scroll { scroll-behavior: smooth; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
         .slider-scroll::-webkit-scrollbar { display: none; }
         .snap-start { scroll-snap-align: start; }
         
-        /* Banner Slider Scroll Bar (Gizli ama smooth) */
         #mainBannerSlider::-webkit-scrollbar, #dynamicSmallBanners::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen overflow-x-hidden">
 
-    <!-- Üst Menü / Navbar (Sabit) -->
     <header id="mainHeader" class="sticky top-0 z-[100] bg-white border-b border-slate-200">
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
             
             <div class="flex items-center gap-3 shrink-0">
-                <!-- Hamburger Menü (Kategoriler Sayfasına Yönlendirir) -->
-                <a href="kategoriler.html" class="p-1 -ml-1 text-slate-600 hover:text-orange-500 rounded-xl transition inline-block">
+                <a href="kategoriler.html" class="p-1 -ml-1 text-slate-600 hover:text-orange-500 rounded-xl transition inline-block sm:block">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </a>
                 <a href="/" class="text-xl sm:text-2xl font-black tracking-tighter text-slate-900">
@@ -65,33 +60,66 @@
             <!-- Arama Çubuğu (Masaüstü) -->
             <div class="flex-1 max-w-2xl mx-8 hidden sm:block relative">
                 <input type="text" id="searchInput" placeholder="Aradığınız ürün, kategori veya markayı yazınız..." 
-                    class="w-full bg-slate-100 border border-transparent hover:border-slate-300 rounded-full pl-12 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-500/20 transition-all font-medium">
+                    class="w-full bg-slate-100 border border-transparent hover:border-slate-300 rounded-full pl-12 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-500/20 transition-all font-medium">
                 <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                <button id="clearSearchBtnDesk" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 hidden" onclick="document.getElementById('searchInput').value=''; document.getElementById('searchInput').dispatchEvent(new Event('input'));">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
             </div>
 
-            <!-- Sağ Butonlar Grubu -->
+            <!-- Sağ Butonlar -->
             <div class="flex items-center gap-3 shrink-0">
-                <!-- Masaüstü İkonları (Mobilde Gizli) -->
                 <div class="hidden sm:flex items-center gap-2">
                     <a href="satici.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
                         <i data-lucide="store" class="w-4 h-4"></i> Satış Yap
                     </a>
-                    <a href="giris.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
-                        <i data-lucide="user" class="w-4 h-4"></i> Giriş Yap
-                    </a>
-                    <button class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-rose-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-rose-50 group">
-                        <i data-lucide="heart" class="w-4 h-4 group-hover:fill-rose-500"></i> Favorilerim
-                    </button>
-                    <a href="sepet.html" class="flex items-center gap-1.5 text-[13px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors px-3 py-2 rounded-xl relative group">
+                    
+                    <div id="authGuestDesktop" class="block">
+                        <a href="giris.html" class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
+                            <i data-lucide="user" class="w-4 h-4"></i> Giriş Yap
+                        </a>
+                    </div>
+
+                    <div id="authLoggedDesktop" class="hidden relative group">
+                        <button class="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-orange-500 transition-colors px-2.5 py-2 rounded-xl hover:bg-orange-50">
+                            <i data-lucide="user-check" class="w-4 h-4 text-emerald-500"></i> Hesabım <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </button>
+                        <div class="absolute right-0 top-full mt-1 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform origin-top-right z-50 flex flex-col overflow-hidden py-1">
+                            <div class="px-4 py-2 border-b border-slate-100">
+                                <span class="block text-[10px] text-slate-400">Hoş geldin,</span>
+                                <span class="block text-xs font-bold text-slate-800 truncate" id="userEmailDisplay">kullanici@mail.com</span>
+                            </div>
+                            <a href="siparisler.html" class="px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-orange-500 flex items-center gap-2 transition">
+                                <i data-lucide="package" class="w-4 h-4"></i> Siparişlerim
+                            </a>
+                            <a href="#" class="px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-orange-500 flex items-center gap-2 transition">
+                                <i data-lucide="heart" class="w-4 h-4"></i> Favorilerim
+                            </a>
+                            <a href="satici.html" id="menuSellerLink" class="hidden px-4 py-2.5 text-sm font-bold text-indigo-600 bg-indigo-50/50 hover:bg-indigo-100 flex items-center gap-2 transition border-t border-slate-100">
+                                <i data-lucide="store" class="w-4 h-4"></i> Satıcı Paneli
+                            </a>
+                            <a href="admin.html" id="menuAdminLink" class="hidden px-4 py-2.5 text-sm font-bold text-rose-600 bg-rose-50/50 hover:bg-rose-100 flex items-center gap-2 transition border-t border-slate-100">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i> Sistem Yönetimi
+                            </a>
+                            <button onclick="window.logoutUser()" class="px-4 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-rose-500 flex items-center gap-2 transition border-t border-slate-100 w-full text-left">
+                                <i data-lucide="log-out" class="w-4 h-4"></i> Çıkış Yap
+                            </button>
+                        </div>
+                    </div>
+
+                    <a href="sepet.html" class="flex items-center gap-1.5 text-[13px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors px-3 py-2 rounded-xl relative ml-2 group">
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i> Sepetim
                         <span id="cartCountBadgeDesk" class="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center shadow-md hidden border-2 border-white">0</span>
                     </a>
                 </div>
 
-                <!-- Mobil İkonları (Sadece Mobilde Görünür - Sağ Üst Köşe) -->
+                <!-- Mobil İkonları -->
                 <div class="flex sm:hidden items-center gap-4">
-                    <a href="giris.html" class="text-slate-600 hover:text-orange-500 transition">
+                    <a href="giris.html" id="authGuestMobile" class="text-slate-600 hover:text-orange-500 transition">
                         <i data-lucide="user" class="w-6 h-6"></i>
+                    </a>
+                    <a href="siparisler.html" id="authLoggedMobile" class="text-emerald-500 hidden transition">
+                        <i data-lucide="user-check" class="w-6 h-6"></i>
                     </a>
                     <a href="sepet.html" class="text-slate-600 hover:text-orange-500 transition relative">
                         <i data-lucide="shopping-cart" class="w-6 h-6"></i>
@@ -99,98 +127,74 @@
                     </a>
                 </div>
             </div>
-
         </div>
     </header>
 
-    <!-- ANA SAYFA VİTRİN BÖLÜMÜ (SADECE ANA SAYFADA GÖRÜNÜR) -->
     <div id="heroBannerSection" class="w-full bg-slate-50 flex flex-col gap-4 pb-8">
         
         <!-- Arama Çubuğu (Mobil) -->
         <div class="sm:hidden p-3 bg-white border-b border-slate-200 sticky top-14 z-50">
             <div class="relative w-full">
                 <input type="text" id="mobileSearchInput" placeholder="Marka, ürün veya kategori ara..." 
-                    class="w-full bg-slate-100 border border-slate-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition-all font-medium">
+                    class="w-full bg-slate-100 border border-slate-200 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-orange-500 transition-all font-medium">
                 <i data-lucide="search" class="w-5 h-5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <button id="clearSearchBtnMob" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 hidden" onclick="document.getElementById('mobileSearchInput').value=''; document.getElementById('mobileSearchInput').dispatchEvent(new Event('input'));">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
             </div>
         </div>
 
-        <!-- YATAY KATEGORİ SLIDER'I -->
         <div class="bg-white border-b border-slate-200 py-3 shadow-sm relative z-40">
             <div class="max-w-[1400px] mx-auto px-2 sm:px-6 lg:px-8">
-                <div class="flex items-start gap-3 overflow-x-auto no-scrollbar" id="homeTopCategorySlider">
-                    <!-- JS Dinamik Dolduracak -->
-                </div>
+                <div class="flex items-start gap-3 overflow-x-auto no-scrollbar" id="homeTopCategorySlider"></div>
             </div>
         </div>
 
-        <!-- VİTRİN İÇERİKLERİ (Maks Genişlik) -->
         <div class="max-w-[1400px] mx-auto w-full px-3 sm:px-6 lg:px-8 flex flex-col gap-8 mt-2">
-            
-            <!-- 1. YATAY KAYDIRMALI BÜYÜK BANNER SLIDERI -->
             <div class="w-full relative">
-                <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl">
-                    <!-- JS Dolduracak -->
-                </div>
-                <!-- Banner Noktaları (Indicators) -->
+                <div id="mainBannerSlider" class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory rounded-3xl"></div>
                 <div id="bannerIndicators" class="flex justify-center gap-1.5 mt-3"></div>
             </div>
 
-            <!-- 2. İKİ ADET KÜÇÜK BANNER (Yatay Kaydırmalı Slider) -->
             <div class="w-full relative">
-                <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners">
-                    <!-- JS Dolduracak -->
-                </div>
-                <!-- Küçük Banner Noktaları (Indicators) -->
+                <div class="flex overflow-x-auto slider-scroll w-full gap-4 snap-x snap-mandatory" id="dynamicSmallBanners"></div>
                 <div id="smallBannerIndicators" class="flex justify-center gap-1.5 mt-3 hidden"></div>
             </div>
 
-            <!-- 3. POPÜLER ÜRÜNLER SLIDER -->
             <div class="flex flex-col gap-3 mt-4">
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="flame" class="w-5 h-5 text-orange-500 fill-orange-100"></i> Popüler Ürünler</h2>
                     <button class="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center">Tümünü Gör <i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinPopularProducts"></div>
             </div>
 
-            <!-- 4. EN ÇOK FAVORİLENENLER SLIDER -->
             <div class="flex flex-col gap-3">
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="heart" class="w-5 h-5 text-rose-500 fill-rose-100"></i> En Çok Favorilenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinFavoriteProducts"></div>
             </div>
 
-            <!-- 5. ÖNE ÇIKAN MAĞAZALAR SLIDER -->
             <div class="flex flex-col gap-3 bg-white p-4 sm:p-6 rounded-3xl border border-slate-100 shadow-sm mt-2">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="store" class="w-5 h-5 text-indigo-500"></i> Öne Çıkan Mağazalar</h2>
                     <button class="text-xs font-bold text-indigo-600 hover:text-indigo-700">Tümü <i data-lucide="chevron-right" class="w-4 h-4 inline"></i></button>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores">
-                    <div class="text-xs text-slate-400 p-4 border border-dashed rounded-xl w-full text-center">Firebase Mağaza verileri yükleniyor...</div>
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll py-2" id="vitrinStores"></div>
             </div>
 
-            <!-- 6. YENİ EKLENENLER SLIDER -->
             <div class="flex flex-col gap-3 mt-2">
                 <div class="flex items-center justify-between px-1">
                     <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-emerald-500 fill-emerald-100"></i> Yeni Eklenenler</h2>
                 </div>
-                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts">
-                    <!-- JS Dolduracak -->
-                </div>
+                <div class="flex items-stretch gap-3 slider-scroll pb-4" id="vitrinNewProducts"></div>
             </div>
 
         </div>
     </div>
 
-    <!-- TREDYOL STİLİ UYGULAMA ÜST BAR (Kategori Seçilince Çıkar) -->
+    <!-- UYGULAMA ÜST BAR (Kategori Seçilince Çıkar) -->
     <div id="categoryTopBar" class="hidden flex-col bg-white border-b border-slate-200 sticky top-14 sm:top-16 z-40 w-full shadow-sm">
         <div class="px-4 py-3 flex items-center justify-between relative">
             <button onclick="window.resetCategorySelection()" class="p-2 -ml-2 text-slate-600 hover:text-orange-500 transition shrink-0">
@@ -239,8 +243,8 @@
                 <i data-lucide="package-search" class="w-8 h-8"></i>
             </div>
             <h3 class="text-lg font-black text-slate-800 mb-1">Ürün Bulunamadı</h3>
-            <p class="text-sm font-medium text-slate-500 max-w-sm mx-auto px-4">Seçtiğiniz filtrelerde ürün bulunmuyor. Lütfen filtreleri esnetin.</p>
-            <button onclick="window.clearAllFilters()" class="mt-5 bg-orange-100 text-orange-600 hover:bg-orange-500 hover:text-white font-bold px-6 py-3 rounded-xl transition">Filtreleri Temizle</button>
+            <p class="text-sm font-medium text-slate-500 max-w-sm mx-auto px-4">Aradığınız kriterlerde bir ürüne rastlayamadık. Lütfen filtreleri esnetin veya kelimeyi kontrol edin.</p>
+            <button onclick="window.clearAllFilters()" class="mt-5 bg-orange-100 text-orange-600 hover:bg-orange-500 hover:text-white font-bold px-6 py-3 rounded-xl transition">Aramayı Temizle</button>
         </div>
     </main>
 
@@ -322,7 +326,7 @@
         </div>
     </div>
 
-    <!-- MOBİL ALT MENÜ (Bottom Navigation Bar) GÜNCELLENDİ (Ana sayfada gizli) -->
+    <!-- MOBİL ALT MENÜ (Ana sayfada gizli) -->
     <div id="mobileBottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[250] sm:hidden justify-around items-center h-16 px-1 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] hidden">
         <a href="/" onclick="window.resetToHome(); return false;" class="flex flex-col items-center justify-center w-full h-full text-orange-500 gap-1 transition">
             <i data-lucide="home" class="w-5 h-5 fill-current"></i>
@@ -363,8 +367,11 @@
     <script type="module">
         import { db } from "./js/firebase-config.js";
         import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+        const auth = getAuth();
         const APP_ID = 'kibris-pazar';
+
         let allProducts = [];
         let allCategories = [];
         let allStores = []; 
@@ -381,12 +388,19 @@
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
         let favorites = JSON.parse(localStorage.getItem('user_favorites')) || [];
 
-        window.generateSlug = (text) => {
-            if (!text) return 'kibris-bazar';
-            return text.toString().toLowerCase().replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
+        // TÜRKÇE KARAKTER DÖNÜŞTÜRÜCÜ (Akıllı Arama İçin)
+        window.normalizeText = (text) => {
+            if (!text) return '';
+            return text.toString().toLowerCase()
+                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                .replace(/ı/g, 'i').replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
         };
 
-        // --- AKILLI KATEGORİ RESİM EŞLEŞTİRİCİ ---
+        window.generateSlug = (text) => {
+            if (!text) return 'kibris-bazar';
+            return window.normalizeText(text).replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
+        };
+
         function getSmartCategoryImage(categoryName) {
             if (!categoryName) return 'https://placehold.co/150x150/f1f5f9/475569?text=Gorsel';
             const name = categoryName.toLowerCase();
@@ -459,7 +473,6 @@
             return `https://source.unsplash.com/150x150/?${keyword}`;
         }
 
-        // --- Ortak ve Genel Sistemler ---
         function updateCartBadge() {
             let totalQty = 0;
             cart.forEach(item => totalQty += item.quantity);
@@ -495,9 +508,11 @@
 
         window.resetToHome = () => {
             activeMainCategory = null; activeSubCategorySlug = null; searchQuery = ""; selectedFilters = {};
-            document.getElementById('searchInput').value = "";
+            const deskSearch = document.getElementById('searchInput');
             const mobSearch = document.getElementById('mobileSearchInput');
-            if(mobSearch) mobSearch.value = "";
+            
+            if(deskSearch) { deskSearch.value = ""; deskSearch.placeholder = "Aradığınız ürün, kategori veya markayı yazınız..."; }
+            if(mobSearch) { mobSearch.value = ""; mobSearch.placeholder = "Marka, ürün veya kategori ara..."; }
             
             document.getElementById('mainProductsSection').classList.add('hidden');
             document.getElementById('categoryTopBar').classList.add('hidden');
@@ -505,19 +520,45 @@
             
             document.getElementById('heroBannerSection').classList.remove('hidden');
             
-            // Ana sayfaya dönüldüğünde mobil alt menüyü GİZLE
-            document.getElementById('mobileBottomNav').classList.add('hidden');
-            document.getElementById('mobileBottomNav').classList.remove('flex');
+            const mobileNav = document.getElementById('mobileBottomNav');
+            if (mobileNav) {
+                mobileNav.classList.add('hidden');
+                mobileNav.classList.remove('flex');
+            }
             document.body.classList.remove('has-bottom-nav');
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
+        window.renderHomeTopCategorySlider = () => {
+            const container = document.getElementById('homeTopCategorySlider');
+            if(!container) return;
+            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
+            let html = '';
+            mainCats.forEach(main => {
+                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
+                html += `
+                    <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
+                        <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
+                            <img src="${img}" alt="${main.name}" loading="lazy" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-700 leading-tight text-center break-words w-full group-hover:text-orange-600 line-clamp-2">${main.name}</span>
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        };
+
         window.selectCategory = (mainCatId, subCatSlug, subCatName, mainCatName) => {
             activeMainCategory = mainCatId; activeSubCategorySlug = subCatSlug; selectedFilters = {}; currentSort = 'newest';
-            document.getElementById('searchInput').value = "";
-            const mobSearch = document.getElementById('mobileSearchInput'); if(mobSearch) mobSearch.value = "";
             searchQuery = "";
+            
+            const deskSearch = document.getElementById('searchInput');
+            const mobSearch = document.getElementById('mobileSearchInput'); 
+            const placeholderText = mainCatName && mainCatName !== 'Kategori' ? `'${mainCatName}' içinde ara...` : "Marka, ürün veya kategori ara...";
+            
+            if(deskSearch) { deskSearch.value = ""; deskSearch.placeholder = placeholderText; }
+            if(mobSearch) { mobSearch.value = ""; mobSearch.placeholder = placeholderText; }
             
             document.getElementById('heroBannerSection').classList.add('hidden');
             document.getElementById('mainProductsSection').classList.remove('hidden');
@@ -525,9 +566,11 @@
             document.getElementById('categoryTopBar').classList.remove('hidden');
             document.getElementById('categoryTopBar').classList.add('flex');
             
-            // Kategori tıklandığında alt menüyü GÖSTER
-            document.getElementById('mobileBottomNav').classList.remove('hidden');
-            document.getElementById('mobileBottomNav').classList.add('flex');
+            const mobileNav = document.getElementById('mobileBottomNav');
+            if (mobileNav) {
+                mobileNav.classList.remove('hidden');
+                mobileNav.classList.add('flex');
+            }
             document.body.classList.add('has-bottom-nav');
             
             document.getElementById('bcMainName').innerText = mainCatName;
@@ -545,19 +588,12 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.resetCategorySelection = () => { window.resetToHome(); };
-
-        // --- BANNER RENDER (Büyük Slider ve İkili Küçük Slider) ---
+        // --- BANNER RENDER ---
         function renderAdminBanners() {
-            // ==========================================
-            // 1) BÜYÜK BANNER KISMI
-            // ==========================================
             const mainSliderContainer = document.getElementById('mainBannerSlider');
             const indicatorsContainer = document.getElementById('bannerIndicators');
             
-            let mainSliderHtml = '';
-            let indicatorsHtml = '';
-            let mainSlideCount = 0;
+            let mainSliderHtml = ''; let indicatorsHtml = ''; let mainSlideCount = 0;
 
             const createMainSlide = (b, index) => {
                 let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
@@ -589,18 +625,11 @@
             }
 
             if (mainBannersData.length === 0) {
-                mainBannersData.push({
-                    tag: "Özel Teklif", title: "Kıbrıs Bazar'a<br>Hoş Geldiniz", subtitle: "Yerel mağazaların dijital pazaryerinde binlerce ürünü keşfedin.", btnText: "Alışverişe Başla", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000"
-                });
+                mainBannersData.push({ tag: "Özel Teklif", title: "Kıbrıs Bazar'a<br>Hoş Geldiniz", subtitle: "Yerel mağazaların dijital pazaryerinde binlerce ürünü keşfedin.", btnText: "Alışverişe Başla", image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000" });
             }
 
-            mainBannersData.forEach((b) => {
-                mainSliderHtml += createMainSlide(b, mainSlideCount); 
-                mainSlideCount++;
-            });
-
-            mainSliderContainer.innerHTML = mainSliderHtml;
-            indicatorsContainer.innerHTML = indicatorsHtml;
+            mainBannersData.forEach((b) => { mainSliderHtml += createMainSlide(b, mainSlideCount); mainSlideCount++; });
+            mainSliderContainer.innerHTML = mainSliderHtml; indicatorsContainer.innerHTML = indicatorsHtml;
 
             if (mainSlideCount > 1) {
                 mainSliderContainer.addEventListener('scroll', () => {
@@ -614,7 +643,6 @@
                         }
                     }
                 });
-                
                 if(window.mainSliderInterval) clearInterval(window.mainSliderInterval);
                 let currentMainSlide = 0;
                 window.mainSliderInterval = setInterval(() => {
@@ -623,15 +651,9 @@
                 }, 5000);
             }
 
-            // ==========================================
-            // 2) KÜÇÜK (YAN) BANNERLAR KISMI
-            // ==========================================
             const smallBannersContainer = document.getElementById('dynamicSmallBanners');
             const smallIndicatorsContainer = document.getElementById('smallBannerIndicators');
-            
-            let smallHtml = '';
-            let smallIndicatorsHtml = '';
-            let smallSlideCount = 0;
+            let smallHtml = ''; let smallIndicatorsHtml = ''; let smallSlideCount = 0;
             
             const createSmallSlide = (b, colorClass, index) => {
                 let targetAction = b.linkValue ? `onclick="window.location.href='${b.linkValue}'"` : '';
@@ -652,7 +674,6 @@
             };
 
             const bgColors = ['bg-blue-100', 'bg-emerald-100', 'bg-purple-100', 'bg-rose-100', 'bg-amber-100'];
-            
             let smallBannersData = [];
             
             if (systemSettings.sideBanners && Array.isArray(systemSettings.sideBanners) && systemSettings.sideBanners.length > 0) {
@@ -660,12 +681,8 @@
             } else if (systemSettings.smallBanners && Array.isArray(systemSettings.smallBanners) && systemSettings.smallBanners.length > 0) {
                 smallBannersData = systemSettings.smallBanners;
             } else {
-                if (systemSettings.sideBanner1 && (systemSettings.sideBanner1.title || systemSettings.sideBanner1.image || systemSettings.sideBanner1.subtitle)) {
-                    smallBannersData.push(systemSettings.sideBanner1);
-                }
-                if (systemSettings.sideBanner2 && (systemSettings.sideBanner2.title || systemSettings.sideBanner2.image || systemSettings.sideBanner2.subtitle)) {
-                    smallBannersData.push(systemSettings.sideBanner2);
-                }
+                if (systemSettings.sideBanner1 && (systemSettings.sideBanner1.title || systemSettings.sideBanner1.image || systemSettings.sideBanner1.subtitle)) smallBannersData.push(systemSettings.sideBanner1);
+                if (systemSettings.sideBanner2 && (systemSettings.sideBanner2.title || systemSettings.sideBanner2.image || systemSettings.sideBanner2.subtitle)) smallBannersData.push(systemSettings.sideBanner2);
             }
 
             if (smallBannersData.length === 0) {
@@ -673,18 +690,12 @@
                 smallBannersData.push({title: "Ev & Yaşam", subtitle: "Evinizi baştan yaratın", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800", icon: "home"});
             }
 
-            smallBannersData.forEach((b, idx) => {
-                smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount);
-                smallSlideCount++;
-            });
-
+            smallBannersData.forEach((b, idx) => { smallHtml += createSmallSlide(b, bgColors[idx % bgColors.length], smallSlideCount); smallSlideCount++; });
             smallBannersContainer.innerHTML = smallHtml;
             
             if (smallIndicatorsContainer) {
                 smallIndicatorsContainer.innerHTML = smallIndicatorsHtml;
-                if(smallSlideCount > 1) { 
-                    smallIndicatorsContainer.classList.remove('hidden');
-                }
+                if(smallSlideCount > 1) smallIndicatorsContainer.classList.remove('hidden');
             }
 
             if (smallSlideCount > 1) {
@@ -693,7 +704,6 @@
                     if(!childElement) return;
                     const slideWidth = childElement.clientWidth + 16; 
                     const activeIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth);
-                    
                     for (let i = 0; i < smallSlideCount; i++) {
                         const ind = document.getElementById(`small-indicator-${i}`);
                         if(ind) {
@@ -702,47 +712,20 @@
                         }
                     }
                 });
-                
                 if(window.smallSliderInterval) clearInterval(window.smallSliderInterval);
-                
                 window.smallSliderInterval = setInterval(() => {
                     const childElement = smallBannersContainer.children[0];
                     if(!childElement) return;
                     const slideWidth = childElement.clientWidth + 16;
-                    
                     let nextIndex = Math.round(smallBannersContainer.scrollLeft / slideWidth) + 1;
-                    
-                    if (smallBannersContainer.scrollLeft + smallBannersContainer.clientWidth >= smallBannersContainer.scrollWidth - 10) {
-                        nextIndex = 0;
-                    } else if(nextIndex >= smallSlideCount) {
-                        nextIndex = 0;
-                    }
-                    
+                    if (smallBannersContainer.scrollLeft + smallBannersContainer.clientWidth >= smallBannersContainer.scrollWidth - 10) nextIndex = 0;
+                    else if(nextIndex >= smallSlideCount) nextIndex = 0;
                     smallBannersContainer.scrollTo({ left: nextIndex * slideWidth, behavior: 'smooth' });
                 }, 4000);
             }
 
             lucide.createIcons();
         }
-
-        window.renderHomeTopCategorySlider = () => {
-            const container = document.getElementById('homeTopCategorySlider');
-            if(!container) return;
-            const mainCats = allCategories.filter(c => c.isMegaMenu).sort((a, b) => (a.order || 0) - (b.order || 0));
-            let html = '';
-            mainCats.forEach(main => {
-                const img = main.image && main.image.trim() !== '' ? main.image : getSmartCategoryImage(main.name);
-                html += `
-                    <button onclick="window.selectCategory('${main.id}', '', 'Tüm ${main.name}', '${main.name}')" class="flex flex-col items-center gap-2 w-[72px] shrink-0 group">
-                        <div class="w-16 h-16 rounded-full bg-white border border-slate-200 p-1 shadow-sm overflow-hidden group-hover:border-orange-400 group-hover:shadow-md transition flex items-center justify-center relative">
-                            <img src="${img}" alt="${main.name}" loading="lazy" onerror="this.src='https://placehold.co/150x150/f1f5f9/475569?text=${encodeURIComponent(main.name)}'" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-300">
-                        </div>
-                        <span class="text-[10px] font-bold text-slate-700 leading-tight text-center break-words w-full group-hover:text-orange-600 line-clamp-2">${main.name}</span>
-                    </button>
-                `;
-            });
-            container.innerHTML = html;
-        };
 
         window.createMiniProductCard = (p) => {
             const discount = p.originalPrice > p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
@@ -938,9 +921,24 @@
         window.applyFilters = () => {
             const grid = document.getElementById('productsGrid'); const noResults = document.getElementById('noResults');
             let filtered = allProducts;
-            if (activeSubCategorySlug && activeSubCategorySlug !== '') { filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug); } 
-            else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) { const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug); filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug)); }
-            if (searchQuery.trim() !== '') { const q = searchQuery.toLowerCase().trim(); filtered = filtered.filter(p => (p.title && p.title.toLowerCase().includes(q)) || (p.storeName && p.storeName.toLowerCase().includes(q)) || (p.category && p.category.toLowerCase().includes(q)) ); }
+            
+            if (activeSubCategorySlug && activeSubCategorySlug !== '') { 
+                filtered = filtered.filter(p => p.categorySlug === activeSubCategorySlug); 
+            } 
+            else if (activeMainCategory && (!activeSubCategorySlug || activeSubCategorySlug === '')) { 
+                const targetCatIds = allCategories.filter(c => c.parentId === activeMainCategory || (allCategories.find(g => g.id === c.parentId)?.parentId === activeMainCategory)).map(c => c.slug); 
+                filtered = filtered.filter(p => targetCatIds.includes(p.categorySlug)); 
+            }
+            
+            if (searchQuery.trim() !== '') { 
+                const q = window.normalizeText(searchQuery); 
+                filtered = filtered.filter(p => 
+                    (p.title && window.normalizeText(p.title).includes(q)) || 
+                    (p.storeName && window.normalizeText(p.storeName).includes(q)) || 
+                    (p.category && window.normalizeText(p.category).includes(q)) 
+                ); 
+            }
+            
             if(document.getElementById('modalFilterFreeDelivery')?.checked) { filtered = filtered.filter(p => p.freeDelivery === true); }
             if(document.getElementById('modalFilterCOD')?.checked) { filtered = filtered.filter(p => p.cashOnDelivery === true); }
             const minPrice = document.getElementById('modalFilterPriceMin')?.value; const maxPrice = document.getElementById('modalFilterPriceMax')?.value;
@@ -964,29 +962,44 @@
 
             const searchInput = document.getElementById('searchInput');
             const mobileSearchInput = document.getElementById('mobileSearchInput');
+            const clearBtnDesk = document.getElementById('clearSearchBtnDesk');
+            const clearBtnMob = document.getElementById('clearSearchBtnMob');
             
             const handleSearch = (e) => {
                 searchQuery = e.target.value;
+                
                 if(searchQuery.length > 0) {
+                    if(clearBtnDesk) clearBtnDesk.classList.remove('hidden');
+                    if(clearBtnMob) clearBtnMob.classList.remove('hidden');
+                    
                     document.getElementById('heroBannerSection').classList.add('hidden');
                     document.getElementById('categoryTopBar').classList.add('hidden');
                     document.getElementById('mainProductsSection').classList.remove('hidden');
                     
-                    // Arama yapılıyorsa alt menüyü GÖSTER
-                    document.getElementById('mobileBottomNav').classList.remove('hidden');
-                    document.getElementById('mobileBottomNav').classList.add('flex');
+                    const mobileNav = document.getElementById('mobileBottomNav');
+                    if(mobileNav) {
+                        mobileNav.classList.remove('hidden');
+                        mobileNav.classList.add('flex');
+                    }
                     document.body.classList.add('has-bottom-nav');
 
                     const rt = document.getElementById('homeResultsTitle');
                     if(rt) rt.innerHTML = `<h2 class="text-lg font-black text-slate-800">Arama Sonuçları</h2>`;
-                } else if (!activeSubCategorySlug) {
-                    document.getElementById('mainProductsSection').classList.add('hidden');
-                    document.getElementById('heroBannerSection').classList.remove('hidden');
+                } else {
+                    if(clearBtnDesk) clearBtnDesk.classList.add('hidden');
+                    if(clearBtnMob) clearBtnMob.classList.add('hidden');
                     
-                    // Arama silinip ana sayfaya dönüldüyse alt menüyü GİZLE
-                    document.getElementById('mobileBottomNav').classList.add('hidden');
-                    document.getElementById('mobileBottomNav').classList.remove('flex');
-                    document.body.classList.remove('has-bottom-nav');
+                    if (!activeSubCategorySlug && !activeMainCategory) {
+                        document.getElementById('mainProductsSection').classList.add('hidden');
+                        document.getElementById('heroBannerSection').classList.remove('hidden');
+                        
+                        const mobileNav = document.getElementById('mobileBottomNav');
+                        if(mobileNav) {
+                            mobileNav.classList.add('hidden');
+                            mobileNav.classList.remove('flex');
+                        }
+                        document.body.classList.remove('has-bottom-nav');
+                    }
                 }
                 window.applyFilters();
             };
@@ -995,29 +1008,24 @@
             if (mobileSearchInput) mobileSearchInput.addEventListener('input', handleSearch);
 
             try {
-                // Ayarları Çek
                 const settingsSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'settings'));
                 if (settingsSnap.exists()) { systemSettings = settingsSnap.data(); }
 
-                // Kategorileri Çek
                 const catSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'categories'));
                 allCategories = [];
                 catSnap.forEach(doc => allCategories.push({ id: doc.id, ...doc.data() }));
                 
                 window.renderHomeTopCategorySlider();
 
-                // Ürünleri Çek
                 const q = query(collection(db, 'artifacts', APP_ID, 'public', 'data', 'products'), where("isActive", "==", true));
                 const snap = await getDocs(q);
                 allProducts = [];
                 snap.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
 
-                // Mağazaları Çek
                 const storesSnap = await getDocs(collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores'));
                 allStores = [];
                 storesSnap.forEach(doc => allStores.push({ id: doc.id, ...doc.data() }));
 
-                // Vitrin Bölümlerini Doldur
                 renderAdminBanners();
                 renderVitrinPopularProducts();
                 renderVitrinFavoriteProducts();
@@ -1025,7 +1033,15 @@
                 renderVitrinStores();
 
                 document.getElementById('loadingIndicator').classList.add('hidden');
-                window.applyFilters();
+
+                const savedCatFilter = localStorage.getItem('kibris_active_category');
+                if (savedCatFilter) {
+                    const parsedData = JSON.parse(savedCatFilter);
+                    localStorage.removeItem('kibris_active_category');
+                    window.selectCategory(parsedData.mainCatId, parsedData.subCatSlug, parsedData.subCatName, parsedData.mainCatName);
+                } else {
+                    window.applyFilters();
+                }
 
             } catch (err) {
                 console.error("Yükleme hatası:", err);
@@ -1034,6 +1050,56 @@
         }
 
         document.addEventListener('DOMContentLoaded', initPage);
+
+        // --- AUTH GÖZLEMCİSİ (Kullanıcı Rolüne Göre Menü Güncelleme) ---
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        
+        const authControl = getAuth();
+        const ADMIN_EMAILS = ["admin@kibrisbazar.com"]; 
+
+        onAuthStateChanged(authControl, async (user) => {
+            const guestDesk = document.getElementById('authGuestDesktop');
+            const loggedDesk = document.getElementById('authLoggedDesktop');
+            const guestMob = document.getElementById('authGuestMobile');
+            const loggedMob = document.getElementById('authLoggedMobile');
+            
+            if (user && !user.isAnonymous) {
+                if(guestDesk) guestDesk.classList.add('hidden');
+                if(loggedDesk) loggedDesk.classList.remove('hidden');
+                if(guestMob) guestMob.classList.add('hidden');
+                if(loggedMob) loggedMob.classList.remove('hidden');
+                
+                const emailDisplay = document.getElementById('userEmailDisplay');
+                if(emailDisplay) emailDisplay.innerText = user.email;
+
+                if (ADMIN_EMAILS.includes(user.email)) {
+                    const adminLink = document.getElementById('menuAdminLink');
+                    if(adminLink) adminLink.classList.remove('hidden');
+                }
+
+                try {
+                    const storesRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'stores');
+                    const qEmail = query(storesRef, where("email", "==", user.email));
+                    const snapEmail = await getDocs(qEmail);
+                    
+                    const qUid = query(storesRef, where("ownerId", "==", user.uid));
+                    const snapUid = await getDocs(qUid);
+
+                    if (!snapEmail.empty || !snapUid.empty) {
+                        const sellerLink = document.getElementById('menuSellerLink');
+                        if(sellerLink) sellerLink.classList.remove('hidden');
+                    }
+                } catch(e) {
+                    console.error("Satıcı kontrolü hatası:", e);
+                }
+            } else {
+                if(guestDesk) guestDesk.classList.remove('hidden');
+                if(loggedDesk) loggedDesk.classList.add('hidden');
+                if(guestMob) guestMob.classList.remove('hidden');
+                if(loggedMob) loggedMob.classList.add('hidden');
+            }
+        });
+
     </script>
 </body>
 </html>
