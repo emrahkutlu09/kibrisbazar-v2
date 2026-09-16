@@ -130,6 +130,15 @@
         const APP_ID = 'kibris-pazar';
         let cart = JSON.parse(localStorage.getItem('cart_items_v2')) || [];
 
+        // URL Yapılandırıcılar
+        window.generateSlug = (text) => {
+            if (!text) return 'kibris-bazar';
+            return text.toString().toLowerCase()
+                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                .replace(/ı/g, 'i').replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                .replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+|-+$/g, '');
+        };
+
         window.renderCart = () => {
             const container = document.getElementById('cartItemsContainer');
             const wrapper = document.getElementById('cartContentWrapper');
@@ -159,14 +168,20 @@
                 subtotal += itemTotal;
                 const img = item.dynamicImage || (p.images && p.images.length > 0 ? p.images[0] : 'https://placehold.co/200x200');
 
+                // LİNKLER
+                const productUrl = `/urun/${window.generateSlug(p.title)}-${p.id}`;
+                const storeUrl = `/magaza/${window.generateSlug(p.storeName || 'Mağaza')}-${p.storeId}`;
+
                 html += `
                     <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center gap-5">
-                        <div class="w-24 h-24 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
-                            <img src="${img}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200';">
-                        </div>
+                        <a href="${productUrl}" class="w-24 h-24 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 hover:opacity-80 transition block">
+                            <img src="${img}" class="w-full h-full object-cover hover:scale-105 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/200x200';">
+                        </a>
                         <div class="flex-1 text-center sm:text-left">
-                            <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-md inline-block mb-1">${p.storeName || 'Mağaza'}</span>
-                            <h3 class="text-base font-bold text-slate-800 line-clamp-1 mb-1">${p.title}</h3>
+                            <a href="${storeUrl}" class="text-[10px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition px-2.5 py-1 rounded-md inline-block mb-1">${p.storeName || 'Mağaza'}</a>
+                            <h3 class="text-base font-bold text-slate-800 line-clamp-1 mb-1">
+                                <a href="${productUrl}" class="hover:text-orange-500 transition-colors">${p.title}</a>
+                            </h3>
                             ${item.variant ? `<div class="text-xs text-purple-600 font-bold mb-2">Seçenek: ${item.variant}</div>` : ''}
                             <div class="text-lg font-black text-slate-900">${price.toLocaleString('tr-TR')} TL</div>
                         </div>
@@ -213,7 +228,6 @@
             const phone = document.getElementById('buyerPhone').value.trim();
             const address = document.getElementById('buyerAddress').value.trim();
 
-            // SİPARİŞİ TAMAMLAYINCA ADRES BİLGİLERİNİ BİR SONRAKİ SEFER İÇİN HAFIZAYA KAYDET
             localStorage.setItem('kibris_user_info', JSON.stringify({
                 name: name,
                 phone: phone,
@@ -323,7 +337,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             window.renderCart();
 
-            // KAYITLI KULLANICI BİLGİLERİNİ FORMA OTOMATİK DOLDUR
             const savedInfo = localStorage.getItem('kibris_user_info');
             if (savedInfo) {
                 try {
@@ -336,7 +349,6 @@
                 }
             }
 
-            // Eğer isim kısmı boşsa ve Google ile giriş yapılmışsa ismi oradan çek
             onAuthStateChanged(auth, (user) => {
                 if (user && !user.isAnonymous) {
                     const nameInput = document.getElementById('buyerName');
